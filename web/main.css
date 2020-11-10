@@ -1,0 +1,9 @@
+/* 
+    Created on : 10-Nov-2020, 13:20:20
+    Author     : Adam Watson
+*/
+
+button:disabled:hover, a:disabled:hover {
+    cursor: not-allowed;
+}
+
