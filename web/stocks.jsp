@@ -81,6 +81,30 @@
                     }
                 }
 
+                // Handle sell query parameter
+                if (request.getParameter("sell") != null) {
+                    try {
+                        String symbol = request.getParameter("symbol");
+                        Double quantity = Double.parseDouble(request.getParameter("quantity"));
+
+                        if (symbol == null || quantity == null) {
+                            out.println("<div class='bg-danger p-2'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>");
+                        } else if (quantity <= 0) {
+                            out.println("<div class='bg-danger p-2'>Sorry, something went wrong. You cannot sell 0 or less shares - please try again.</div>");
+                        } else {
+                            Boolean saleSuccess = port.sellShare(symbol, quantity);
+
+                            if (saleSuccess) {
+                                out.println("<div class='bg-success p-2'>You have successfully sold " + quantity + " shares.</div>");
+                            } else {
+                                out.println("<div class='bg-danger p-2'>Your sale has failed. Please try again. </div>");
+                            }
+                        }
+                    } catch (NumberFormatException e) {
+                        out.println("<div class='bg-danger p-2'>Sorry, something went wrong. It appears a non-integer quantity was entered - please try again.</div>");
+                    }
+                }
+
                 // Get list of Stock objects from the server
                 List<Stock> stocks = port.getAllStocks();
 
