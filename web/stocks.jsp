@@ -25,6 +25,9 @@
         <!-- Custom CSS -->
         <link rel="stylesheet" href="main.css" />
 
+        <!-- Custom JS -->
+        <script src="stocks.js" type="text/javascript"></script>
+
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body class="bg-dark">
@@ -50,18 +53,39 @@
             <h1>Shares</h1>
             <p>This page lists the shares currently listed on Adams Share Broker</p>
             <%
-                try {
-                    // Create reference to the web service
-                    ShareBrokering_Service service = new ShareBrokering_Service();
-                    ShareBrokering port = service.getShareBrokeringPort();
+                // Create reference to the web service
+                ShareBrokering_Service service = new ShareBrokering_Service();
+                ShareBrokering port = service.getShareBrokeringPort();
 
-                    // Get list of Stock objects from the server
-                    List<Stock> stocks = port.getAllStocks();
+                // Handle buy query parameter
+                if (request.getParameter("buy") != null) {
+                    try {
+                        String symbol = request.getParameter("symbol");
+                        Integer quantity = Integer.parseInt(request.getParameter("quantity"));
 
-                    // Check there are stocks actually some stocks
-                    if (!(stocks.size() > 0)) {
-                        out.println("<div class='bg-info p-2'>Sorry, there are no stocks listed at the moment - check back later</div>");
-                    } else {
+                        if (symbol == null || quantity == null) {
+                            out.println("<div class='bg-danger p-2'>Sorry, something went wrong. It appears some form information is missing - please try resubmit.</div>");
+                        } else {
+                            Boolean purchaseSuccess = port.purchaseShare(symbol, quantity);
+
+                            if (purchaseSuccess) {
+                                out.println("<div class='bg-success p-2'>You have successfully purchased " + quantity + " shares.</div>");
+                            } else {
+                                out.println("<div class='bg-danger p-2'>Your purchase has failed. Please try again. </div>");
+                            }
+                        }
+                    } catch (NumberFormatException e) {
+                        out.println("<div class='bg-danger p-2'>Sorry, something went wrong. It appears a non-integer quantity was entered - please try resubmit. " + e + "</div>");
+                    }
+                }
+
+                // Get list of Stock objects from the server
+                List<Stock> stocks = port.getAllStocks();
+
+                // Check there are stocks actually some stocks
+                if (!(stocks.size() > 0)) {
+                    out.println("<div class='bg-info p-2'>Sorry, there are no stocks listed at the moment - check back later</div>");
+                } else {
             %>
             <table class="table table-striped table-dark">
                 <thead>
@@ -87,8 +111,8 @@
                             out.print("<td>" + stock.getPrice().getPrice() + "</td>");
                             out.print("<td>" + stock.getPrice().getUpdated() + "</td>");
                             out.print("<td>");
-                            out.print("<button type='button' class='btn btn-warning mr-2'>Sell</button>");
-                            out.print("<button type='button' class='btn btn-success'" + (stock.getAvailableShares() == 0F ? " disabled" : "") + ">Buy</button>");
+                            out.print("<button type='button' class='btn btn-warning mr-2 js-sell-btn' data-toggle='modal' data-target='#sales-modal' data-action='Sell' data-stock-name='" + stock.getStockName() + "'>Sell</button>");
+                            out.print("<button type='button' class='btn btn-success js-buy-btn'" + (stock.getAvailableShares() == 0F ? " disabled" : "") + " data-toggle='modal' data-target='#sales-modal' data-action='Buy' data-stock-symbol='" + stock.getStockSymbol() + "' data-available-shares='" + stock.getAvailableShares() + "'>Buy</button>");
                             out.print("</td>");
                             out.print("</tr>");
                         }
@@ -96,11 +120,34 @@
                 </tbody>
             </table>
             <%
-                    }
-                } catch (Exception e) {
-                    out.println("<div class='bg-danger p-2'>Sorry, something went wrong... the error message is: " + e.getMessage() + "</div>");
                 }
             %>
+        </div>
+
+        <!-- Purchase/Sale modal -->
+        <div class="modal fade" id="sales-modal">
+            <div class="modal-dialog">
+                <div class="modal-content bg-dark text-white">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="js-modal-title">Share transaction</h5>
+                        <button type="button" class="close text-white" data-dismiss="modal">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+                    <form method="POST" id="js-modal-form">
+                        <div class="modal-body form-inline">
+                            <div class="form-group">
+                                <span id='js-action-text'>Quantity</span><input type="number" name="quantity" id="js-quantitiy-field" class="ml-4 form-control" required="required" min="0" max="0">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="hidden" name="symbol" id="js-form-symbol" value="" />
+                            <input type="button" value="Cancel" class="btn btn-danger" data-dismiss="modal" />
+                            <input type="submit" value="Purchase" class="btn btn-success" id="js-action-btn" />
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </body>
 </html>
