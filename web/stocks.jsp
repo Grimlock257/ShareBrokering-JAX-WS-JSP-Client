@@ -111,8 +111,8 @@
                             out.print("<td>" + stock.getPrice().getPrice() + "</td>");
                             out.print("<td>" + stock.getPrice().getUpdated() + "</td>");
                             out.print("<td>");
-                            out.print("<button type='button' class='btn btn-warning mr-2 js-sell-btn' data-toggle='modal' data-target='#sales-modal' data-action='Sell' data-stock-name='" + stock.getStockName() + "'>Sell</button>");
-                            out.print("<button type='button' class='btn btn-success js-buy-btn'" + (stock.getAvailableShares() == 0F ? " disabled" : "") + " data-toggle='modal' data-target='#sales-modal' data-action='Buy' data-stock-symbol='" + stock.getStockSymbol() + "' data-available-shares='" + stock.getAvailableShares() + "'>Buy</button>");
+                            out.print("<button type='button' class='btn btn-warning mr-2 js-sell-btn' data-toggle='modal' data-target='#sales-modal' data-action='Sell' data-stock-name='" + stock.getStockName() + "' data-stock-symbol='" + stock.getStockSymbol() + "'>Sell</button>");
+                            out.print("<button type='button' class='btn btn-success js-buy-btn'" + (stock.getAvailableShares() == 0F ? " disabled" : "") + " data-toggle='modal' data-target='#sales-modal' data-action='Buy' data-stock-name='" + stock.getStockName() + "' data-stock-symbol='" + stock.getStockSymbol() + "' data-available-shares='" + stock.getAvailableShares() + "'>Buy</button>");
                             out.print("</td>");
                             out.print("</tr>");
                         }
