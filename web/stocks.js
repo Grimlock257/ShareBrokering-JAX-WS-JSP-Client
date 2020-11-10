@@ -20,7 +20,7 @@ $(document).ready(function () {
 
         salesModal.find('#js-modal-title').text(action + " " + stockName + " shares");
         salesModal.find('#js-action-text').text(action + " quantity");
-        salesModal.find('#js-action-btn').text(action);
+        salesModal.find('#js-action-btn').val(action);
         salesModal.find('#js-modal-form').attr("action", "?" + action.toLowerCase());
         salesModal.find('#js-form-symbol').val(stockSymbol);
 
