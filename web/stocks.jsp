@@ -61,10 +61,12 @@
                 if (request.getParameter("buy") != null) {
                     try {
                         String symbol = request.getParameter("symbol");
-                        Integer quantity = Integer.parseInt(request.getParameter("quantity"));
+                        Double quantity = Double.parseDouble(request.getParameter("quantity"));
 
                         if (symbol == null || quantity == null) {
-                            out.println("<div class='bg-danger p-2'>Sorry, something went wrong. It appears some form information is missing - please try resubmit.</div>");
+                            out.println("<div class='bg-danger p-2'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>");
+                        } else if (quantity <= 0) {
+                            out.println("<div class='bg-danger p-2'>Sorry, something went wrong. You cannot purchase 0 or less shares - please try again.</div>");
                         } else {
                             Boolean purchaseSuccess = port.purchaseShare(symbol, quantity);
 
@@ -75,7 +77,7 @@
                             }
                         }
                     } catch (NumberFormatException e) {
-                        out.println("<div class='bg-danger p-2'>Sorry, something went wrong. It appears a non-integer quantity was entered - please try resubmit. " + e + "</div>");
+                        out.println("<div class='bg-danger p-2'>Sorry, something went wrong. It appears a non-integer quantity was entered - please try again.</div>");
                     }
                 }
 
@@ -137,7 +139,7 @@
                     <form method="POST" id="js-modal-form">
                         <div class="modal-body form-inline">
                             <div class="form-group">
-                                <span id='js-action-text'>Quantity</span><input type="number" name="quantity" id="js-quantitiy-field" class="ml-4 form-control" required="required" min="0" max="0">
+                                <span id='js-action-text'>Quantity</span><input type="number" name="quantity" id="js-quantitiy-field" class="ml-4 form-control" required="required" step="any" min="0" max="0">
                             </div>
                         </div>
                         <div class="modal-footer">
