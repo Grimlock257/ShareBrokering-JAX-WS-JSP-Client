@@ -14,10 +14,11 @@ $(document).ready(function () {
         var triggerButton = $(event.relatedTarget);
 
         var action = triggerButton.data('action');
+        var stockName = triggerButton.data('stock-name');
         var stockSymbol = triggerButton.data('stock-symbol');
         var availableShares = triggerButton.data('available-shares');
 
-        salesModal.find('#js-modal-title').text(action + " " + stockSymbol + " shares");
+        salesModal.find('#js-modal-title').text(action + " " + stockName + " shares");
         salesModal.find('#js-action-text').text(action + " quantity");
         salesModal.find('#js-action-btn').text(action);
         salesModal.find('#js-modal-form').attr("action", "?" + action.toLowerCase());
