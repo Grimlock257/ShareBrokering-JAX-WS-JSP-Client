@@ -10,6 +10,10 @@
 
 <xs:element name="purchaseShareResponse" type="tns:purchaseShareResponse"/>
 
+<xs:element name="searchShares" type="tns:searchShares"/>
+
+<xs:element name="searchSharesResponse" type="tns:searchSharesResponse"/>
+
 <xs:element name="sellShare" type="tns:sellShare"/>
 
 <xs:element name="sellShareResponse" type="tns:sellShareResponse"/>
@@ -34,6 +38,24 @@
 <xs:complexType name="sellShareResponse">
 <xs:sequence>
 <xs:element name="return" type="xs:boolean" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="searchShares">
+<xs:sequence>
+<xs:element name="stockName" type="xs:string" minOccurs="0"/>
+<xs:element name="stockSymbol" type="xs:string" minOccurs="0"/>
+<xs:element name="currency" type="xs:string" minOccurs="0"/>
+<xs:element name="sharePriceFilter" type="xs:string" minOccurs="0"/>
+<xs:element name="sharePrice" type="xs:double"/>
+<xs:element name="sortBy" type="xs:string" minOccurs="0"/>
+<xs:element name="order" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="searchSharesResponse">
+<xs:sequence>
+<xs:element name="return" type="ns1:Stock" minOccurs="0" maxOccurs="unbounded"/>
 </xs:sequence>
 </xs:complexType>
 

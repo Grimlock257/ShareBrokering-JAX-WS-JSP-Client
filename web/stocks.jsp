@@ -27,6 +27,7 @@
 
         <!-- Custom JS -->
         <script src="stocks.js" type="text/javascript"></script>
+        <script src="common.js" type="text/javascript"></script>
 
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
@@ -49,13 +50,141 @@
                 </div>
             </div>
         </nav>
-        <div class="container bg-secondary text-white py-1">
+        <div class="container bg-secondary text-white pt-4 pb-1">
             <h1>Shares</h1>
-            <p>This page lists the shares currently listed on Adams Share Broker</p>
+            <div class="d-flex">
+                <div class="p-2 w-100 ">This page lists the shares currently listed on Adams Share Broker</div>
+                <div class="p-2"><button class="btn btn-info" id="stocks-search-btn" data-toggle="collapse" data-target="#search">Search<span id="stocks-search-btn-spacer"></span><span id="stocks-search-btn-arrow">⯆</span></button></div>
+            </div>
+            <div class="collapse js-stocks-search-card" id="search">
+                <div class="card card-body bg-dark mb-4">
+                    <form method="POST" action="?search">
+                        <div class="form-row">
+                            <div class="col-md-5 mb-3">
+                                <label>Stock name</label>
+                                <input type="text" name="stockName" class="form-control" placeholder="e.g. coca-cola">
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label>Stock symbol</label>
+                                <input type="text" name="stockSymbol" class="form-control" placeholder="e.g. KO">
+                            </div>
+                            <div class="col-md-5 mb-3">
+                                <label>Currency</label>
+                                <div class="input-group">
+                                    <select name="stockCurrency" class="form-control">
+                                        <option value="usd" selected disabled>Use default (currency of preference)</option>
+                                        <option value="usd">USD</option>
+                                        <option value="gbp">GBP</option>
+                                        <option value="aud">AUD</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-3 mb-3">
+                                <label>Share price is</label>
+                                <div class="input-group">
+                                    <select name="sharePriceFilter"class="form-control">
+                                        <option value="equal" selected>Use default (equal to)</option>
+                                        <option value="lessOrEqual">Is less than or equal to</option>
+                                        <option value="equal">Is equal to</option>
+                                        <option value="greaterOrEqual">Is greater than or equal to</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label>Share price</label>
+                                <input type="number" name="sharePrice" class="form-control" placeholder="e.g. 10" step="any" min="0">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label>Sort by</label>
+                                <div class="input-group">
+                                    <select name="sortBy" class="form-control">
+                                        <option value="stockSymbol" selected>Use default (stock symbol)</option>
+                                        <option value="stockName">Stock name</option>
+                                        <option value="stockSymbol">Stock symbol</option>
+                                        <option value="shareCurrency">Currency</option>
+                                        <option value="sharePrice">Share price</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label>Order by</label>
+                                <div class="input-group">
+                                    <select name="orderBy" class="form-control">
+                                        <option value="desc" selected>Use default (descending)</option>
+                                        <option value="asc">Ascending</option>
+                                        <option value="desc">Descending</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-1 mb-3 d-flex flex-column justify-content-end">
+                                <button class="btn btn-primary form-control" type="submit">Search!</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
             <%
                 // Create reference to the web service
                 ShareBrokering_Service service = new ShareBrokering_Service();
                 ShareBrokering port = service.getShareBrokeringPort();
+
+                // Handle search query parameter
+                if (request.getParameter("search") != null) {
+                    String stockName = request.getParameter("stockName");
+                    String stockSymbol = request.getParameter("stockSymbol");
+                    String stockCurrency = request.getParameter("stockCurrency");
+                    String sharePriceFilter = request.getParameter("sharePriceFilter");
+                    String sharePriceStr = request.getParameter("sharePrice");
+                    Double sharePrice = -1D;
+                    String sortBy = request.getParameter("sortBy");
+                    String orderBy = request.getParameter("orderBy");
+
+                    try {
+                        sharePrice = Double.parseDouble(sharePriceStr);
+                    } catch (NumberFormatException e) {
+                        if (sharePriceStr.length() > 0) {
+                            out.println("<div class='bg-danger p-2'>Sorry, something went wrong. It appears a non-integer quantity was entered - please try again.</div>");
+                        }
+                    }
+
+                    List<Stock> filteredStocks = port.searchShares(stockName, stockSymbol, stockCurrency, sharePriceFilter, sharePrice, sortBy, orderBy);
+            %>
+            <table class="table table-striped table-dark">
+                <thead>
+                    <tr>
+                        <th>Company Name</th>
+                        <th>Stock Symbol</th>
+                        <th>Available Shares</th>
+                        <th>Share Currency</th>
+                        <th>Share Price</th>
+                        <th>Price Last Updated</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%
+                        // Iterate over Stock objects, adding a table row for each
+                        for (Stock stock : filteredStocks) {
+                            out.print("<tr>");
+                            out.print("<th>" + stock.getStockName() + "</th>");
+                            out.print("<td>" + stock.getStockSymbol() + "</td>");
+                            out.print("<td>" + stock.getAvailableShares() + "</td>");
+                            out.print("<td>" + stock.getPrice().getCurrency() + "</td>");
+                            out.print("<td>" + stock.getPrice().getPrice() + "</td>");
+                            out.print("<td>" + stock.getPrice().getUpdated() + "</td>");
+                            out.print("<td>");
+                            out.print("<button type='button' class='btn btn-warning mr-2 js-sell-btn' data-toggle='modal' data-target='#sales-modal' data-action='Sell' data-stock-name='" + stock.getStockName() + "' data-stock-symbol='" + stock.getStockSymbol() + "'>Sell</button>");
+                            out.print("<button type='button' class='btn btn-success js-buy-btn'" + (stock.getAvailableShares() == 0F ? " disabled" : "") + " data-toggle='modal' data-target='#sales-modal' data-action='Buy' data-stock-name='" + stock.getStockName() + "' data-stock-symbol='" + stock.getStockSymbol() + "' data-available-shares='" + stock.getAvailableShares() + "'>Buy</button>");
+                            out.print("</td>");
+                            out.print("</tr>");
+                        }
+                    %>
+                </tbody>
+            </table>
+            <%
+                }
 
                 // Handle buy query parameter
                 if (request.getParameter("buy") != null) {

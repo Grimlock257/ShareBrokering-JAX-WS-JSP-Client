@@ -7,3 +7,21 @@ button:disabled:hover, a:disabled:hover {
     cursor: not-allowed;
 }
 
+#stocks-search-btn {
+    padding-right: 22px;
+}
+
+#stocks-search-btn-spacer {
+    padding-left: 6px;
+}
+
+#stocks-search-btn-arrow {
+    transition: all 0.5s;
+    position: absolute;
+}
+
+#stocks-search-btn-arrow.active {
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    transform: rotate(180deg);
+} 
