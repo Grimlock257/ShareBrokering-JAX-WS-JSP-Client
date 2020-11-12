@@ -80,7 +80,7 @@
                                 <label>Currency</label>
                                 <div class="input-group">
                                     <select name="stockCurrency" class="form-control js-stocks-search-selectable">
-                                        <option value="usd" selected readonly>Default (currency of preference)</option>
+                                        <option value="" selected readonly>Default (any)</option>
                                         <option value="usd" <% out.println(wasSearch && request.getParameter("stockCurrency").equals("usd") ? "selected" : "");%>>USD</option>
                                         <option value="gbp" <% out.println(wasSearch && request.getParameter("stockCurrency").equals("gbp") ? "selected" : "");%>>GBP</option>
                                         <option value="aud" <% out.println(wasSearch && request.getParameter("stockCurrency").equals("aud") ? "selected" : "");%>>AUD</option>
