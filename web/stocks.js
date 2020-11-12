@@ -53,5 +53,9 @@ $(document).ready(function () {
         $('.js-stocks-search-selectable option').each(function () {
             $(this).removeAttr("selected");
         });
+
+        $('.js-stocks-search-text-clearable').each(function () {
+            $(this).removeAttr("value");
+        });
     });
 });

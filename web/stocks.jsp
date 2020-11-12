@@ -70,11 +70,11 @@
                         <div class="form-row">
                             <div class="col-md-5 mb-3">
                                 <label>Stock name</label>
-                                <input type="text" name="stockName" <% out.println(wasSearch ? "value='" + request.getParameter("stockName") + "'" : ""); %> class="form-control" placeholder="e.g. coca-cola">
+                                <input type="text" name="stockName" <% out.println(wasSearch ? "value='" + request.getParameter("stockName") + "'" : ""); %> class="form-control js-stocks-search-text-clearable" placeholder="e.g. coca-cola">
                             </div>
                             <div class="col-md-2 mb-3">
                                 <label>Stock symbol</label>
-                                <input type="text" name="stockSymbol" <% out.println(wasSearch ? "value='" + request.getParameter("stockSymbol") + "'" : ""); %> class="form-control" placeholder="e.g. KO">
+                                <input type="text" name="stockSymbol" <% out.println(wasSearch ? "value='" + request.getParameter("stockSymbol") + "'" : ""); %> class="form-control js-stocks-search-text-clearable" placeholder="e.g. KO">
                             </div>
                             <div class="col-md-5 mb-3">
                                 <label>Currency</label>
@@ -102,7 +102,7 @@
                             </div>
                             <div class="col-md-2 mb-3">
                                 <label>Share price</label>
-                                <input type="number" name="sharePrice" <% out.println(wasSearch ? "value='" + request.getParameter("sharePrice") + "'" : ""); %> class="form-control" placeholder="e.g. 10" step="any" min="0">
+                                <input type="number" name="sharePrice" <% out.println(wasSearch ? "value='" + request.getParameter("sharePrice") + "'" : ""); %> class="form-control js-stocks-search-text-clearable" placeholder="e.g. 10" step="any" min="0">
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label>Sort by</label>
