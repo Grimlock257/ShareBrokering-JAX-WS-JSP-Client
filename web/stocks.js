@@ -45,4 +45,13 @@ $(document).ready(function () {
         salesModal.find('#js-modal-form').attr("action", "");
         salesModal.find('#js-form-symbol').val("");
     });
+
+    /**
+     * When the search form reset button has been clicked, removed 'selected' attribute from all option elements
+     */
+    $("#js-stocks-search-reset").on("click", function () {
+        $('.js-stocks-search-selectable option').each(function () {
+            $(this).removeAttr("selected");
+        });
+    });
 });
