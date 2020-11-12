@@ -130,7 +130,7 @@
                 ShareBrokering_Service service = new ShareBrokering_Service();
                 ShareBrokering port = service.getShareBrokeringPort();
 
-                // Handle search query parameter
+                // Handle different
                 if (request.getParameter("search") != null) {
                     String stockName = request.getParameter("stockName");
                     String stockSymbol = request.getParameter("stockSymbol");
@@ -150,44 +150,14 @@
                     }
 
                     List<Stock> filteredStocks = port.searchShares(stockName, stockSymbol, stockCurrency, sharePriceFilter, sharePrice, sortBy, orderBy);
-            %>
-            <table class="table table-striped table-dark">
-                <thead>
-                    <tr>
-                        <th>Company Name</th>
-                        <th>Stock Symbol</th>
-                        <th>Available Shares</th>
-                        <th>Share Currency</th>
-                        <th>Share Price</th>
-                        <th>Price Last Updated</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <%
-                        // Iterate over Stock objects, adding a table row for each
-                        for (Stock stock : filteredStocks) {
-                            out.print("<tr>");
-                            out.print("<th>" + stock.getStockName() + "</th>");
-                            out.print("<td>" + stock.getStockSymbol() + "</td>");
-                            out.print("<td>" + stock.getAvailableShares() + "</td>");
-                            out.print("<td>" + stock.getPrice().getCurrency() + "</td>");
-                            out.print("<td>" + stock.getPrice().getPrice() + "</td>");
-                            out.print("<td>" + stock.getPrice().getUpdated() + "</td>");
-                            out.print("<td>");
-                            out.print("<button type='button' class='btn btn-warning mr-2 js-sell-btn' data-toggle='modal' data-target='#sales-modal' data-action='Sell' data-stock-name='" + stock.getStockName() + "' data-stock-symbol='" + stock.getStockSymbol() + "'>Sell</button>");
-                            out.print("<button type='button' class='btn btn-success js-buy-btn'" + (stock.getAvailableShares() == 0F ? " disabled" : "") + " data-toggle='modal' data-target='#sales-modal' data-action='Buy' data-stock-name='" + stock.getStockName() + "' data-stock-symbol='" + stock.getStockSymbol() + "' data-available-shares='" + stock.getAvailableShares() + "'>Buy</button>");
-                            out.print("</td>");
-                            out.print("</tr>");
-                        }
-                    %>
-                </tbody>
-            </table>
-            <%
-                }
 
-                // Handle buy query parameter
-                if (request.getParameter("buy") != null) {
+                    // Check there are stocks actually some stocks
+                    if (!(filteredStocks.size() > 0)) {
+                        out.println("<div class='bg-danger p-2'>Sorry, no stocks met your criteria - please try search again.</div>");
+                    } else {
+                        out.println(getStockTableAsHTML(filteredStocks));
+                    }
+                } else if (request.getParameter("buy") != null) {
                     try {
                         String symbol = request.getParameter("symbol");
                         Double quantity = Double.parseDouble(request.getParameter("quantity"));
@@ -208,10 +178,7 @@
                     } catch (NumberFormatException e) {
                         out.println("<div class='bg-danger p-2'>Sorry, something went wrong. It appears a non-integer quantity was entered - please try again.</div>");
                     }
-                }
-
-                // Handle sell query parameter
-                if (request.getParameter("sell") != null) {
+                } else if (request.getParameter("sell") != null) {
                     try {
                         String symbol = request.getParameter("symbol");
                         Double quantity = Double.parseDouble(request.getParameter("quantity"));
@@ -232,49 +199,16 @@
                     } catch (NumberFormatException e) {
                         out.println("<div class='bg-danger p-2'>Sorry, something went wrong. It appears a non-integer quantity was entered - please try again.</div>");
                     }
-                }
-
-                // Get list of Stock objects from the server
-                List<Stock> stocks = port.getAllStocks();
-
-                // Check there are stocks actually some stocks
-                if (!(stocks.size() > 0)) {
-                    out.println("<div class='bg-info p-2'>Sorry, there are no stocks listed at the moment - check back later</div>");
                 } else {
-            %>
-            <table class="table table-striped table-dark">
-                <thead>
-                    <tr>
-                        <th>Company Name</th>
-                        <th>Stock Symbol</th>
-                        <th>Available Shares</th>
-                        <th>Share Currency</th>
-                        <th>Share Price</th>
-                        <th>Price Last Updated</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <%
-                        // Iterate over Stock objects, adding a table row for each
-                        for (Stock stock : stocks) {
-                            out.print("<tr>");
-                            out.print("<th>" + stock.getStockName() + "</th>");
-                            out.print("<td>" + stock.getStockSymbol() + "</td>");
-                            out.print("<td>" + stock.getAvailableShares() + "</td>");
-                            out.print("<td>" + stock.getPrice().getCurrency() + "</td>");
-                            out.print("<td>" + stock.getPrice().getPrice() + "</td>");
-                            out.print("<td>" + stock.getPrice().getUpdated() + "</td>");
-                            out.print("<td>");
-                            out.print("<button type='button' class='btn btn-warning mr-2 js-sell-btn' data-toggle='modal' data-target='#sales-modal' data-action='Sell' data-stock-name='" + stock.getStockName() + "' data-stock-symbol='" + stock.getStockSymbol() + "'>Sell</button>");
-                            out.print("<button type='button' class='btn btn-success js-buy-btn'" + (stock.getAvailableShares() == 0F ? " disabled" : "") + " data-toggle='modal' data-target='#sales-modal' data-action='Buy' data-stock-name='" + stock.getStockName() + "' data-stock-symbol='" + stock.getStockSymbol() + "' data-available-shares='" + stock.getAvailableShares() + "'>Buy</button>");
-                            out.print("</td>");
-                            out.print("</tr>");
-                        }
-                    %>
-                </tbody>
-            </table>
-            <%
+                    // Get list of Stock objects from the server
+                    List<Stock> stocks = port.getAllStocks();
+
+                    // Check there are stocks actually some stocks
+                    if (!(stocks.size() > 0)) {
+                        out.println("<div class='bg-info p-2'>Sorry, there are no stocks listed at the moment - check back later</div>");
+                    } else {
+                        out.println(getStockTableAsHTML(stocks));
+                    }
                 }
             %>
         </div>
@@ -306,3 +240,53 @@
         </div>
     </body>
 </html>
+
+<%!
+    /**
+     * Generate a String representing an HTML table of stocks
+     *
+     * @param stocks The stocks used to populate the table with
+     * @return The String representing the HTML table
+     */
+    public String getStockTableAsHTML(List<Stock> stocks) {
+        StringBuilder builder = new StringBuilder();
+
+        // Create table and set up header row
+        builder.append("<table class='table table-striped table-dark'>");
+        builder.append("<thead>");
+        builder.append("<tr>");
+        builder.append("<th>Company Name</th>");
+        builder.append("<th>Stock Symbol</th>");
+        builder.append("<th>Available Shares</th>");
+        builder.append("<th>Share Currency</th>");
+        builder.append("<th>Share Price</th>");
+        builder.append("<th>Price Last Updated</th>");
+        builder.append("<th></th>");
+        builder.append("</tr>");
+        builder.append("</thead>");
+        builder.append("<tbody>");
+
+        // Iterate over Stock objects, adding a table row for each
+        for (Stock stock : stocks) {
+            builder.append("<tr>");
+            builder.append("<th>" + stock.getStockName() + "</th>");
+            builder.append("<td>" + stock.getStockSymbol() + "</td>");
+            builder.append("<td>" + stock.getAvailableShares() + "</td>");
+            builder.append("<td>" + stock.getPrice().getCurrency() + "</td>");
+            builder.append("<td>" + stock.getPrice().getPrice() + "</td>");
+            builder.append("<td>" + stock.getPrice().getUpdated() + "</td>");
+            builder.append("<td>");
+            builder.append("<button type='button' class='btn btn-warning mr-2 js-sell-btn' data-toggle='modal' data-target='#sales-modal' data-action='Sell' data-stock-name='" + stock.getStockName() + "' data-stock-symbol='" + stock.getStockSymbol() + "'>Sell</button>");
+            builder.append("<button type='button' class='btn btn-success js-buy-btn'" + (stock.getAvailableShares() == 0F ? " disabled" : "") + " data-toggle='modal' data-target='#sales-modal' data-action='Buy' data-stock-name='" + stock.getStockName() + "' data-stock-symbol='" + stock.getStockSymbol() + "' data-available-shares='" + stock.getAvailableShares() + "'>Buy</button>");
+            builder.append("</td>");
+            builder.append("</tr>");
+        }
+
+        // Close up the table
+        builder.append("</tbody>");
+        builder.append("</table>");
+
+        // Return contents as a String
+        return builder.toString();
+    }
+%>
