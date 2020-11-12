@@ -111,7 +111,7 @@
                             <div class="col-md-3 mb-3">
                                 <label>Order by</label>
                                 <div class="input-group">
-                                    <select name="orderBy" class="form-control">
+                                    <select name="order" class="form-control">
                                         <option value="desc" selected>Use default (descending)</option>
                                         <option value="asc">Ascending</option>
                                         <option value="desc">Descending</option>
@@ -126,89 +126,34 @@
                 </div>
             </div>
             <%
-                // Create reference to the web service
-                ShareBrokering_Service service = new ShareBrokering_Service();
-                ShareBrokering port = service.getShareBrokeringPort();
-
                 // Handle different
                 if (request.getParameter("search") != null) {
                     String stockName = request.getParameter("stockName");
                     String stockSymbol = request.getParameter("stockSymbol");
                     String stockCurrency = request.getParameter("stockCurrency");
                     String sharePriceFilter = request.getParameter("sharePriceFilter");
-                    String sharePriceStr = request.getParameter("sharePrice");
-                    Double sharePrice = -1D;
+                    String sharePrice = request.getParameter("sharePrice");
                     String sortBy = request.getParameter("sortBy");
-                    String orderBy = request.getParameter("orderBy");
+                    String order = request.getParameter("order");
 
-                    try {
-                        sharePrice = Double.parseDouble(sharePriceStr);
-                    } catch (NumberFormatException e) {
-                        if (sharePriceStr.length() > 0) {
-                            out.println("<div class='bg-danger p-2'>Sorry, something went wrong. It appears a non-integer quantity was entered - please try again.</div>");
-                        }
-                    }
+                    String searchResult = handleSearch(stockName, stockSymbol, stockCurrency, sharePriceFilter, sharePrice, sortBy, order);
 
-                    List<Stock> filteredStocks = port.searchShares(stockName, stockSymbol, stockCurrency, sharePriceFilter, sharePrice, sortBy, orderBy);
-
-                    // Check there are stocks actually some stocks
-                    if (!(filteredStocks.size() > 0)) {
-                        out.println("<div class='bg-danger p-2'>Sorry, no stocks met your criteria - please try search again.</div>");
-                    } else {
-                        out.println(getStockTableAsHTML(filteredStocks));
-                    }
+                    out.println(searchResult);
                 } else if (request.getParameter("buy") != null) {
-                    try {
-                        String symbol = request.getParameter("symbol");
-                        Double quantity = Double.parseDouble(request.getParameter("quantity"));
+                    String symbol = request.getParameter("symbol");
+                    String quantity = request.getParameter("quantity");
 
-                        if (symbol == null || quantity == null) {
-                            out.println("<div class='bg-danger p-2'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>");
-                        } else if (quantity <= 0) {
-                            out.println("<div class='bg-danger p-2'>Sorry, something went wrong. You cannot purchase 0 or less shares - please try again.</div>");
-                        } else {
-                            Boolean purchaseSuccess = port.purchaseShare(symbol, quantity);
+                    out.println(handlePurchase(symbol, quantity));
+                    out.println(getStocksTable());
 
-                            if (purchaseSuccess) {
-                                out.println("<div class='bg-success p-2'>You have successfully purchased " + quantity + " shares.</div>");
-                            } else {
-                                out.println("<div class='bg-danger p-2'>Your purchase has failed. Please try again. </div>");
-                            }
-                        }
-                    } catch (NumberFormatException e) {
-                        out.println("<div class='bg-danger p-2'>Sorry, something went wrong. It appears a non-integer quantity was entered - please try again.</div>");
-                    }
                 } else if (request.getParameter("sell") != null) {
-                    try {
-                        String symbol = request.getParameter("symbol");
-                        Double quantity = Double.parseDouble(request.getParameter("quantity"));
+                    String symbol = request.getParameter("symbol");
+                    String quantity = request.getParameter("quantity");
 
-                        if (symbol == null || quantity == null) {
-                            out.println("<div class='bg-danger p-2'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>");
-                        } else if (quantity <= 0) {
-                            out.println("<div class='bg-danger p-2'>Sorry, something went wrong. You cannot sell 0 or less shares - please try again.</div>");
-                        } else {
-                            Boolean saleSuccess = port.sellShare(symbol, quantity);
-
-                            if (saleSuccess) {
-                                out.println("<div class='bg-success p-2'>You have successfully sold " + quantity + " shares.</div>");
-                            } else {
-                                out.println("<div class='bg-danger p-2'>Your sale has failed. Please try again. </div>");
-                            }
-                        }
-                    } catch (NumberFormatException e) {
-                        out.println("<div class='bg-danger p-2'>Sorry, something went wrong. It appears a non-integer quantity was entered - please try again.</div>");
-                    }
+                    out.println(handleSale(symbol, quantity));
+                    out.println(getStocksTable());
                 } else {
-                    // Get list of Stock objects from the server
-                    List<Stock> stocks = port.getAllStocks();
-
-                    // Check there are stocks actually some stocks
-                    if (!(stocks.size() > 0)) {
-                        out.println("<div class='bg-info p-2'>Sorry, there are no stocks listed at the moment - check back later</div>");
-                    } else {
-                        out.println(getStockTableAsHTML(stocks));
-                    }
+                    out.println(getStocksTable());
                 }
             %>
         </div>
@@ -242,6 +187,118 @@
 </html>
 
 <%!
+    // Create reference to the web service
+    ShareBrokering_Service service = new ShareBrokering_Service();
+    ShareBrokering port = service.getShareBrokeringPort();
+
+    /**
+     * Handle when a search is submitted, attempt to retrieve search results from the Web Service.
+     *
+     * @param stockName The stock name to search for (contains)
+     * @param stockSymbol The stock symbol to search for (contains)
+     * @param stockCurrency The stock currency to search for (equals)
+     * @param sharePriceFilter The share price filter (<=, =, >=)
+     * @param sharePriceStr The share price as a string
+     * @param sortBy The column in which the results should be ordered by
+     * @param order Whether to order the sortBy column ascending or descending
+     * @return The stocks table or a info diaglog as an HTML string
+     */
+    public String handleSearch(String stockName, String stockSymbol, String stockCurrency, String sharePriceFilter, String sharePriceStr, String sortBy, String order) {
+        Double sharePrice = -1D;
+
+        try {
+            sharePrice = Double.parseDouble(sharePriceStr);
+        } catch (NumberFormatException e) {
+            if (sharePriceStr.length() > 0) {
+                return "<div class='bg-danger p-2'>Sorry, something went wrong. It appears a non-integer quantity was entered - please try again.</div>";
+            }
+        }
+
+        List<Stock> filteredStocks = port.searchShares(stockName, stockSymbol, stockCurrency, sharePriceFilter, sharePrice, sortBy, order);
+
+        // Check there are stocks actually some stocks
+        if (!(filteredStocks.size() > 0)) {
+            return "<div class='bg-danger p-2'>Sorry, no stocks met your criteria - please try search again.</div>";
+        } else {
+            return getStockTableAsHTML(filteredStocks);
+        }
+    }
+
+    /**
+     * Handle when a purchase order is actioned, attempt to execute the purchase on the Web Service.
+     *
+     * @param symbol The stock symbol which the user is purchasing
+     * @param quantityStr The quantity that the user is purchasing as a String
+     * @return A string representing an HTML diaglog box with the appropriate message within (success or failure)
+     */
+    public String handlePurchase(String symbol, String quantityStr) {
+        try {
+            Double quantity = Double.parseDouble(quantityStr);
+
+            if (symbol == null || quantity == null) {
+                return "<div class='bg-danger p-2'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>";
+            } else if (quantity <= 0) {
+                return "<div class='bg-danger p-2'>Sorry, something went wrong. You cannot purchase 0 or less shares - please try again.</div>";
+            } else {
+                Boolean purchaseSuccess = port.purchaseShare(symbol, quantity);
+
+                if (purchaseSuccess) {
+                    return "<div class='bg-success p-2'>You have successfully purchased " + quantity + " shares.</div>";
+                } else {
+                    return "<div class='bg-danger p-2'>Your purchase has failed. Please try again. </div>";
+                }
+            }
+        } catch (NumberFormatException e) {
+            return "<div class='bg-danger p-2'>Sorry, something went wrong. It appears a non-integer quantity was entered - please try again.</div>";
+        }
+    }
+
+    /**
+     * Handle when sell order is actioned, attempt to execute the sale on the Web Service.
+     *
+     * @param symbol The stock symbol which the user is selling
+     * @param quantityStr The quantity that the user is selling as a String
+     * @return A string representing an HTML diaglog box with the appropriate message within (success or failure)
+     */
+    public String handleSale(String symbol, String quantityStr) {
+        try {
+            Double quantity = Double.parseDouble(quantityStr);
+
+            if (symbol == null || quantity == null) {
+                return "<div class='bg-danger p-2'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>";
+            } else if (quantity <= 0) {
+                return "<div class='bg-danger p-2'>Sorry, something went wrong. You cannot sell 0 or less shares - please try again.</div>";
+            } else {
+                Boolean saleSuccess = port.sellShare(symbol, quantity);
+
+                if (saleSuccess) {
+                    return "<div class='bg-success p-2'>You have successfully sold " + quantity + " shares.</div>";
+                } else {
+                    return "<div class='bg-danger p-2'>Your sale has failed. Please try again. </div>";
+                }
+            }
+        } catch (NumberFormatException e) {
+            return "<div class='bg-danger p-2'>Sorry, something went wrong. It appears a non-integer quantity was entered - please try again.</div>";
+        }
+    }
+
+    /**
+     * Retrieve stocks from the Web Service and return a HTML table representation, or info diaglog if there are no Stocks to display
+     *
+     * @return The stocks table or a info diaglog as an HTML string
+     */
+    public String getStocksTable() {
+        // Get list of Stock objects from the server
+        List<Stock> stocks = port.getAllStocks();
+
+        // Check there are stocks actually some stocks
+        if (!(stocks.size() > 0)) {
+            return "<div class='bg-info p-2'>Sorry, there are no stocks listed at the moment - check back later</div>";
+        } else {
+            return getStockTableAsHTML(stocks);
+        }
+    }
+
     /**
      * Generate a String representing an HTML table of stocks
      *
