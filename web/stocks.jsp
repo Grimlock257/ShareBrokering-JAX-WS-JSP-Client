@@ -19,7 +19,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
 
         <!-- jQuery and JS bundle w/ Popper.js -->
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
 
         <!-- Custom CSS -->
@@ -323,6 +323,7 @@
         builder.append("<table class='table table-striped table-dark'>");
         builder.append("<thead>");
         builder.append("<tr>");
+        builder.append("<th></th>");
         builder.append("<th>Company Name</th>");
         builder.append("<th>Stock Symbol</th>");
         builder.append("<th>Available Shares</th>");
@@ -337,13 +338,14 @@
         // Iterate over Stock objects, adding a table row for each
         for (Stock stock : stocks) {
             builder.append("<tr>");
-            builder.append("<th>" + stock.getStockName() + "</th>");
-            builder.append("<td>" + stock.getStockSymbol() + "</td>");
-            builder.append("<td>" + stock.getAvailableShares() + "</td>");
-            builder.append("<td>" + stock.getPrice().getCurrency() + "</td>");
-            builder.append("<td>" + stock.getPrice().getPrice() + "</td>");
-            builder.append("<td>" + stock.getPrice().getUpdated() + "</td>");
-            builder.append("<td>");
+            builder.append("<td class='align-middle js-stock-img-cell c-stock-img-cell' data-stock-name='" + stock.getStockName() + "'></td>");
+            builder.append("<th class='align-middle'>" + stock.getStockName() + "</th>");
+            builder.append("<td class='align-middle'>" + stock.getStockSymbol() + "</td>");
+            builder.append("<td class='align-middle'>" + stock.getAvailableShares() + "</td>");
+            builder.append("<td class='align-middle'>" + stock.getPrice().getCurrency() + "</td>");
+            builder.append("<td class='align-middle'>" + stock.getPrice().getPrice() + "</td>");
+            builder.append("<td class='align-middle'>" + stock.getPrice().getUpdated() + "</td>");
+            builder.append("<td class='align-middle'>");
             builder.append("<button type='button' class='btn btn-warning mr-2 js-sell-btn' data-toggle='modal' data-target='#sales-modal' data-action='Sell' data-stock-name='" + stock.getStockName() + "' data-stock-symbol='" + stock.getStockSymbol() + "'>Sell</button>");
             builder.append("<button type='button' class='btn btn-success js-buy-btn'" + (stock.getAvailableShares() == 0F ? " disabled" : "") + " data-toggle='modal' data-target='#sales-modal' data-action='Buy' data-stock-name='" + stock.getStockName() + "' data-stock-symbol='" + stock.getStockSymbol() + "' data-available-shares='" + stock.getAvailableShares() + "'>Buy</button>");
             builder.append("</td>");

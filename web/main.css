@@ -24,4 +24,15 @@ button:disabled:hover, a:disabled:hover {
     -webkit-transform: rotate(180deg);
     -moz-transform: rotate(180deg);
     transform: rotate(180deg);
-} 
+}
+
+.c-stock-img-cell {
+    width: 1% !important;
+    padding-right: 0 !important;
+}
+
+.c-company-logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 6px;
+}
