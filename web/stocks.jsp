@@ -4,6 +4,9 @@
     Author     : Adam Watson
 --%>
 
+<%@page import="java.time.ZonedDateTime"%>
+<%@page import="java.time.format.DateTimeFormatter"%>
+<%@page import="javax.xml.datatype.XMLGregorianCalendar"%>
 <%@page import="io.grimlock257.sccc.ws.Stock"%>
 <%@page import="java.util.List"%>
 <%@page import="io.grimlock257.sccc.ws.ShareBrokering"%>
@@ -344,7 +347,7 @@
             builder.append("<td class='align-middle'>" + stock.getAvailableShares() + "</td>");
             builder.append("<td class='align-middle'>" + stock.getPrice().getCurrency() + "</td>");
             builder.append("<td class='align-middle'>" + stock.getPrice().getPrice() + "</td>");
-            builder.append("<td class='align-middle'>" + stock.getPrice().getUpdated() + "</td>");
+            builder.append("<td class='align-middle'>" + formatDateTime(stock.getPrice().getUpdated()) + "</td>");
             builder.append("<td class='align-middle'>");
             builder.append("<button type='button' class='btn btn-warning mr-2 js-sell-btn' data-toggle='modal' data-target='#sales-modal' data-action='Sell' data-stock-name='" + stock.getStockName() + "' data-stock-symbol='" + stock.getStockSymbol() + "'>Sell</button>");
             builder.append("<button type='button' class='btn btn-success js-buy-btn'" + (stock.getAvailableShares() == 0F ? " disabled" : "") + " data-toggle='modal' data-target='#sales-modal' data-action='Buy' data-stock-name='" + stock.getStockName() + "' data-stock-symbol='" + stock.getStockSymbol() + "' data-available-shares='" + stock.getAvailableShares() + "'>Buy</button>");
@@ -358,5 +361,18 @@
 
         // Return contents as a String
         return builder.toString();
+    }
+
+    /**
+     * Format the provided XMLGregorianCalendar object into a more readable format
+     *
+     * @param dateTime The XMLGregorianCalendar object to format
+     * @return The formatted date time as a String
+     */
+    public String formatDateTime(XMLGregorianCalendar dateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
+        ZonedDateTime zonedTime = dateTime.toGregorianCalendar().toZonedDateTime();
+
+        return formatter.format(zonedTime);
     }
 %>
