@@ -53,7 +53,7 @@
                 </div>
             </div>
         </nav>
-        <div class="container bg-secondary text-white pt-4 pb-1">
+        <div class="container bg-secondary text-white pt-4 pb-1 mb-4">
             <h1>Shares</h1>
             <%
                 // Used to populate the search form with previous search criteria
@@ -323,7 +323,7 @@
         StringBuilder builder = new StringBuilder();
 
         // Create table and set up header row
-        builder.append("<table class='table table-striped table-dark'>");
+        builder.append("<table class='table table-striped table-dark table-hover'>");
         builder.append("<thead>");
         builder.append("<tr>");
         builder.append("<th></th>");
@@ -340,7 +340,7 @@
 
         // Iterate over Stock objects, adding a table row for each
         for (Stock stock : stocks) {
-            builder.append("<tr>");
+            builder.append("<tr class='js-clickable-row c-clickable-row' data-href='company-profile.jsp' data-stock-name='" + stock.getStockName() + "' data-stock-symbol='" + stock.getStockSymbol() + "'>");
             builder.append("<td class='align-middle js-stock-img-cell c-stock-img-cell' data-stock-name='" + stock.getStockName() + "'></td>");
             builder.append("<th class='align-middle'>" + stock.getStockName() + "</th>");
             builder.append("<td class='align-middle'>" + stock.getStockSymbol() + "</td>");

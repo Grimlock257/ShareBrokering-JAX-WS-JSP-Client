@@ -36,3 +36,32 @@ button:disabled:hover, a:disabled:hover {
     height: 48px;
     border-radius: 6px;
 }
+
+.c-clickable-row {
+    cursor: pointer;
+}
+
+.c-single-line {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+}
+
+.c-article-description {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+}
+
+.c-news-item-container {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+.c-news-item-container > div[class^='col-'] {
+    padding-left: 5px;
+    padding-right: 5px;
+}
