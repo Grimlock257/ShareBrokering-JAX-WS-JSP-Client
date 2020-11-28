@@ -1,4 +1,4 @@
-/* 
+/*
  * Created on : 10-Nov-2020, 13:38:54
  * Author     : Adam Watson
  */
@@ -77,5 +77,17 @@ $(document).ready(function () {
                 }
             }
         });
+    });
+
+    $('.js-clickable-row').on("click", function () {
+        var isButton = $(event.target).is('button');
+        var rowDestination = $(this).data("href");
+        var stockName = $(this).data("stock-name");
+        var stockSymbol = $(this).data("stock-symbol");
+        var url = rowDestination + "?stockName=" + stockName + "&stockSymbol=" + stockSymbol;
+
+        if (!isButton) {
+            window.location = url;
+        }
     });
 });
