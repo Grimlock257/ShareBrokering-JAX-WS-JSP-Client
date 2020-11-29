@@ -16,13 +16,19 @@ $(document).ready(function () {
                 var currenciesFormSelect = currenciesForm.find("select");
                 currenciesFormSelect.removeClass("d-none");
 
+                var userCurrency = Cookies.get('userCurrency');
+
                 Object.keys(response).forEach(function (key) {
-                    currenciesFormSelect.append("<option value='" + key.toLowerCase() + "'>" + key + " - " + response[key] + "</option>");
+                    currenciesFormSelect.append("<option value='" + key.toLowerCase() + "' " + ((userCurrency === key.toLowerCase()) ? "selected" : "") + ">" + key + " - " + response[key] + "</option>");
                 });
             } else {
                 currenciesForm.append("<div class='bg-danger p-2'>Failed to retrieve currencies. Please try again.</div>");
             }
         }
+    });
+
+    $(".js-currencies-form select").change(function () {
+        Cookies.set('userCurrency', $(this).val());
     });
 
     /**
