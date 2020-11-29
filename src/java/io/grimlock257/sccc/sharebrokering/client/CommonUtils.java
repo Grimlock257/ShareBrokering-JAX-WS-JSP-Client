@@ -48,17 +48,23 @@ public class CommonUtils {
         StringBuilder builder = new StringBuilder();
 
         // Create table and set up header row
-        builder.append("<table class='table table-striped table-dark " + (clickableRows ? "table-hover" : "") + "'>");
-        builder.append("<thead>");
+        builder.append("<table class='table table-striped table-dark table-bordered " + (clickableRows ? "table-hover" : "") + " js-stocks-table'>");
+        builder.append("<thead class='text-center'>");
         builder.append("<tr>");
-        builder.append("<th></th>");
-        builder.append("<th>Company Name</th>");
-        builder.append("<th>Stock Symbol</th>");
-        builder.append("<th>Available Shares</th>");
-        builder.append("<th>Share Currency</th>");
-        builder.append("<th>Share Price</th>");
-        builder.append("<th>Price Last Updated</th>");
-        builder.append("<th></th>");
+        builder.append("<th class='border-right-0' rowspan='2'></th>");
+        builder.append("<th class='border-left-0 text-left' rowspan='2'>Company</th>");
+        builder.append("<th rowspan='2'>Symbol</th>");
+        builder.append("<th rowspan='2'>Available</th>");
+        builder.append("<th colspan='2'>Listed</th>");
+        builder.append("<th colspan='2'>Preferred</th>");
+        builder.append("<th rowspan='2'>Price Last Updated</th>");
+        builder.append("<th rowspan='2'></th>");
+        builder.append("</tr>");
+        builder.append("<tr>");
+        builder.append("<th>Price</th>");
+        builder.append("<th>Currency</th>");
+        builder.append("<th>Price</th>");
+        builder.append("<th>Currency</th>");
         builder.append("</tr>");
         builder.append("</thead>");
         builder.append("<tbody>");
@@ -66,14 +72,16 @@ public class CommonUtils {
         // Iterate over Stock objects, adding a table row for each
         for (Stock stock : stocks) {
             builder.append("<tr " + (clickableRows ? "class='js-clickable-row c-clickable-row' data-href='company-profile.jsp' data-stock-name='" + stock.getStockName() + "' data-stock-symbol='" + stock.getStockSymbol() : "") + "'>");
-            builder.append("<td class='align-middle js-stock-img-cell c-stock-img-cell' data-stock-name='" + stock.getStockName() + "'></td>");
-            builder.append("<th class='align-middle'>" + stock.getStockName() + "</th>");
-            builder.append("<td class='align-middle'>" + stock.getStockSymbol() + "</td>");
-            builder.append("<td class='align-middle'>" + stock.getAvailableShares() + "</td>");
-            builder.append("<td class='align-middle'>" + stock.getPrice().getCurrency() + "</td>");
-            builder.append("<td class='align-middle'>" + stock.getPrice().getPrice() + "</td>");
-            builder.append("<td class='align-middle'>" + CommonUtils.formatDateTime(stock.getPrice().getUpdated()) + "</td>");
-            builder.append("<td class='align-middle'>");
+            builder.append("<td class='border-right-0 align-middle js-stock-img-cell c-stock-img-cell' data-stock-name='" + stock.getStockName() + "'></td>");
+            builder.append("<th class='border-left-0 align-middle'>" + stock.getStockName() + "</th>");
+            builder.append("<td class='align-middle c-shrink-cell'>" + stock.getStockSymbol() + "</td>");
+            builder.append("<td class='align-middle c-shrink-cell text-right'>" + String.format("%.2f", stock.getAvailableShares()) + "</td>");
+            builder.append("<td class='align-middle c-shrink-cell text-right js-currency-listed-price-cell'>" + String.format("%.2f", stock.getPrice().getPrice()) + "</td>");
+            builder.append("<td class='align-middle c-shrink-cell text-left js-currency-listed-currency-cell'>" + stock.getPrice().getCurrency() + "</td>");
+            builder.append("<td class='align-middle c-shrink-cell text-right js-currency-preference-price-cell'></td>");
+            builder.append("<td class='align-middle c-shrink-cell text-left js-currency-preference-currency-cell'></td>");
+            builder.append("<td class='align-middle text-center'>" + CommonUtils.formatDateTime(stock.getPrice().getUpdated()) + "</td>");
+            builder.append("<td class='align-middle text-center'>");
             builder.append("<button type='button' class='btn btn-warning mr-2 js-sell-btn' data-toggle='modal' data-target='#sales-modal' data-action='Sell' data-stock-name='" + stock.getStockName() + "' data-stock-symbol='" + stock.getStockSymbol() + "'>Sell</button>");
             builder.append("<button type='button' class='btn btn-success js-buy-btn'" + (stock.getAvailableShares() == 0F ? " disabled" : "") + " data-toggle='modal' data-target='#sales-modal' data-action='Buy' data-stock-name='" + stock.getStockName() + "' data-stock-symbol='" + stock.getStockSymbol() + "' data-available-shares='" + stock.getAvailableShares() + "'>Buy</button>");
             builder.append("</td>");
