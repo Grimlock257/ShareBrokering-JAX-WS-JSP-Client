@@ -31,6 +31,10 @@ button:disabled:hover, a:disabled:hover {
     padding-right: 0 !important;
 }
 
+.c-shrink-cell {
+    width: 1% !important;
+}
+
 .c-company-logo {
     width: 48px;
     height: 48px;

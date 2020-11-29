@@ -30,6 +30,45 @@ $(document).ready(function () {
     });
 
     /**
+     * On page load, look for a table with a class of js-stocks-table and iterate over the rows. Convert the base price to the prefernenc currency, or default to GBP
+     */
+    $(".js-stocks-table").ready(function () {
+        // Attempt to get userCurrenct from Cookie
+        var userCurrency = Cookies.get('userCurrency');
+        var theTable = $(this);
+
+        // If no cookie, default to GBP
+        if (userCurrency === undefined) {
+            userCurrency = "gbp";
+        }
+
+        theTable.find("tbody tr").each(function () {
+            var theRow = $(this);
+            var baseCurrency = theRow.find(".js-currency-listed-currency-cell").html();
+            var value = theRow.find(".js-currency-listed-price-cell").html();
+
+            // Set the currency cell value
+            theRow.find(".js-currency-preference-currency-cell").append(userCurrency.toUpperCase());
+
+            // Asynchronously convert the currency via the CurrencyAPI and update the table
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/CurrencyAPI/webresources/convert",
+                data: "baseCurrency=" + baseCurrency + "&targetCurrency=" + userCurrency + "&value=" + value,
+                success: function (response) {
+                    var preferredCurrencyPriceCell = theRow.find(".js-currency-preference-price-cell");
+
+                    if (response !== null && response !== undefined && response.status === "success") {
+                        preferredCurrencyPriceCell.append(response.value.toFixed(2));
+                    } else {
+                        preferredCurrencyPriceCell.append("error");
+                    }
+                }
+            });
+        });
+    });
+
+    /**
      * Listen to currency form select change events to update the userCurrency cookie
      */
     $(".js-currencies-form select").change(function () {
