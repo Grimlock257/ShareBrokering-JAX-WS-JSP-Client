@@ -82,6 +82,39 @@ public class Stocks {
     }
 
     /**
+     * Handle when a search is submitted, attempt to retrieve search results from the Web Service.
+     *
+     * @param stockName The stock name to search for (contains)
+     * @param stockSymbol The stock symbol to search for (contains)
+     * @param stockCurrency The stock currency to search for (equals)
+     * @param sharePriceFilter The share price filter (<=, =, >=)
+     * @param sharePriceStr The share price as a string
+     * @param sortBy The column in which the results should be ordered by
+     * @param order Whether to order the sortBy column ascending or descending
+     * @return The stocks table or a info dialog as an HTML string
+     */
+    public String handleSearch(String stockName, String stockSymbol, String stockCurrency, String sharePriceFilter, String sharePriceStr, String sortBy, String order) {
+        Double sharePrice = -1D;
+
+        try {
+            sharePrice = Double.parseDouble(sharePriceStr);
+        } catch (NumberFormatException e) {
+            if (sharePriceStr.length() > 0) {
+                return "<div class='bg-danger p-2'>Sorry, something went wrong. It appears a non-integer quantity was entered - please try again.</div>";
+            }
+        }
+
+        List<Stock> filteredStocks = port.searchShares(stockName, stockSymbol, stockCurrency, sharePriceFilter, sharePrice, sortBy, order);
+
+        // Check there are stocks actually some stocks
+        if (!(filteredStocks.size() > 0)) {
+            return "<div class='bg-danger p-2'>Sorry, no stocks met your criteria - please try search again.</div>";
+        } else {
+            return CommonUtils.getInstance().getStockTableAsHTML(filteredStocks, true);
+        }
+    }
+
+    /**
      * Handle when a purchase order is actioned, attempt to execute the purchase on the Web Service.
      *
      * @param symbol The stock symbol which the user is purchasing

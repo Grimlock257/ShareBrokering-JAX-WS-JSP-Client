@@ -5,14 +5,6 @@
 --%>
 
 <%@page import="io.grimlock257.sccc.sharebrokering.client.Stocks"%>
-<%@page import="io.grimlock257.sccc.sharebrokering.client.CommonUtils"%>
-<%@page import="java.time.ZonedDateTime"%>
-<%@page import="java.time.format.DateTimeFormatter"%>
-<%@page import="javax.xml.datatype.XMLGregorianCalendar"%>
-<%@page import="io.grimlock257.sccc.ws.Stock"%>
-<%@page import="java.util.List"%>
-<%@page import="io.grimlock257.sccc.ws.ShareBrokering"%>
-<%@page import="io.grimlock257.sccc.ws.ShareBrokering_Service"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
@@ -152,7 +144,7 @@
                     String sortBy = request.getParameter("sortBy");
                     String order = request.getParameter("order");
 
-                    String searchResult = handleSearch(stockName, stockSymbol, stockCurrency, sharePriceFilter, sharePrice, sortBy, order);
+                    String searchResult = Stocks.getInstance().handleSearch(stockName, stockSymbol, stockCurrency, sharePriceFilter, sharePrice, sortBy, order);
 
                     out.println(searchResult);
                 } else if (request.getParameter("buy") != null) {
@@ -176,42 +168,3 @@
         <jsp:include page="includes/sales-modal.jsp" />
     </body>
 </html>
-
-<%!
-    // Create reference to the web service
-    ShareBrokering_Service service = new ShareBrokering_Service();
-    ShareBrokering port = service.getShareBrokeringPort();
-
-    /**
-     * Handle when a search is submitted, attempt to retrieve search results from the Web Service.
-     *
-     * @param stockName The stock name to search for (contains)
-     * @param stockSymbol The stock symbol to search for (contains)
-     * @param stockCurrency The stock currency to search for (equals)
-     * @param sharePriceFilter The share price filter (<=, =, >=)
-     * @param sharePriceStr The share price as a string
-     * @param sortBy The column in which the results should be ordered by
-     * @param order Whether to order the sortBy column ascending or descending
-     * @return The stocks table or a info diaglog as an HTML string
-     */
-    public String handleSearch(String stockName, String stockSymbol, String stockCurrency, String sharePriceFilter, String sharePriceStr, String sortBy, String order) {
-        Double sharePrice = -1D;
-
-        try {
-            sharePrice = Double.parseDouble(sharePriceStr);
-        } catch (NumberFormatException e) {
-            if (sharePriceStr.length() > 0) {
-                return "<div class='bg-danger p-2'>Sorry, something went wrong. It appears a non-integer quantity was entered - please try again.</div>";
-            }
-        }
-
-        List<Stock> filteredStocks = port.searchShares(stockName, stockSymbol, stockCurrency, sharePriceFilter, sharePrice, sortBy, order);
-
-        // Check there are stocks actually some stocks
-        if (!(filteredStocks.size() > 0)) {
-            return "<div class='bg-danger p-2'>Sorry, no stocks met your criteria - please try search again.</div>";
-        } else {
-            return CommonUtils.getInstance().getStockTableAsHTML(filteredStocks, true);
-        }
-    }
-%>
