@@ -10,7 +10,13 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Home | Adams Share Broker</title>
+        <%
+            if (request.getParameter("stockName") != null) {
+                out.println("<title>" + request.getParameter("stockName") + " | Adams Share Broker</title>");
+            } else {
+                out.println("<title>Company profile | Adams Share Broker</title>");
+            }
+        %>
 
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
@@ -51,7 +57,7 @@
         <div class="container bg-secondary text-white pt-4 pb-1 mb-4">
             <h1 class="js-company-name"></h1>
             <%
-                // If the stockSymbol is present as a query parameter, display the information section with the stock table entry
+                // Display page contents based on query parameters
                 if (request.getParameter("buy") != null) {
                     String symbol = request.getParameter("symbol");
                     String quantity = request.getParameter("quantity");
