@@ -21,4 +21,24 @@ $(document).ready(function () {
     $('.js-stocks-search-card').on('hide.bs.collapse', function () {
         $('#stocks-search-btn-arrow').removeClass('active');
     });
+
+    /**
+     * For every stock image cell, make an asynchronous request to the logo API to search for the logo based on
+     * company name
+     */
+    $('.js-stock-img-cell').each(function () {
+        var cell = $(this);
+        var stockName = cell.data('stock-name');
+
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8080/LogoAPI/webresources/logo",
+            data: "name=" + stockName,
+            success: function (response) {
+                if (response.success === true) {
+                    cell.append("<img src='" + response.logoUrl + "' alt='" + stockName + " logo' class='c-company-logo'/>");
+                }
+            }
+        });
+    });
 });
