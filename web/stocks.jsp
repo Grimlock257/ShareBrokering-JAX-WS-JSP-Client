@@ -4,6 +4,8 @@
     Author     : Adam Watson
 --%>
 
+<%@page import="io.grimlock257.sccc.sharebrokering.client.Stocks"%>
+<%@page import="io.grimlock257.sccc.sharebrokering.client.CommonUtils"%>
 <%@page import="java.time.ZonedDateTime"%>
 <%@page import="java.time.format.DateTimeFormatter"%>
 <%@page import="javax.xml.datatype.XMLGregorianCalendar"%>
@@ -157,46 +159,21 @@
                     String symbol = request.getParameter("symbol");
                     String quantity = request.getParameter("quantity");
 
-                    out.println(handlePurchase(symbol, quantity));
-                    out.println(getStocksTable());
-
+                    out.println(Stocks.getInstance().handlePurchase(symbol, quantity));
+                    out.println(Stocks.getInstance().getStocksTable());
                 } else if (request.getParameter("sell") != null) {
                     String symbol = request.getParameter("symbol");
                     String quantity = request.getParameter("quantity");
 
-                    out.println(handleSale(symbol, quantity));
-                    out.println(getStocksTable());
+                    out.println(Stocks.getInstance().handleSale(symbol, quantity));
+                    out.println(Stocks.getInstance().getStocksTable());
                 } else {
-                    out.println(getStocksTable());
+                    out.println(Stocks.getInstance().getStocksTable());
                 }
             %>
         </div>
 
-        <!-- Purchase/Sale modal -->
-        <div class="modal fade" id="sales-modal">
-            <div class="modal-dialog">
-                <div class="modal-content bg-dark text-white">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="js-modal-title">Share transaction</h5>
-                        <button type="button" class="close text-white" data-dismiss="modal">
-                            <span>&times;</span>
-                        </button>
-                    </div>
-                    <form method="POST" id="js-modal-form">
-                        <div class="modal-body form-inline">
-                            <div class="form-group">
-                                <span id='js-action-text'>Quantity</span><input type="number" name="quantity" id="js-quantitiy-field" class="ml-4 form-control" required="required" step="any" min="0" max="0">
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <input type="hidden" name="symbol" id="js-form-symbol" value="" />
-                            <input type="button" value="Cancel" class="btn btn-danger" data-dismiss="modal" />
-                            <input type="submit" value="Purchase" class="btn btn-success" id="js-action-btn" />
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+        <jsp:include page="includes/sales-modal.jsp" />
     </body>
 </html>
 
@@ -234,145 +211,7 @@
         if (!(filteredStocks.size() > 0)) {
             return "<div class='bg-danger p-2'>Sorry, no stocks met your criteria - please try search again.</div>";
         } else {
-            return getStockTableAsHTML(filteredStocks);
+            return CommonUtils.getInstance().getStockTableAsHTML(filteredStocks, true);
         }
-    }
-
-    /**
-     * Handle when a purchase order is actioned, attempt to execute the purchase on the Web Service.
-     *
-     * @param symbol The stock symbol which the user is purchasing
-     * @param quantityStr The quantity that the user is purchasing as a String
-     * @return A string representing an HTML diaglog box with the appropriate message within (success or failure)
-     */
-    public String handlePurchase(String symbol, String quantityStr) {
-        try {
-            Double quantity = Double.parseDouble(quantityStr);
-
-            if (symbol == null || quantity == null) {
-                return "<div class='bg-danger p-2'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>";
-            } else if (quantity <= 0) {
-                return "<div class='bg-danger p-2'>Sorry, something went wrong. You cannot purchase 0 or less shares - please try again.</div>";
-            } else {
-                Boolean purchaseSuccess = port.purchaseShare(symbol, quantity);
-
-                if (purchaseSuccess) {
-                    return "<div class='bg-success p-2'>You have successfully purchased " + quantity + " shares.</div>";
-                } else {
-                    return "<div class='bg-danger p-2'>Your purchase has failed. Please try again. </div>";
-                }
-            }
-        } catch (NumberFormatException e) {
-            return "<div class='bg-danger p-2'>Sorry, something went wrong. It appears a non-integer quantity was entered - please try again.</div>";
-        }
-    }
-
-    /**
-     * Handle when sell order is actioned, attempt to execute the sale on the Web Service.
-     *
-     * @param symbol The stock symbol which the user is selling
-     * @param quantityStr The quantity that the user is selling as a String
-     * @return A string representing an HTML diaglog box with the appropriate message within (success or failure)
-     */
-    public String handleSale(String symbol, String quantityStr) {
-        try {
-            Double quantity = Double.parseDouble(quantityStr);
-
-            if (symbol == null || quantity == null) {
-                return "<div class='bg-danger p-2'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>";
-            } else if (quantity <= 0) {
-                return "<div class='bg-danger p-2'>Sorry, something went wrong. You cannot sell 0 or less shares - please try again.</div>";
-            } else {
-                Boolean saleSuccess = port.sellShare(symbol, quantity);
-
-                if (saleSuccess) {
-                    return "<div class='bg-success p-2'>You have successfully sold " + quantity + " shares.</div>";
-                } else {
-                    return "<div class='bg-danger p-2'>Your sale has failed. Please try again. </div>";
-                }
-            }
-        } catch (NumberFormatException e) {
-            return "<div class='bg-danger p-2'>Sorry, something went wrong. It appears a non-integer quantity was entered - please try again.</div>";
-        }
-    }
-
-    /**
-     * Retrieve stocks from the Web Service and return a HTML table representation, or info diaglog if there are no Stocks to display
-     *
-     * @return The stocks table or a info diaglog as an HTML string
-     */
-    public String getStocksTable() {
-        // Get list of Stock objects from the server
-        List<Stock> stocks = port.getAllStocks();
-
-        // Check there are stocks actually some stocks
-        if (!(stocks.size() > 0)) {
-            return "<div class='bg-info p-2'>Sorry, there are no stocks listed at the moment - check back later</div>";
-        } else {
-            return getStockTableAsHTML(stocks);
-        }
-    }
-
-    /**
-     * Generate a String representing an HTML table of stocks
-     *
-     * @param stocks The stocks used to populate the table with
-     * @return The String representing the HTML table
-     */
-    public String getStockTableAsHTML(List<Stock> stocks) {
-        StringBuilder builder = new StringBuilder();
-
-        // Create table and set up header row
-        builder.append("<table class='table table-striped table-dark table-hover'>");
-        builder.append("<thead>");
-        builder.append("<tr>");
-        builder.append("<th></th>");
-        builder.append("<th>Company Name</th>");
-        builder.append("<th>Stock Symbol</th>");
-        builder.append("<th>Available Shares</th>");
-        builder.append("<th>Share Currency</th>");
-        builder.append("<th>Share Price</th>");
-        builder.append("<th>Price Last Updated</th>");
-        builder.append("<th></th>");
-        builder.append("</tr>");
-        builder.append("</thead>");
-        builder.append("<tbody>");
-
-        // Iterate over Stock objects, adding a table row for each
-        for (Stock stock : stocks) {
-            builder.append("<tr class='js-clickable-row c-clickable-row' data-href='company-profile.jsp' data-stock-name='" + stock.getStockName() + "' data-stock-symbol='" + stock.getStockSymbol() + "'>");
-            builder.append("<td class='align-middle js-stock-img-cell c-stock-img-cell' data-stock-name='" + stock.getStockName() + "'></td>");
-            builder.append("<th class='align-middle'>" + stock.getStockName() + "</th>");
-            builder.append("<td class='align-middle'>" + stock.getStockSymbol() + "</td>");
-            builder.append("<td class='align-middle'>" + stock.getAvailableShares() + "</td>");
-            builder.append("<td class='align-middle'>" + stock.getPrice().getCurrency() + "</td>");
-            builder.append("<td class='align-middle'>" + stock.getPrice().getPrice() + "</td>");
-            builder.append("<td class='align-middle'>" + formatDateTime(stock.getPrice().getUpdated()) + "</td>");
-            builder.append("<td class='align-middle'>");
-            builder.append("<button type='button' class='btn btn-warning mr-2 js-sell-btn' data-toggle='modal' data-target='#sales-modal' data-action='Sell' data-stock-name='" + stock.getStockName() + "' data-stock-symbol='" + stock.getStockSymbol() + "'>Sell</button>");
-            builder.append("<button type='button' class='btn btn-success js-buy-btn'" + (stock.getAvailableShares() == 0F ? " disabled" : "") + " data-toggle='modal' data-target='#sales-modal' data-action='Buy' data-stock-name='" + stock.getStockName() + "' data-stock-symbol='" + stock.getStockSymbol() + "' data-available-shares='" + stock.getAvailableShares() + "'>Buy</button>");
-            builder.append("</td>");
-            builder.append("</tr>");
-        }
-
-        // Close up the table
-        builder.append("</tbody>");
-        builder.append("</table>");
-
-        // Return contents as a String
-        return builder.toString();
-    }
-
-    /**
-     * Format the provided XMLGregorianCalendar object into a more readable format
-     *
-     * @param dateTime The XMLGregorianCalendar object to format
-     * @return The formatted date time as a String
-     */
-    public String formatDateTime(XMLGregorianCalendar dateTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
-        ZonedDateTime zonedTime = dateTime.toGregorianCalendar().toZonedDateTime();
-
-        return formatter.format(zonedTime);
     }
 %>

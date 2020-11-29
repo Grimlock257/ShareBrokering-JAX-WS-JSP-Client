@@ -21,7 +21,7 @@ $(document).ready(function () {
         salesModal.find('#js-modal-title').text(action + " " + stockName + " shares");
         salesModal.find('#js-action-text').text(action + " quantity");
         salesModal.find('#js-action-btn').val(action);
-        salesModal.find('#js-modal-form').attr("action", "?" + action.toLowerCase());
+        salesModal.find('#js-modal-form').attr("action", "?" + action.toLowerCase() + "&stockName=" + stockName + "&stockSymbol=" + stockSymbol);
         salesModal.find('#js-form-symbol').val(stockSymbol);
 
         if (availableShares !== null && availableShares !== undefined) {
@@ -56,26 +56,6 @@ $(document).ready(function () {
 
         $('.js-stocks-search-text-clearable').each(function () {
             $(this).removeAttr("value");
-        });
-    });
-
-    /**
-     * For every stock image cell, make an asynchronous request to the logo API to search for the logo based on
-     * company name
-     */
-    $('.js-stock-img-cell').each(function () {
-        var cell = $(this);
-        var stockName = cell.data('stock-name');
-
-        $.ajax({
-            type: "GET",
-            url: "http://localhost:8080/LogoAPI/webresources/logo",
-            data: "name=" + stockName,
-            success: function (response) {
-                if (response.success === true) {
-                    cell.append("<img src='" + response.logoUrl + "' alt='" + stockName + " logo' class='c-company-logo'/>");
-                }
-            }
         });
     });
 
