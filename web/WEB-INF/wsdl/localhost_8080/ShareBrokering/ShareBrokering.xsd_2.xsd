@@ -13,7 +13,7 @@
 <xs:sequence>
 <xs:element name="Currency" type="xs:string"/>
 <xs:element name="Price" type="xs:double"/>
-<xs:element name="Updated" type="xs:date"/>
+<xs:element name="Updated" type="xs:dateTime"/>
 </xs:sequence>
 </xs:complexType>
 </xs:schema>

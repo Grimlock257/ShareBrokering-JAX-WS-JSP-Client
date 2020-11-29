@@ -6,6 +6,10 @@
 
 <xs:element name="getAllStocksResponse" type="tns:getAllStocksResponse"/>
 
+<xs:element name="getStockBySymbol" type="tns:getStockBySymbol"/>
+
+<xs:element name="getStockBySymbolResponse" type="tns:getStockBySymbolResponse"/>
+
 <xs:element name="purchaseShare" type="tns:purchaseShare"/>
 
 <xs:element name="purchaseShareResponse" type="tns:purchaseShareResponse"/>
@@ -17,6 +21,18 @@
 <xs:element name="sellShare" type="tns:sellShare"/>
 
 <xs:element name="sellShareResponse" type="tns:sellShareResponse"/>
+
+<xs:complexType name="getStockBySymbol">
+<xs:sequence>
+<xs:element name="companySymbol" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getStockBySymbolResponse">
+<xs:sequence>
+<xs:element name="return" type="ns1:Stock" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
 
 <xs:complexType name="getAllStocks">
 <xs:sequence/>
