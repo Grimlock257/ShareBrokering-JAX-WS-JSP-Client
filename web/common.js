@@ -6,6 +6,37 @@
 $(document).ready(function () {
 
     /**
+     *  Asynchronously get currencies at page load and populate
+     */
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8080/CurrencyAPI/webresources/currencies",
+        success: function (response) {
+            var currenciesForm = $(".js-currencies-form");
+
+            if (response !== null && response !== undefined) {
+                var currenciesFormSelect = currenciesForm.find("select");
+                currenciesFormSelect.removeClass("d-none");
+
+                var userCurrency = Cookies.get('userCurrency');
+
+                Object.keys(response).forEach(function (key) {
+                    currenciesFormSelect.append("<option value='" + key.toLowerCase() + "' " + ((userCurrency === key.toLowerCase()) ? "selected" : "") + ">" + key + " - " + response[key] + "</option>");
+                });
+            } else {
+                currenciesForm.append("<div class='bg-danger p-2'>Failed to retrieve currencies. Please try again.</div>");
+            }
+        }
+    });
+
+    /**
+     * Listen to currency form select change events to update the userCurrency cookie
+     */
+    $(".js-currencies-form select").change(function () {
+        Cookies.set('userCurrency', $(this).val());
+    });
+
+    /**
      * When the show event has been fired, add the active class and to trigger
      * the CSS transition
      */
