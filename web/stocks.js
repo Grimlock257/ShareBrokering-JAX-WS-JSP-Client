@@ -5,6 +5,26 @@
 
 $(document).ready(function () {
 
+    // Asynchronously get currencies at page load and populate
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8080/CurrencyAPI/webresources/currencies",
+        success: function (response) {
+            var currenciesForm = $(".js-currencies-form");
+
+            if (response !== null && response !== undefined) {
+                var currenciesFormSelect = currenciesForm.find("select");
+                currenciesFormSelect.removeClass("d-none");
+
+                Object.keys(response).forEach(function (key) {
+                    currenciesFormSelect.append("<option value='" + key.toLowerCase() + "'>" + key + " - " + response[key] + "</option>");
+                });
+            } else {
+                currenciesForm.append("<div class='bg-danger p-2'>Failed to retrieve currencies. Please try again.</div>");
+            }
+        }
+    });
+
     /**
      * When the modal show event has been fired, set up the modal text and
      * max value for the text input field
