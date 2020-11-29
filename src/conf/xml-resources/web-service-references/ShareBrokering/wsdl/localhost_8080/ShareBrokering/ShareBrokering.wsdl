@@ -7,11 +7,23 @@
 <xsd:import namespace="http://grimlock257.github.io/Stocks" schemaLocation="http://localhost:8080/ShareBrokering/ShareBrokering?xsd=2"/>
 </xsd:schema>
 </types>
+<message name="getStockBySymbol">
+<part name="parameters" element="tns:getStockBySymbol"/>
+</message>
+<message name="getStockBySymbolResponse">
+<part name="parameters" element="tns:getStockBySymbolResponse"/>
+</message>
 <message name="searchShares">
 <part name="parameters" element="tns:searchShares"/>
 </message>
 <message name="searchSharesResponse">
 <part name="parameters" element="tns:searchSharesResponse"/>
+</message>
+<message name="getAllStocks">
+<part name="parameters" element="tns:getAllStocks"/>
+</message>
+<message name="getAllStocksResponse">
+<part name="parameters" element="tns:getAllStocksResponse"/>
 </message>
 <message name="sellShare">
 <part name="parameters" element="tns:sellShare"/>
@@ -25,16 +37,18 @@
 <message name="purchaseShareResponse">
 <part name="parameters" element="tns:purchaseShareResponse"/>
 </message>
-<message name="getAllStocks">
-<part name="parameters" element="tns:getAllStocks"/>
-</message>
-<message name="getAllStocksResponse">
-<part name="parameters" element="tns:getAllStocksResponse"/>
-</message>
 <portType name="ShareBrokering">
+<operation name="getStockBySymbol">
+<input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/getStockBySymbolRequest" message="tns:getStockBySymbol"/>
+<output wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/getStockBySymbolResponse" message="tns:getStockBySymbolResponse"/>
+</operation>
 <operation name="searchShares">
 <input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/searchSharesRequest" message="tns:searchShares"/>
 <output wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/searchSharesResponse" message="tns:searchSharesResponse"/>
+</operation>
+<operation name="getAllStocks">
+<input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/getAllStocksRequest" message="tns:getAllStocks"/>
+<output wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/getAllStocksResponse" message="tns:getAllStocksResponse"/>
 </operation>
 <operation name="sellShare">
 <input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/sellShareRequest" message="tns:sellShare"/>
@@ -44,14 +58,28 @@
 <input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/purchaseShareRequest" message="tns:purchaseShare"/>
 <output wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/purchaseShareResponse" message="tns:purchaseShareResponse"/>
 </operation>
-<operation name="getAllStocks">
-<input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/getAllStocksRequest" message="tns:getAllStocks"/>
-<output wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/getAllStocksResponse" message="tns:getAllStocksResponse"/>
-</operation>
 </portType>
 <binding name="ShareBrokeringPortBinding" type="tns:ShareBrokering">
 <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+<operation name="getStockBySymbol">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
 <operation name="searchShares">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="getAllStocks">
 <soap:operation soapAction=""/>
 <input>
 <soap:body use="literal"/>
@@ -70,15 +98,6 @@
 </output>
 </operation>
 <operation name="purchaseShare">
-<soap:operation soapAction=""/>
-<input>
-<soap:body use="literal"/>
-</input>
-<output>
-<soap:body use="literal"/>
-</output>
-</operation>
-<operation name="getAllStocks">
 <soap:operation soapAction=""/>
 <input>
 <soap:body use="literal"/>
