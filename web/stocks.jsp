@@ -29,7 +29,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body class="bg-dark">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-secondary shadow">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-secondary shadow sticky-top">
             <div class="container">
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle">
                     <span class="navbar-toggler-icon"></span>
@@ -44,6 +44,11 @@
                             <a class="nav-link" href="#">Stocks</a>
                         </li>
                     </ul>
+                    <form class="js-currencies-form">
+                        <select name="preferenceCurrency" class="form-control d-none">
+                            <option value="gbp" selected readonly>GBP - British Pound (default)</option>
+                        </select>
+                    </form>
                 </div>
             </div>
         </nav>
