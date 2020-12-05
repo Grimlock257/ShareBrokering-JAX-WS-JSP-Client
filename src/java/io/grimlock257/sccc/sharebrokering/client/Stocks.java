@@ -250,4 +250,37 @@ public class Stocks {
             return "<div class='bg-danger p-2'>Your removal has failed. Please try again. </div>";
         }
     }
+
+    /**
+     * Handle when a stock is edited, attempt to execute the modify operation on the Web Service.
+     *
+     * @param stockName The updated stockName
+     * @param currentStockSymbol The current stock symbol
+     * @param newStockSymbol The updated stock symbol
+     * @param availableSharesStr The updated available share amount
+     * @return A string representing an HTML dialog box with the appropriate message within (success or failure)
+     */
+    public String handleEdit(String stockName, String currentStockSymbol, String newStockSymbol, String availableSharesStr) {
+        try {
+            if (stockName == null || currentStockSymbol == null || newStockSymbol == null || availableSharesStr == null) {
+                return "<div class='bg-danger p-2'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>";
+            }
+
+            Double availableShares = Double.parseDouble(availableSharesStr);
+
+            if (availableShares < 0) {
+                return "<div class='bg-danger p-2'>Sorry, something went wrong. You cannot have less than 0 shares - please try again.</div>";
+            } else {
+                Boolean editSuccess = port.modifyShare(stockName, currentStockSymbol, newStockSymbol, availableShares);
+
+                if (editSuccess) {
+                    return "<div class='bg-success p-2'>You have successfully modified " + currentStockSymbol + ".</div>";
+                } else {
+                    return "<div class='bg-danger p-2'>Your modification has failed. Please try again. </div>";
+                }
+            }
+        } catch (NumberFormatException e) {
+            return "<div class='bg-danger p-2'>Sorry, something went wrong. It appears a non-integer value was entered - please try again.</div>";
+        }
+    }
 }
