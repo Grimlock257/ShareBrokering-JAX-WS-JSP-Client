@@ -26,7 +26,6 @@
         <link rel="stylesheet" href="main.css" />
 
         <!-- Custom JS -->
-        <script src="stocks.js" type="text/javascript"></script>
         <script src="common.js" type="text/javascript"></script>
 
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">

@@ -126,4 +126,29 @@ $(document).ready(function () {
             }
         });
     });
+
+    /**
+     * When the search form reset button has been clicked, removed 'selected' attribute from all option elements
+     */
+    $("#js-stocks-search-reset").on("click", function () {
+        $('.js-stocks-search-selectable option').each(function () {
+            $(this).removeAttr("selected");
+        });
+
+        $('.js-stocks-search-text-clearable').each(function () {
+            $(this).removeAttr("value");
+        });
+    });
+
+    $('.js-clickable-row').on("click", function () {
+        var isButton = $(event.target).is('button');
+        var rowDestination = $(this).data("href");
+        var stockName = $(this).data("stock-name");
+        var stockSymbol = $(this).data("stock-symbol");
+        var url = rowDestination + "?stockName=" + stockName + "&stockSymbol=" + stockSymbol;
+
+        if (!isButton) {
+            window.location = url;
+        }
+    });
 });
