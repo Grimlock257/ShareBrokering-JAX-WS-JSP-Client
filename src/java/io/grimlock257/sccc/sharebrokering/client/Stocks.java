@@ -90,8 +90,8 @@ public class Stocks {
             return CommonUtils.getInstance().getStockTableAsHTML(theStock, false, false);
         }
     }
-    
-        /**
+
+    /**
      * Handle when a search is submitted, attempt to retrieve search results from the Web Service (non management mode)
      *
      * @param stockName The stock name to search for (contains)
@@ -228,6 +228,26 @@ public class Stocks {
             }
         } catch (NumberFormatException e) {
             return "<div class='bg-danger p-2'>Sorry, something went wrong. It appears a non-integer value was entered - please try again.</div>";
+        }
+    }
+
+    /**
+     * Handle when a stock is removed from the system, attempt to execute the remove operation on the Web Service.
+     *
+     * @param stockSymbol The symbol for the stock to be removed
+     * @return A string representing an HTML dialog box with the appropriate message within (success or failure)
+     */
+    public String handleRemove(String stockSymbol) {
+        if (stockSymbol == null) {
+            return "<div class='bg-danger p-2'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>";
+        }
+
+        Boolean addSuccess = port.deleteShare(stockSymbol);
+
+        if (addSuccess) {
+            return "<div class='bg-success p-2'>You have successfully removed the stock with the symbol '" + stockSymbol + "'.</div>";
+        } else {
+            return "<div class='bg-danger p-2'>Your removal has failed. Please try again. </div>";
         }
     }
 }

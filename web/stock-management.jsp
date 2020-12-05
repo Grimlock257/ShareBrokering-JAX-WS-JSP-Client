@@ -26,6 +26,7 @@
         <link rel="stylesheet" href="main.css" />
 
         <!-- Custom JS -->
+        <script src="stock-management.js" type="text/javascript"></script>
         <script src="common.js" type="text/javascript"></script>
 
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -108,7 +109,7 @@
             <h1>Edit Existing Stocks</h1>
 
             <jsp:include page="includes/search-pane.jsp" />
-            
+
             <%
                 // Handle different page states
                 if (request.getParameter("search") != null) {
@@ -123,12 +124,19 @@
                     String searchResult = Stocks.getInstance().handleSearch(stockName, stockSymbol, stockCurrency, sharePriceFilter, sharePrice, sortBy, order, true);
 
                     out.println(searchResult);
+                } else if (request.getParameter("remove") != null) {
+                    String stockSymbol = request.getParameter("stockSymbol");
+
+                    String removeResult = Stocks.getInstance().handleRemove(stockSymbol);
+
+                    out.println(removeResult);
+                    out.println(Stocks.getInstance().getStocksTable(true));
                 } else {
                     out.println(Stocks.getInstance().getStocksTable(true));
                 }
             %>
         </div>
 
-        <jsp:include page="includes/sales-modal.jsp" />
+        <jsp:include page="includes/remove-modal.jsp" />
     </body>
 </html>
