@@ -13,23 +13,29 @@
 <message name="getStockBySymbolResponse">
 <part name="parameters" element="tns:getStockBySymbolResponse"/>
 </message>
-<message name="searchShares">
-<part name="parameters" element="tns:searchShares"/>
-</message>
-<message name="searchSharesResponse">
-<part name="parameters" element="tns:searchSharesResponse"/>
-</message>
 <message name="getAllStocks">
 <part name="parameters" element="tns:getAllStocks"/>
 </message>
 <message name="getAllStocksResponse">
 <part name="parameters" element="tns:getAllStocksResponse"/>
 </message>
-<message name="sellShare">
-<part name="parameters" element="tns:sellShare"/>
+<message name="searchShares">
+<part name="parameters" element="tns:searchShares"/>
 </message>
-<message name="sellShareResponse">
-<part name="parameters" element="tns:sellShareResponse"/>
+<message name="searchSharesResponse">
+<part name="parameters" element="tns:searchSharesResponse"/>
+</message>
+<message name="addShare">
+<part name="parameters" element="tns:addShare"/>
+</message>
+<message name="addShareResponse">
+<part name="parameters" element="tns:addShareResponse"/>
+</message>
+<message name="modifyShare">
+<part name="parameters" element="tns:modifyShare"/>
+</message>
+<message name="modifyShareResponse">
+<part name="parameters" element="tns:modifyShareResponse"/>
 </message>
 <message name="purchaseShare">
 <part name="parameters" element="tns:purchaseShare"/>
@@ -37,26 +43,50 @@
 <message name="purchaseShareResponse">
 <part name="parameters" element="tns:purchaseShareResponse"/>
 </message>
+<message name="sellShare">
+<part name="parameters" element="tns:sellShare"/>
+</message>
+<message name="sellShareResponse">
+<part name="parameters" element="tns:sellShareResponse"/>
+</message>
+<message name="deleteShare">
+<part name="parameters" element="tns:deleteShare"/>
+</message>
+<message name="deleteShareResponse">
+<part name="parameters" element="tns:deleteShareResponse"/>
+</message>
 <portType name="ShareBrokering">
 <operation name="getStockBySymbol">
 <input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/getStockBySymbolRequest" message="tns:getStockBySymbol"/>
 <output wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/getStockBySymbolResponse" message="tns:getStockBySymbolResponse"/>
 </operation>
+<operation name="getAllStocks">
+<input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/getAllStocksRequest" message="tns:getAllStocks"/>
+<output wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/getAllStocksResponse" message="tns:getAllStocksResponse"/>
+</operation>
 <operation name="searchShares">
 <input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/searchSharesRequest" message="tns:searchShares"/>
 <output wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/searchSharesResponse" message="tns:searchSharesResponse"/>
 </operation>
-<operation name="getAllStocks">
-<input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/getAllStocksRequest" message="tns:getAllStocks"/>
-<output wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/getAllStocksResponse" message="tns:getAllStocksResponse"/>
+<operation name="addShare">
+<input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/addShareRequest" message="tns:addShare"/>
+<output wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/addShareResponse" message="tns:addShareResponse"/>
+</operation>
+<operation name="modifyShare">
+<input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/modifyShareRequest" message="tns:modifyShare"/>
+<output wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/modifyShareResponse" message="tns:modifyShareResponse"/>
+</operation>
+<operation name="purchaseShare">
+<input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/purchaseShareRequest" message="tns:purchaseShare"/>
+<output wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/purchaseShareResponse" message="tns:purchaseShareResponse"/>
 </operation>
 <operation name="sellShare">
 <input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/sellShareRequest" message="tns:sellShare"/>
 <output wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/sellShareResponse" message="tns:sellShareResponse"/>
 </operation>
-<operation name="purchaseShare">
-<input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/purchaseShareRequest" message="tns:purchaseShare"/>
-<output wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/purchaseShareResponse" message="tns:purchaseShareResponse"/>
+<operation name="deleteShare">
+<input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/deleteShareRequest" message="tns:deleteShare"/>
+<output wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/deleteShareResponse" message="tns:deleteShareResponse"/>
 </operation>
 </portType>
 <binding name="ShareBrokeringPortBinding" type="tns:ShareBrokering">
@@ -70,6 +100,15 @@
 <soap:body use="literal"/>
 </output>
 </operation>
+<operation name="getAllStocks">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
 <operation name="searchShares">
 <soap:operation soapAction=""/>
 <input>
@@ -79,7 +118,25 @@
 <soap:body use="literal"/>
 </output>
 </operation>
-<operation name="getAllStocks">
+<operation name="addShare">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="modifyShare">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="purchaseShare">
 <soap:operation soapAction=""/>
 <input>
 <soap:body use="literal"/>
@@ -97,7 +154,7 @@
 <soap:body use="literal"/>
 </output>
 </operation>
-<operation name="purchaseShare">
+<operation name="deleteShare">
 <soap:operation soapAction=""/>
 <input>
 <soap:body use="literal"/>

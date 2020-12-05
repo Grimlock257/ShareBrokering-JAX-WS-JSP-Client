@@ -171,4 +171,36 @@ public class Stocks {
             return "<div class='bg-danger p-2'>Sorry, something went wrong. It appears a non-integer quantity was entered - please try again.</div>";
         }
     }
+
+    /**
+     * Handle when a stock is added to the system, attempt to execute the add operation on the Web Service.
+     *
+     * @param stockName The company name of the new stock
+     * @param stockSymbol The symbol for the new stock
+     * @param availableSharesStr The amount of available shares for the new stock
+     * @return A string representing an HTML dialog box with the appropriate message within (success or failure)
+     */
+    public String handleAdd(String stockName, String stockSymbol, String availableSharesStr) {
+        try {
+            if (stockName == null || stockSymbol == null || availableSharesStr == null) {
+                return "<div class='bg-danger p-2'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>";
+            }
+
+            Double availableShares = Double.parseDouble(availableSharesStr);
+
+            if (availableShares < 0) {
+                return "<div class='bg-danger p-2'>Sorry, something went wrong. You cannot have less than 0 shares - please try again.</div>";
+            } else {
+                Boolean addSuccess = port.addShare(stockName, stockSymbol, availableShares);
+
+                if (addSuccess) {
+                    return "<div class='bg-success p-2'>You have successfully added " + stockSymbol + " as a share.</div>";
+                } else {
+                    return "<div class='bg-danger p-2'>Your addition has failed. Please try again. </div>";
+                }
+            }
+        } catch (NumberFormatException e) {
+            return "<div class='bg-danger p-2'>Sorry, something went wrong. It appears a non-integer value was entered - please try again.</div>";
+        }
+    }
 }
