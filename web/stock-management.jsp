@@ -96,13 +96,36 @@
                 </form>
             </div>
             <%
-                // Handle different page states
                 if (request.getParameter("add") != null) {
                     String stockName = request.getParameter("stockName");
                     String stockSymbol = request.getParameter("stockSymbol");
                     String shareQuantity = request.getParameter("shareQuantity");
 
                     out.println(Stocks.getInstance().handleAdd(stockName, stockSymbol, shareQuantity));
+                }
+            %>
+        </div>
+        <div class="container bg-secondary text-white pt-4 pb-1 mb-4">
+            <h1>Edit Existing Stocks</h1>
+
+            <jsp:include page="includes/search-pane.jsp" />
+            
+            <%
+                // Handle different page states
+                if (request.getParameter("search") != null) {
+                    String stockName = request.getParameter("stockName");
+                    String stockSymbol = request.getParameter("stockSymbol");
+                    String stockCurrency = request.getParameter("stockCurrency");
+                    String sharePriceFilter = request.getParameter("sharePriceFilter");
+                    String sharePrice = request.getParameter("sharePrice");
+                    String sortBy = request.getParameter("sortBy");
+                    String order = request.getParameter("order");
+
+                    String searchResult = Stocks.getInstance().handleSearch(stockName, stockSymbol, stockCurrency, sharePriceFilter, sharePrice, sortBy, order, true);
+
+                    out.println(searchResult);
+                } else {
+                    out.println(Stocks.getInstance().getStocksTable(true));
                 }
             %>
         </div>
