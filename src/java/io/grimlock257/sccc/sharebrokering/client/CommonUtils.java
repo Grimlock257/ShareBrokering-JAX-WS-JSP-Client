@@ -42,9 +42,10 @@ public class CommonUtils {
      *
      * @param stocks The stocks used to populate the table with
      * @param clickableRows Whether to have clickable rows
+     * @param managementMode Whether the table is to be generated for the management page
      * @return The String representing the HTML table
      */
-    public String getStockTableAsHTML(List<Stock> stocks, boolean clickableRows) {
+    public String getStockTableAsHTML(List<Stock> stocks, boolean clickableRows, boolean managementMode) {
         StringBuilder builder = new StringBuilder();
 
         // Create table and set up header row
@@ -82,8 +83,15 @@ public class CommonUtils {
             builder.append("<td class='align-middle c-shrink-cell text-left js-currency-preference-currency-cell'></td>");
             builder.append("<td class='align-middle text-center'>" + CommonUtils.formatDateTime(stock.getPrice().getUpdated()) + "</td>");
             builder.append("<td class='align-middle text-center'>");
-            builder.append("<button type='button' class='btn btn-warning mr-2 js-sell-btn' data-toggle='modal' data-target='#sales-modal' data-action='Sell' data-stock-name='" + stock.getStockName() + "' data-stock-symbol='" + stock.getStockSymbol() + "'>Sell</button>");
-            builder.append("<button type='button' class='btn btn-success js-buy-btn'" + (stock.getAvailableShares() == 0F ? " disabled" : "") + " data-toggle='modal' data-target='#sales-modal' data-action='Buy' data-stock-name='" + stock.getStockName() + "' data-stock-symbol='" + stock.getStockSymbol() + "' data-available-shares='" + stock.getAvailableShares() + "'>Buy</button>");
+
+            if (managementMode) {
+                builder.append("<button type='button' class='btn btn-warning mr-2 js-edit-btn' data-action='Edit' data-stock-name='" + stock.getStockName() + "' data-stock-symbol='" + stock.getStockSymbol() + "'>Edit</button>");
+                builder.append("<button type='button' class='btn btn-danger js-remove-btn' data-toggle='modal' data-target='#remove-modal' data-action='Remove' data-stock-name='" + stock.getStockName() + "' data-stock-symbol='" + stock.getStockSymbol() + "' data-available-shares='" + stock.getAvailableShares() + "'>Remove</button>");
+
+            } else {
+                builder.append("<button type='button' class='btn btn-warning mr-2 js-sell-btn' data-toggle='modal' data-target='#sales-modal' data-action='Sell' data-stock-name='" + stock.getStockName() + "' data-stock-symbol='" + stock.getStockSymbol() + "'>Sell</button>");
+                builder.append("<button type='button' class='btn btn-success js-buy-btn'" + (stock.getAvailableShares() == 0F ? " disabled" : "") + " data-toggle='modal' data-target='#sales-modal' data-action='Buy' data-stock-name='" + stock.getStockName() + "' data-stock-symbol='" + stock.getStockSymbol() + "' data-available-shares='" + stock.getAvailableShares() + "'>Buy</button>");
+            }
             builder.append("</td>");
             builder.append("</tr>");
         }

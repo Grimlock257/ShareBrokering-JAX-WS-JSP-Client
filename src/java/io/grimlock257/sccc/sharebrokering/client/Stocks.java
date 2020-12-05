@@ -44,11 +44,21 @@ public class Stocks {
     }
 
     /**
-     * Retrieve stocks from the Web Service and return a HTML table representation, or info dialog if there are no Stocks to display
+     * Retrieve stocks from the Web Service and return a HTML table representation, or info dialog if there are no Stocks to display (non management mode)
      *
      * @return The stocks table or a info dialog as an HTML string
      */
     public String getStocksTable() {
+        return getStocksTable(false);
+    }
+
+    /**
+     * Retrieve stocks from the Web Service and return a HTML table representation, or info dialog if there are no Stocks to display
+     *
+     * @param managementMode Whether the table should be for the management mode
+     * @return The stocks table or a info dialog as an HTML string
+     */
+    public String getStocksTable(boolean managementMode) {
         // Get list of Stock objects from the server
         List<Stock> stocks = port.getAllStocks();
 
@@ -56,7 +66,7 @@ public class Stocks {
         if (!(stocks.size() > 0)) {
             return "<div class='bg-info p-2'>Sorry, there are no stocks listed at the moment - check back later</div>";
         } else {
-            return CommonUtils.getInstance().getStockTableAsHTML(stocks, true);
+            return CommonUtils.getInstance().getStockTableAsHTML(stocks, true, managementMode);
         }
     }
 
@@ -77,8 +87,24 @@ public class Stocks {
             List<Stock> theStock = new ArrayList<>();
             theStock.add(stock);
 
-            return CommonUtils.getInstance().getStockTableAsHTML(theStock, false);
+            return CommonUtils.getInstance().getStockTableAsHTML(theStock, false, false);
         }
+    }
+    
+        /**
+     * Handle when a search is submitted, attempt to retrieve search results from the Web Service (non management mode)
+     *
+     * @param stockName The stock name to search for (contains)
+     * @param stockSymbol The stock symbol to search for (contains)
+     * @param stockCurrency The stock currency to search for (equals)
+     * @param sharePriceFilter The share price filter (<=, =, >=)
+     * @param sharePriceStr The share price as a string
+     * @param sortBy The column in which the results should be ordered by
+     * @param order Whether to order the sortBy column ascending or descending
+     * @return The stocks table or a info dialog as an HTML string
+     */
+    public String handleSearch(String stockName, String stockSymbol, String stockCurrency, String sharePriceFilter, String sharePriceStr, String sortBy, String order) {
+        return handleSearch(stockName, stockSymbol, stockCurrency, sharePriceFilter, sharePriceStr, sortBy, order, false);
     }
 
     /**
@@ -91,9 +117,10 @@ public class Stocks {
      * @param sharePriceStr The share price as a string
      * @param sortBy The column in which the results should be ordered by
      * @param order Whether to order the sortBy column ascending or descending
+     * @param managementMode Whether to render the table in management mode
      * @return The stocks table or a info dialog as an HTML string
      */
-    public String handleSearch(String stockName, String stockSymbol, String stockCurrency, String sharePriceFilter, String sharePriceStr, String sortBy, String order) {
+    public String handleSearch(String stockName, String stockSymbol, String stockCurrency, String sharePriceFilter, String sharePriceStr, String sortBy, String order, boolean managementMode) {
         Double sharePrice = -1D;
 
         try {
@@ -110,7 +137,7 @@ public class Stocks {
         if (!(filteredStocks.size() > 0)) {
             return "<div class='bg-danger p-2'>Sorry, no stocks met your criteria - please try search again.</div>";
         } else {
-            return CommonUtils.getInstance().getStockTableAsHTML(filteredStocks, true);
+            return CommonUtils.getInstance().getStockTableAsHTML(filteredStocks, true, managementMode);
         }
     }
 
