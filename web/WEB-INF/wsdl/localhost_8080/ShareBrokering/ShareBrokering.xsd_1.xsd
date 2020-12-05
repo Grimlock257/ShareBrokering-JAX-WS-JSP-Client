@@ -2,6 +2,14 @@
 
 <xs:import namespace="http://grimlock257.github.io/Stocks" schemaLocation="http://localhost:8080/ShareBrokering/ShareBrokering?xsd=2"/>
 
+<xs:element name="addShare" type="tns:addShare"/>
+
+<xs:element name="addShareResponse" type="tns:addShareResponse"/>
+
+<xs:element name="deleteShare" type="tns:deleteShare"/>
+
+<xs:element name="deleteShareResponse" type="tns:deleteShareResponse"/>
+
 <xs:element name="getAllStocks" type="tns:getAllStocks"/>
 
 <xs:element name="getAllStocksResponse" type="tns:getAllStocksResponse"/>
@@ -9,6 +17,10 @@
 <xs:element name="getStockBySymbol" type="tns:getStockBySymbol"/>
 
 <xs:element name="getStockBySymbolResponse" type="tns:getStockBySymbolResponse"/>
+
+<xs:element name="modifyShare" type="tns:modifyShare"/>
+
+<xs:element name="modifyShareResponse" type="tns:modifyShareResponse"/>
 
 <xs:element name="purchaseShare" type="tns:purchaseShare"/>
 
@@ -57,6 +69,20 @@
 </xs:sequence>
 </xs:complexType>
 
+<xs:complexType name="addShare">
+<xs:sequence>
+<xs:element name="stockName" type="xs:string" minOccurs="0"/>
+<xs:element name="stockSymbol" type="xs:string" minOccurs="0"/>
+<xs:element name="availableShares" type="xs:double"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="addShareResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+
 <xs:complexType name="searchShares">
 <xs:sequence>
 <xs:element name="stockName" type="xs:string" minOccurs="0"/>
@@ -85,6 +111,33 @@
 <xs:complexType name="purchaseShareResponse">
 <xs:sequence>
 <xs:element name="return" type="xs:boolean" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="deleteShare">
+<xs:sequence>
+<xs:element name="stockSymbol" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="deleteShareResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="modifyShare">
+<xs:sequence>
+<xs:element name="stockName" type="xs:string" minOccurs="0"/>
+<xs:element name="currentStockSymbol" type="xs:string" minOccurs="0"/>
+<xs:element name="newStockSymbol" type="xs:string" minOccurs="0"/>
+<xs:element name="availableShares" type="xs:double"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="modifyShareResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"/>
 </xs:sequence>
 </xs:complexType>
 </xs:schema>

@@ -44,6 +44,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="stocks.jsp">Stocks</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="stock-management.jsp">Stock Management</a>
+                        </li>
                     </ul>
                     <form class="js-currencies-form js-currency-preference-form">
                         <select name="preferenceCurrency" class="form-control d-none">

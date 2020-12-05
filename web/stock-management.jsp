@@ -1,6 +1,6 @@
-<%--
-    Document   : company-profile
-    Created on : 28-Nov-2020, 21:07:10
+<%-- 
+    Document   : stock-management
+    Created on : 29-Nov-2020, 20:48:12
     Author     : Adam Watson
 --%>
 
@@ -10,13 +10,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <%
-            if (request.getParameter("stockName") != null) {
-                out.println("<title>" + request.getParameter("stockName") + " | Adams Share Broker</title>");
-            } else {
-                out.println("<title>Company profile | Adams Share Broker</title>");
-            }
-        %>
+        <title>Stock Management | Adams Share Broker</title>
 
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
@@ -32,14 +26,13 @@
         <link rel="stylesheet" href="main.css" />
 
         <!-- Custom JS -->
-        <script src="company-profile.js" type="text/javascript"></script>
         <script src="stocks.js" type="text/javascript"></script>
         <script src="common.js" type="text/javascript"></script>
 
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body class="bg-dark">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-secondary shadow">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-secondary shadow sticky-top">
             <div class="container">
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle">
                     <span class="navbar-toggler-icon"></span>
@@ -53,8 +46,8 @@
                         <li class="nav-item">
                             <a class="nav-link" href="stocks.jsp">Stocks</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="stock-management.jsp">Stock Management</a>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Stock Management</a>
                         </li>
                     </ul>
                     <form class="js-currencies-form js-currency-preference-form">
@@ -65,31 +58,53 @@
                 </div>
             </div>
         </nav>
+
         <div class="container bg-secondary text-white pt-4 pb-1 mb-4">
-            <h1 class="js-company-name"></h1>
+            <h1>Add New Stock</h1>
+            <div class="card card-body bg-dark mb-3">
+                <form method="POST" action="?add">
+                    <div class="row form-group">
+                        <label  class="col-sm-2 col-form-label">Stock name</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="stockName" class="form-control" placeholder="Tesla">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label  class="col-sm-2 col-form-label">Stock symbol</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="stockSymbol" class="form-control" placeholder="TSLA">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label  class="col-sm-2 col-form-label">Quantity</label>
+                        <div class="col-sm-10">
+                            <input type="number" name="shareQuantity" class="form-control" placeholder="100" min="0">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-10 offset-md-2">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <button type="reset" class="btn btn-danger w-100">Reset</button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="submit" class="btn btn-success w-100">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
             <%
-                // Display page contents based on query parameters
-                if (request.getParameter("buy") != null) {
-                    String symbol = request.getParameter("symbol");
-                    String quantity = request.getParameter("quantity");
+                // Handle different page states
+                if (request.getParameter("add") != null) {
+                    String stockName = request.getParameter("stockName");
+                    String stockSymbol = request.getParameter("stockSymbol");
+                    String shareQuantity = request.getParameter("shareQuantity");
 
-                    out.println("<h2>Information</h2>");
-                    out.println(Stocks.getInstance().handlePurchase(symbol, quantity));
-                    out.println(Stocks.getInstance().getStockTable(request.getParameter("stockSymbol")));
-                } else if (request.getParameter("sell") != null) {
-                    String symbol = request.getParameter("symbol");
-                    String quantity = request.getParameter("quantity");
-
-                    out.println("<h2>Information</h2>");
-                    out.println(Stocks.getInstance().handleSale(symbol, quantity));
-                    out.println(Stocks.getInstance().getStockTable(request.getParameter("stockSymbol")));
-                } else if (request.getParameter("stockSymbol") != null) {
-                    out.println("<h2>Information</h2>");
-                    out.println(Stocks.getInstance().getStockTable(request.getParameter("stockSymbol")));
+                    out.println(Stocks.getInstance().handleAdd(stockName, stockSymbol, shareQuantity));
                 }
             %>
-            <h2>Popular articles</h2>
-            <div class="row js-news-item-container c-news-item-container"></div>
         </div>
 
         <jsp:include page="includes/sales-modal.jsp" />
