@@ -85,7 +85,7 @@ public class CommonUtils {
             builder.append("<td class='align-middle text-center'>");
 
             if (managementMode) {
-                builder.append("<button type='button' class='btn btn-warning mr-2 js-edit-btn' data-action='Edit' data-stock-name='" + stock.getStockName() + "' data-stock-symbol='" + stock.getStockSymbol() + "'>Edit</button>");
+                builder.append("<a href='stock-management-edit.jsp?stockSymbol=" + stock.getStockSymbol() + "&stockName=" + stock.getStockName() + "&availableShares=" + stock.getAvailableShares() + "' class='btn btn-warning mr-2 js-edit-btn'>Edit</a>");
                 builder.append("<button type='button' class='btn btn-danger js-remove-btn' data-toggle='modal' data-target='#remove-modal' data-action='Remove' data-stock-name='" + stock.getStockName() + "' data-stock-symbol='" + stock.getStockSymbol() + "' data-available-shares='" + stock.getAvailableShares() + "'>Remove</button>");
 
             } else {
