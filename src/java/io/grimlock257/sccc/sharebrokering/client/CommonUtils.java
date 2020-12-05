@@ -103,7 +103,7 @@ public class CommonUtils {
      * @return The formatted date time as a String
      */
     public static String formatDateTime(XMLGregorianCalendar dateTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         ZonedDateTime zonedTime = dateTime.toGregorianCalendar().toZonedDateTime();
 
         return formatter.format(zonedTime);
