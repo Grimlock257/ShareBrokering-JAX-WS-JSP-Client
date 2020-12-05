@@ -47,7 +47,7 @@
                             <a class="nav-link" href="#">Stocks</a>
                         </li>
                     </ul>
-                    <form class="js-currencies-form">
+                    <form class="js-currencies-form js-currency-preference-form">
                         <select name="preferenceCurrency" class="form-control d-none">
                             <option value="gbp" readonly>GBP - British Pound (default)</option>
                         </select>
@@ -71,7 +71,7 @@
             </div>
             <div class="collapse js-stocks-search-card  <% out.println(wasSearch ? "show" : ""); %>" id="search">
                 <div class="card card-body bg-dark mb-4">
-                    <form method="POST" action="?search">
+                    <form>
                         <div class="form-row">
                             <div class="col-md-5 mb-3">
                                 <label>Stock name</label>
@@ -83,12 +83,9 @@
                             </div>
                             <div class="col-md-5 mb-3">
                                 <label>Currency</label>
-                                <div class="input-group">
+                                <div class="input-group js-currencies-form">
                                     <select name="stockCurrency" class="form-control js-stocks-search-selectable">
-                                        <option value="" selected readonly>Default (any)</option>
-                                        <option value="usd" <% out.println(wasSearch && request.getParameter("stockCurrency").equals("usd") ? "selected" : "");%>>USD</option>
-                                        <option value="gbp" <% out.println(wasSearch && request.getParameter("stockCurrency").equals("gbp") ? "selected" : "");%>>GBP</option>
-                                        <option value="aud" <% out.println(wasSearch && request.getParameter("stockCurrency").equals("aud") ? "selected" : "");%>>AUD</option>
+                                        <option value="" readonly>Default (any)</option>
                                     </select>
                                 </div>
                             </div>
@@ -135,7 +132,7 @@
                                 <button class="btn btn-danger form-control" id="js-stocks-search-reset" type="reset">Reset</button>
                             </div>
                             <div class="col-md-1 mb-3 d-flex flex-column justify-content-end">
-                                <button class="btn btn-primary form-control" type="submit">Search!</button>
+                                <button class="btn btn-primary form-control" name="search" type="submit">Search!</button>
                             </div>
                         </div>
                     </form>

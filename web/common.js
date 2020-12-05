@@ -12,19 +12,34 @@ $(document).ready(function () {
         type: "GET",
         url: "http://localhost:8080/CurrencyAPI/webresources/currencies",
         success: function (response) {
-            var currenciesForm = $(".js-currencies-form");
-
             if (response !== null && response !== undefined) {
-                var currenciesFormSelect = currenciesForm.find("select");
-                currenciesFormSelect.removeClass("d-none");
-
                 var userCurrency = Cookies.get('userCurrency');
 
-                Object.keys(response).forEach(function (key) {
-                    currenciesFormSelect.append("<option value='" + key.toLowerCase() + "' " + ((userCurrency === key.toLowerCase()) ? "selected" : "") + ">" + key + " - " + response[key] + "</option>");
+                // Iterate over each currency dropdown on the page
+                $(".js-currencies-form").each(function () {
+                    var currencyForm = $(this);
+
+                    var currenciesFormSelect = currencyForm.find("select");
+                    currenciesFormSelect.removeClass("d-none");
+
+                    // Determine whether the form is for currency prefernce
+                    if (currencyForm.hasClass("js-currency-preference-form")) {
+                        Object.keys(response).forEach(function (key) {
+                            currenciesFormSelect.append("<option value='" + key.toLowerCase() + "' " + ((userCurrency === key.toLowerCase()) ? "selected" : "") + ">" + key + " - " + response[key] + "</option>");
+                        });
+                    } else {
+                        // Get query parameters
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const wasSearch = urlParams.has('search');
+                        const stockCurrency = urlParams.get('stockCurrency');
+
+                        Object.keys(response).forEach(function (key) {
+                            currenciesFormSelect.append("<option value='" + key.toLowerCase() + "' " + ((wasSearch && stockCurrency === key.toLowerCase()) ? "selected" : "") + ">" + key + " - " + response[key] + "</option>");
+                        });
+                    }
                 });
             } else {
-                currenciesForm.append("<div class='bg-danger p-2'>Failed to retrieve currencies. Please try again.</div>");
+                $("body > .container").prepend("<div class='bg-danger p-2'>Failed to retrieve currencies. Please try again.</div>");
             }
         }
     });
@@ -71,7 +86,7 @@ $(document).ready(function () {
     /**
      * Listen to currency form select change events to update the userCurrency cookie
      */
-    $(".js-currencies-form select").change(function () {
+    $(".js-currency-preference-form select").change(function () {
         Cookies.set('userCurrency', $(this).val());
     });
 
