@@ -45,12 +45,12 @@ $(document).ready(function () {
     });
 
     /**
-     * On page load, look for a table with a class of js-stocks-table and iterate over the rows. Convert the base price to the prefernenc currency, or default to GBP
+     * Look for a table with a class of js-stocks-table and iterate over the rows. Convert the base price to the prefernenc currency, or default to GBP
      */
-    $(".js-stocks-table").ready(function () {
+    $.fn.convertCurrencies = function () {
         // Attempt to get userCurrenct from Cookie
         var userCurrency = Cookies.get('userCurrency');
-        var theTable = $(this);
+        var theTable = $(".js-stocks-table");
 
         // If no cookie, default to GBP
         if (userCurrency === undefined) {
@@ -63,7 +63,7 @@ $(document).ready(function () {
             var value = theRow.find(".js-currency-listed-price-cell").html();
 
             // Set the currency cell value
-            theRow.find(".js-currency-preference-currency-cell").append(userCurrency.toUpperCase());
+            theRow.find(".js-currency-preference-currency-cell").html(userCurrency.toUpperCase());
 
             // Asynchronously convert the currency via the CurrencyAPI and update the table
             $.ajax({
@@ -74,20 +74,27 @@ $(document).ready(function () {
                     var preferredCurrencyPriceCell = theRow.find(".js-currency-preference-price-cell");
 
                     if (response !== null && response !== undefined && response.status === "success") {
-                        preferredCurrencyPriceCell.append(response.value.toFixed(2));
+                        preferredCurrencyPriceCell.html(response.value.toFixed(2));
                     } else {
-                        preferredCurrencyPriceCell.append("error");
+                        preferredCurrencyPriceCell.html("error");
                     }
                 }
             });
         });
-    });
+    };
+
+    /**
+     * On page load, convert currencies
+     */
+    $(".js-stocks-table").ready($.fn.convertCurrencies());
 
     /**
      * Listen to currency form select change events to update the userCurrency cookie
      */
     $(".js-currency-preference-form select").change(function () {
         Cookies.set('userCurrency', $(this).val());
+
+        $.fn.convertCurrencies();
     });
 
     /**
