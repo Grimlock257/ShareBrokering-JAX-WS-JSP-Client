@@ -12,9 +12,10 @@ $(document).ready(function () {
     $('#remove-modal').on('show.bs.modal', function (event) {
         var removeModal = $(this);
         var triggerButton = $(event.relatedTarget);
+        var parentRow = triggerButton.closest("tr");
 
-        var stockName = triggerButton.data('stock-name');
-        var stockSymbol = triggerButton.data('stock-symbol');
+        var stockName = parentRow.data('stock-name');
+        var stockSymbol = parentRow.data('stock-symbol');
 
         removeModal.find('#js-modal-title').text("Remove stock: " + stockName);
         removeModal.find('#js-modal-form').attr("action", "?remove&stockSymbol=" + stockSymbol);

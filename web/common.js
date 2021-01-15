@@ -120,7 +120,9 @@ $(document).ready(function () {
      */
     $('.js-stock-img-cell').each(function () {
         var cell = $(this);
-        var stockName = cell.data('stock-name');
+        
+        var parentRow = cell.closest("tr")
+        var stockName = parentRow.data('stock-name');
 
         $.ajax({
             type: "GET",
