@@ -41,10 +41,10 @@ $(document).ready(function () {
                         $(".js-news-item-container").append(newCard);
                     });
                 } else {
-                    $(".js-news-item-container").append("<div class='bg-danger p-2'>No article results</div>");
+                    $(".js-news-item-container").append("<div class='bg-info p-2 w-100 text-center mb-2 font-weight-bold'>No article results</div>");
                 }
             } else {
-                $(".js-news-item-container").append("<div class='bg-danger p-2'>Failed to retrieve articles. Please try again.</div>");
+                $(".js-news-item-container").append("<div class='bg-danger p-2 w-100 text-center mb-2 font-weight-bold'>Failed to retrieve articles. Please try again.</div>");
             }
         }
     });

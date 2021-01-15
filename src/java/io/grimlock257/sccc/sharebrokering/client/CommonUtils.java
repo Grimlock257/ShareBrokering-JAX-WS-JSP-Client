@@ -90,7 +90,7 @@ public class CommonUtils {
 
             } else {
                 builder.append("<button type='button' class='btn btn-warning mr-2 js-sell-btn' data-toggle='modal' data-target='#sales-modal' data-action='Sell'>Sell</button>");
-                builder.append("<button type='button' class='btn btn-success js-buy-btn'" + (stock.getAvailableShares() == 0F ? " disabled" : "") + " data-toggle='modal' data-target='#sales-modal' data-action='Buy' data-available-shares='" + stock.getAvailableShares() + "'>Buy</button>");
+                builder.append("<button type='button' class='btn btn-success js-buy-btn'" + (stock.getAvailableShares() <= 0F ? " disabled" : "") + " data-toggle='modal' data-target='#sales-modal' data-action='Buy' data-available-shares='" + stock.getAvailableShares() + "'>Buy</button>");
             }
             builder.append("</td>");
             builder.append("</tr>");

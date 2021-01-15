@@ -18,8 +18,8 @@ $(document).ready(function () {
                 // Iterate over each currency dropdown on the page
                 $(".js-currencies-form").each(function () {
                     var currencyForm = $(this);
-
                     var currenciesFormSelect = currencyForm.find("select");
+
                     currenciesFormSelect.removeClass("d-none");
 
                     // Determine whether the form is for currency prefernce
@@ -76,7 +76,7 @@ $(document).ready(function () {
                     if (response !== null && response !== undefined && response.status === "success") {
                         preferredCurrencyPriceCell.html(response.value.toFixed(2));
                     } else {
-                        preferredCurrencyPriceCell.html("error");
+                        preferredCurrencyPriceCell.html("<span class='text-warning font-weight-bold'>Error</span>");
                     }
                 }
             });
@@ -120,8 +120,7 @@ $(document).ready(function () {
      */
     $('.js-stock-img-cell').each(function () {
         var cell = $(this);
-        
-        var parentRow = cell.closest("tr")
+        var parentRow = cell.closest("tr");
         var stockName = parentRow.data('stock-name');
 
         $.ajax({
@@ -149,8 +148,12 @@ $(document).ready(function () {
         });
     });
 
+    /**
+     * When a clickable row (but not a button on the row) receives a click event, retrieve data attributes from the row regarding target desination, and navigate to the new page
+     */
     $('.js-clickable-row').on("click", function () {
         var isButton = $(event.target).is('button');
+
         var rowDestination = $(this).data("href");
         var stockName = $(this).data("stock-name");
         var stockSymbol = $(this).data("stock-symbol");

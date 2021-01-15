@@ -16,7 +16,7 @@
             </div>
             <form method="POST" id="js-modal-form">
                 <div class="modal-body">
-                    <p>This is an irreversible action - make sure this is the stock you want to remove.
+                    <p>This is an irreversible action - make sure this is the stock you want to remove.</p>
                 </div>
                 <div class="modal-footer">
                     <input type="hidden" name="symbol" id="js-form-symbol" value="" />

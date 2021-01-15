@@ -64,7 +64,7 @@ public class Stocks {
 
         // Check there are stocks actually some stocks
         if (!(stocks.size() > 0)) {
-            return "<div class='bg-info p-2'>Sorry, there are no stocks listed at the moment - check back later</div>";
+            return "<div class='bg-info p-2 mb-3'>Sorry, there are no stocks listed at the moment - check back later</div>";
         } else {
             return CommonUtils.getInstance().getStockTableAsHTML(stocks, true, managementMode);
         }
@@ -82,7 +82,7 @@ public class Stocks {
 
         // Check stock is not null
         if (stock == null) {
-            return "<div class='bg-danger p-2'>Sorry, the stock could not be found - check back later, or please try again.</div>";
+            return "<div class='bg-danger p-2 mb-3'>Sorry, the stock could not be found - check back later, or please try again.</div>";
         } else {
             List<Stock> theStock = new ArrayList<>();
             theStock.add(stock);
@@ -127,7 +127,7 @@ public class Stocks {
             sharePrice = Double.parseDouble(sharePriceStr);
         } catch (NumberFormatException e) {
             if (sharePriceStr.length() > 0) {
-                return "<div class='bg-danger p-2'>Sorry, something went wrong. It appears a non-integer quantity was entered - please try again.</div>";
+                return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. It appears a non-numeric value was entered - please try again.</div>";
             }
         }
 
@@ -135,7 +135,7 @@ public class Stocks {
 
         // Check there are stocks actually some stocks
         if (!(filteredStocks.size() > 0)) {
-            return "<div class='bg-danger p-2'>Sorry, no stocks met your criteria - please try search again.</div>";
+            return "<div class='bg-danger p-2 mb-3'>Sorry, no stocks met your criteria - please try search again.</div>";
         } else {
             return CommonUtils.getInstance().getStockTableAsHTML(filteredStocks, true, managementMode);
         }
@@ -152,21 +152,21 @@ public class Stocks {
         try {
             Double quantity = Double.parseDouble(quantityStr);
 
-            if (symbol == null || quantity == null) {
-                return "<div class='bg-danger p-2'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>";
+            if (symbol == null) {
+                return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. It appears symbol is missing - please try again.</div>";
             } else if (quantity <= 0) {
-                return "<div class='bg-danger p-2'>Sorry, something went wrong. You cannot purchase 0 or less shares - please try again.</div>";
+                return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. You cannot purchase 0 or less shares - please try again.</div>";
             } else {
                 Boolean purchaseSuccess = port.purchaseShare(symbol, quantity);
 
                 if (purchaseSuccess) {
-                    return "<div class='bg-success p-2'>You have successfully purchased " + quantity + " shares.</div>";
+                    return "<div class='bg-success p-2 mb-3'>You have successfully purchased " + quantity + " shares.</div>";
                 } else {
-                    return "<div class='bg-danger p-2'>Your purchase has failed. Please try again. </div>";
+                    return "<div class='bg-danger p-2 mb-3'>Your purchase has failed. Please try again.</div>";
                 }
             }
         } catch (NumberFormatException e) {
-            return "<div class='bg-danger p-2'>Sorry, something went wrong. It appears a non-integer quantity was entered - please try again.</div>";
+            return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. It appears a non-numeric value was entered - please try again.</div>";
         }
     }
 
@@ -181,21 +181,21 @@ public class Stocks {
         try {
             Double quantity = Double.parseDouble(quantityStr);
 
-            if (symbol == null || quantity == null) {
-                return "<div class='bg-danger p-2'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>";
+            if (symbol == null) {
+                return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. It appears symbol is missing - please try again.</div>";
             } else if (quantity <= 0) {
-                return "<div class='bg-danger p-2'>Sorry, something went wrong. You cannot sell 0 or less shares - please try again.</div>";
+                return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. You cannot sell 0 or less shares - please try again.</div>";
             } else {
                 Boolean saleSuccess = port.sellShare(symbol, quantity);
 
                 if (saleSuccess) {
-                    return "<div class='bg-success p-2'>You have successfully sold " + quantity + " shares.</div>";
+                    return "<div class='bg-success p-2 mb-3'>You have successfully sold " + quantity + " shares.</div>";
                 } else {
-                    return "<div class='bg-danger p-2'>Your sale has failed. Please try again. </div>";
+                    return "<div class='bg-danger p-2 mb-3'>Your sale has failed. Please try again.</div>";
                 }
             }
         } catch (NumberFormatException e) {
-            return "<div class='bg-danger p-2'>Sorry, something went wrong. It appears a non-integer quantity was entered - please try again.</div>";
+            return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. It appears a non-numeric value was entered - please try again.</div>";
         }
     }
 
@@ -210,24 +210,24 @@ public class Stocks {
     public String handleAdd(String stockName, String stockSymbol, String availableSharesStr) {
         try {
             if (stockName == null || stockSymbol == null || availableSharesStr == null) {
-                return "<div class='bg-danger p-2'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>";
+                return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>";
             }
 
             Double availableShares = Double.parseDouble(availableSharesStr);
 
             if (availableShares < 0) {
-                return "<div class='bg-danger p-2'>Sorry, something went wrong. You cannot have less than 0 shares - please try again.</div>";
+                return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. You cannot have less than 0 shares - please try again.</div>";
             } else {
                 Boolean addSuccess = port.addShare(stockName, stockSymbol, availableShares);
 
                 if (addSuccess) {
-                    return "<div class='bg-success p-2'>You have successfully added " + stockSymbol + " as a share.</div>";
+                    return "<div class='bg-success p-2 mb-3'>You have successfully added " + stockSymbol + " as a share.</div>";
                 } else {
-                    return "<div class='bg-danger p-2'>Your addition has failed. Please try again. </div>";
+                    return "<div class='bg-danger p-2 mb-3'>Your addition has failed. Please try again. </div>";
                 }
             }
         } catch (NumberFormatException e) {
-            return "<div class='bg-danger p-2'>Sorry, something went wrong. It appears a non-integer value was entered - please try again.</div>";
+            return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. It appears a non-integer value was entered - please try again.</div>";
         }
     }
 
@@ -239,15 +239,15 @@ public class Stocks {
      */
     public String handleRemove(String stockSymbol) {
         if (stockSymbol == null) {
-            return "<div class='bg-danger p-2'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>";
+            return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>";
         }
 
-        Boolean addSuccess = port.deleteShare(stockSymbol);
+        Boolean removeSuccess = port.deleteShare(stockSymbol);
 
-        if (addSuccess) {
-            return "<div class='bg-success p-2'>You have successfully removed the stock with the symbol '" + stockSymbol + "'.</div>";
+        if (removeSuccess) {
+            return "<div class='bg-success p-2 mb-3'>You have successfully removed the stock with the symbol '" + stockSymbol + "'.</div>";
         } else {
-            return "<div class='bg-danger p-2'>Your removal has failed. Please try again. </div>";
+            return "<div class='bg-danger p-2 mb-3'>Your removal has failed. Please try again. </div>";
         }
     }
 
@@ -263,24 +263,24 @@ public class Stocks {
     public String handleEdit(String stockName, String currentStockSymbol, String newStockSymbol, String availableSharesStr) {
         try {
             if (stockName == null || currentStockSymbol == null || newStockSymbol == null || availableSharesStr == null) {
-                return "<div class='bg-danger p-2'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>";
+                return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>";
             }
 
             Double availableShares = Double.parseDouble(availableSharesStr);
 
             if (availableShares < 0) {
-                return "<div class='bg-danger p-2'>Sorry, something went wrong. You cannot have less than 0 shares - please try again.</div>";
+                return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. You cannot have less than 0 shares - please try again.</div>";
             } else {
                 Boolean editSuccess = port.modifyShare(stockName, currentStockSymbol, newStockSymbol, availableShares);
 
                 if (editSuccess) {
-                    return "<div class='bg-success p-2'>You have successfully modified " + currentStockSymbol + ".</div>";
+                    return "<div class='bg-success p-2 mb-3'>You have successfully modified " + currentStockSymbol + ".</div>";
                 } else {
-                    return "<div class='bg-danger p-2'>Your modification has failed. Please try again. </div>";
+                    return "<div class='bg-danger p-2 mb-3'>Your modification has failed. Please try again. </div>";
                 }
             }
         } catch (NumberFormatException e) {
-            return "<div class='bg-danger p-2'>Sorry, something went wrong. It appears a non-integer value was entered - please try again.</div>";
+            return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. It appears a non-integer value was entered - please try again.</div>";
         }
     }
 }
