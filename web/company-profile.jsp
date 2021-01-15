@@ -19,7 +19,7 @@
         %>
 
         <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" onerror="this.onerror=null;this.href='vendor/bootstrap.min.css';">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" onerror="this.onerror=null;this.href='vendor/bootstrap.min.css';" />
 
         <!-- jQuery and JS bundle w/ Popper.js -->
         <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
@@ -43,7 +43,7 @@
         <script src="stocks.js" type="text/javascript"></script>
         <script src="common.js" type="text/javascript"></script>
 
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     </head>
     <body class="bg-dark">
         <nav class="navbar navbar-expand-lg navbar-dark bg-secondary shadow">
@@ -74,26 +74,22 @@
         </nav>
         <div class="container bg-secondary text-white pt-4 pb-1 mb-4">
             <h1 class="js-company-name"></h1>
+            <h2>Information</h2>
             <%
                 // Display page contents based on query parameters
                 if (request.getParameter("buy") != null) {
                     String symbol = request.getParameter("symbol");
                     String quantity = request.getParameter("quantity");
 
-                    out.println("<h2>Information</h2>");
                     out.println(Stocks.getInstance().handlePurchase(symbol, quantity));
-                    out.println(Stocks.getInstance().getStockTable(request.getParameter("stockSymbol")));
                 } else if (request.getParameter("sell") != null) {
                     String symbol = request.getParameter("symbol");
                     String quantity = request.getParameter("quantity");
 
-                    out.println("<h2>Information</h2>");
                     out.println(Stocks.getInstance().handleSale(symbol, quantity));
-                    out.println(Stocks.getInstance().getStockTable(request.getParameter("stockSymbol")));
-                } else if (request.getParameter("stockSymbol") != null) {
-                    out.println("<h2>Information</h2>");
-                    out.println(Stocks.getInstance().getStockTable(request.getParameter("stockSymbol")));
                 }
+
+                out.println(Stocks.getInstance().getStockTable(request.getParameter("stockSymbol")));
             %>
             <h2>Popular articles</h2>
             <div class="row js-news-item-container c-news-item-container"></div>

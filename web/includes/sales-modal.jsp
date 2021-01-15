@@ -17,7 +17,7 @@
             <form method="POST" id="js-modal-form">
                 <div class="modal-body form-inline">
                     <div class="form-group">
-                        <span id='js-action-text'>Quantity</span><input type="number" name="quantity" id="js-quantitiy-field" class="ml-4 form-control" required="required" step="any" min="0" max="0">
+                        <span id='js-action-text'>Quantity</span><input type="number" name="quantity" id="js-quantitiy-field" class="ml-4 form-control" required="required" step="any" min="0" max="0" />
                     </div>
                 </div>
                 <div class="modal-footer">
