@@ -12,11 +12,13 @@ $(document).ready(function () {
     $('#sales-modal').on('show.bs.modal', function (event) {
         var salesModal = $(this);
         var triggerButton = $(event.relatedTarget);
+        var parentRow = triggerButton.closest("tr");
 
         var action = triggerButton.data('action');
-        var stockName = triggerButton.data('stock-name');
-        var stockSymbol = triggerButton.data('stock-symbol');
         var availableShares = triggerButton.data('available-shares');
+
+        var stockName = parentRow.data('stock-name');
+        var stockSymbol = parentRow.data('stock-symbol');
 
         salesModal.find('#js-modal-title').text(action + " " + stockName + " shares");
         salesModal.find('#js-action-text').text(action + " quantity");
