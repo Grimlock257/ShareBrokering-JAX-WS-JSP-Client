@@ -4,6 +4,7 @@
     Author     : Adam Watson
 --%>
 
+<%@page import="io.grimlock257.sccc.sharebrokering.client.Users"%>
 <%@page import="io.grimlock257.sccc.sharebrokering.client.Stocks"%>
 
 <%
@@ -22,6 +23,20 @@
 %>
 
 <jsp:include page="includes/header.jsp" />
+
+<%--
+    Logout
+--%>
+<%
+    if (request.getParameter("logout") != null) {
+        Users.getInstance().logout(response);
+
+        String name = request.getParameter("stockName");
+        String symbol = request.getParameter("stockSymbol");
+
+        response.sendRedirect("company-profile.jsp?stockName=" + name + "&stockSymbol=" + symbol + "&loggedout");
+    }
+%>
 
 <div class="container bg-secondary text-white pt-4 pb-1 mb-4">
     <h1 class="js-company-name"></h1>

@@ -98,4 +98,20 @@ public class Users {
             return new ClientResponseModel(false, "<div class='bg-danger p-2 mb-3'>Your login has failed. Please try again.</div>");
         }
     }
+
+    /**
+     * Log the user out by deleting their cookies
+     *
+     * @param response The response object from the call site page
+     */
+    public void logout(HttpServletResponse response) {
+        Cookie guidCookie = new Cookie("guid", null);
+        guidCookie.setMaxAge(0);
+
+        Cookie roleCookie = new Cookie("role", null);
+        roleCookie.setMaxAge(0);
+
+        response.addCookie(guidCookie);
+        response.addCookie(roleCookie);
+    }
 }
