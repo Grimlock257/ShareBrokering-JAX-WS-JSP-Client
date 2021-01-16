@@ -121,3 +121,12 @@
                 </div>
             </div>
         </nav>
+        <%
+            if (request.getParameter("loggedout") != null) {
+        %>
+        <div class="container bg-success text-white pt-4 pb-1 mb-4">
+            <p>Logged out successfully!</p>
+        </div>
+        <%
+            }
+        %>
