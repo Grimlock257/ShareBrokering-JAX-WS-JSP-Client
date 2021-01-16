@@ -101,6 +101,9 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="row form-group">
+                            <a href="login.jsp" class="offset-md-2 col-sm-10 col-form-label text-white">Already registered? Login!</a>
+                        </div>
                         <div class="row">
                             <div class="col-sm-10 offset-md-2">
                                 <div class="row">
