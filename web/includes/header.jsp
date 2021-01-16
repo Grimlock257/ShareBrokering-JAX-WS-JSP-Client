@@ -96,11 +96,28 @@
                             }
                         %>
                     </ul>
-                    <form class="js-currencies-form js-currency-preference-form">
-                        <select name="preferenceCurrency" class="form-control d-none">
-                            <option value="gbp" readonly>GBP - British Pound (default)</option>
-                        </select>
-                    </form>
+                    <span class="navbar-text">
+                        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                            <%
+                                if (guid != null && role != null) {
+                            %>
+                            <li class="nav-item">
+                                <a class="nav-link" href="<%= (request.getQueryString() != null) ? "?" + request.getQueryString() + "&" : "?"%>logout">Logout</a>
+                            </li>
+                            <%
+                            } else {
+                            %>
+                            <li class="nav-item">
+                                <a class="nav-link <%= currentPage != null && currentPage.equalsIgnoreCase("register") ? "active" : ""%>" href="register.jsp">Register</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link <%= currentPage != null && currentPage.equalsIgnoreCase("login") ? "active" : ""%>" href="login.jsp">Login</a>
+                            </li>
+                            <%
+                                }
+                            %>
+                        </ul>
+                    </span>
                 </div>
             </div>
         </nav>
