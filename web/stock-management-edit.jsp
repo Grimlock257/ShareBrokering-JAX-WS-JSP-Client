@@ -4,6 +4,7 @@
     Author     : Adam Watson
 --%>
 
+<%@page import="io.grimlock257.sccc.sharebrokering.client.Users"%>
 <%@page import="io.grimlock257.sccc.ws.Role"%>
 <%@page import="io.grimlock257.sccc.sharebrokering.client.Stocks"%>
 
@@ -15,6 +16,18 @@
 %>
 
 <jsp:include page="includes/header.jsp" />
+
+<%--
+    Logout
+--%>
+<%
+    if (request.getParameter("logout") != null) {
+        Users.getInstance().logout(response);
+
+        response.sendRedirect("index.jsp?loggedout");
+    }
+%>
+
 <%
     // Check cookies for guid and role
     String guid = null;
@@ -23,6 +36,8 @@
     for (Cookie cookie : request.getCookies()) {
         if (cookie.getName().equalsIgnoreCase("guid")) {
             guid = cookie.getValue();
+
+            continue;
         }
 
         if (cookie.getName().equalsIgnoreCase("role")) {

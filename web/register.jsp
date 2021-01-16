@@ -4,7 +4,30 @@
     Author     : Adam Watson
 --%>
 
+<%@page import="io.grimlock257.sccc.sharebrokering.client.model.ClientResponseModel"%>
 <%@page import="io.grimlock257.sccc.sharebrokering.client.Users"%>
+
+<%
+    // Check cookies for guid and role
+    String guid = null;
+    String role = null;
+
+    for (Cookie cookie : request.getCookies()) {
+        if (cookie.getName().equalsIgnoreCase("guid")) {
+            guid = cookie.getValue();
+
+            continue;
+        }
+
+        if (cookie.getName().equalsIgnoreCase("role")) {
+            role = cookie.getValue().toUpperCase();
+        }
+    }
+
+    if (guid != null && role != null) {
+        response.sendRedirect("index.jsp");
+    }
+%>
 
 <%
     request.setAttribute("currentPage", "register");
@@ -78,7 +101,13 @@
             String password = request.getParameter("password");
             String currency = request.getParameter("currency").toUpperCase();
 
-            out.println(Users.getInstance().register(firstName, lastName, username, password, currency));
+            ClientResponseModel clientResponseModel = Users.getInstance().register(firstName, lastName, username, password, currency);
+
+            if (clientResponseModel.isIsSuccessful()) {
+                response.sendRedirect("login.jsp");
+            } else {
+                out.println(clientResponseModel.getMessage());
+            }
         }
     %>
 </div>
