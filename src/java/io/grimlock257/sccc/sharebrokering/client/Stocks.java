@@ -106,6 +106,7 @@ public class Stocks {
      * @param sharePriceStr The share price as a string
      * @param sortBy The column in which the results should be ordered by
      * @param order Whether to order the sortBy column ascending or descending
+     * @param isLoggedIn Whether a user is logged in
      * @return The stocks table or a info dialog as an HTML string
      */
     public String handleSearch(String stockName, String stockSymbol, String stockCurrency, String sharePriceFilter, String sharePriceStr, String sortBy, String order, boolean isLoggedIn) {
