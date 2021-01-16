@@ -32,13 +32,7 @@
 %>
 
 <div class="container bg-secondary text-white pt-4 pb-1 mb-4">
-    <h1 class="d-inline mr-auto">Shares</h1>
-    <p class="d-inline">hello</p>
-    <!--    <form class="js-currencies-form js-currency-preference-form">
-            <select name="preferenceCurrency" class="form-control d-none">
-                <option value="gbp" readonly>GBP - British Pound (default)</option>
-            </select>
-        </form>-->
+    <h1>Shares</h1>
 
     <jsp:include page="includes/search-pane.jsp" />
 
