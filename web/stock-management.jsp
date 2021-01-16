@@ -102,7 +102,7 @@
             String sortBy = request.getParameter("sortBy");
             String order = request.getParameter("order");
 
-            String searchResult = Stocks.getInstance().handleSearch(stockName, stockSymbol, stockCurrency, sharePriceFilter, sharePrice, sortBy, order, true);
+            String searchResult = Stocks.getInstance().handleSearch(stockName, stockSymbol, stockCurrency, sharePriceFilter, sharePrice, sortBy, order, true, isLoggedIn);
 
             out.println(searchResult);
         } else if (request.getParameter("remove") != null) {
@@ -111,9 +111,9 @@
             String removeResult = Stocks.getInstance().handleRemove(stockSymbol);
 
             out.println(removeResult);
-            out.println(Stocks.getInstance().getStocksTable(true));
+            out.println(Stocks.getInstance().getStocksTable(true, isLoggedIn));
         } else {
-            out.println(Stocks.getInstance().getStocksTable(true));
+            out.println(Stocks.getInstance().getStocksTable(true, isLoggedIn));
         }
     %>
 </div>

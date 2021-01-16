@@ -4,6 +4,7 @@
     Author     : Adam Watson
 --%>
 
+<%@page import="io.grimlock257.sccc.sharebrokering.client.model.UserSessionModel"%>
 <%@page import="io.grimlock257.sccc.sharebrokering.client.Users"%>
 <%@page import="io.grimlock257.sccc.sharebrokering.client.Stocks"%>
 
@@ -37,6 +38,10 @@
     <jsp:include page="includes/search-pane.jsp" />
 
     <%
+        // Check cookies for guid and role
+        UserSessionModel userSessionModel = Users.getInstance().getUserSessionDetails(request);
+        boolean isLoggedIn = userSessionModel != null;
+
         // Handle different page states
         if (request.getParameter("search") != null) {
             String stockName = request.getParameter("stockName");
@@ -47,23 +52,23 @@
             String sortBy = request.getParameter("sortBy");
             String order = request.getParameter("order");
 
-            String searchResult = Stocks.getInstance().handleSearch(stockName, stockSymbol, stockCurrency, sharePriceFilter, sharePrice, sortBy, order);
+            String searchResult = Stocks.getInstance().handleSearch(stockName, stockSymbol, stockCurrency, sharePriceFilter, sharePrice, sortBy, order, isLoggedIn);
 
             out.println(searchResult);
         } else if (request.getParameter("buy") != null) {
             String symbol = request.getParameter("symbol");
             String quantity = request.getParameter("quantity");
 
-            out.println(Stocks.getInstance().handlePurchase(symbol, quantity));
-            out.println(Stocks.getInstance().getStocksTable());
+            out.println(Stocks.getInstance().handlePurchase(request, symbol, quantity));
+            out.println(Stocks.getInstance().getStocksTable(isLoggedIn));
         } else if (request.getParameter("sell") != null) {
             String symbol = request.getParameter("symbol");
             String quantity = request.getParameter("quantity");
 
-            out.println(Stocks.getInstance().handleSale(symbol, quantity));
-            out.println(Stocks.getInstance().getStocksTable());
+            out.println(Stocks.getInstance().handleSale(request, symbol, quantity));
+            out.println(Stocks.getInstance().getStocksTable(isLoggedIn));
         } else {
-            out.println(Stocks.getInstance().getStocksTable());
+            out.println(Stocks.getInstance().getStocksTable(isLoggedIn));
         }
     %>
 </div>
