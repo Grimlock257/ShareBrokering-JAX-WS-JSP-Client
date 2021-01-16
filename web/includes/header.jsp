@@ -4,6 +4,7 @@
     Author     : Adam Watson
 --%>
 
+<%@page import="io.grimlock257.sccc.ws.Role"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
@@ -71,9 +72,29 @@
                         <li class="nav-item">
                             <a class="nav-link <%= currentPage != null && (currentPage.equalsIgnoreCase("stocks") || currentPage.equalsIgnoreCase("company-profile")) ? "active" : ""%>" href="stocks.jsp">Stocks</a>
                         </li>
+                        <%
+                            // Check cookies for guid and role
+                            String guid = null;
+                            String role = null;
+
+                            for (Cookie cookie : request.getCookies()) {
+                                if (cookie.getName().equalsIgnoreCase("guid")) {
+                                    guid = cookie.getValue();
+                                }
+
+                                if (cookie.getName().equalsIgnoreCase("role")) {
+                                    role = cookie.getValue().toUpperCase();
+                                }
+                            }
+
+                            if (guid != null && role != null && (Role.valueOf(role) == Role.ADMIN)) {
+                        %>
                         <li class="nav-item">
                             <a class="nav-link <%= currentPage != null && (currentPage.equalsIgnoreCase("stock-management") || currentPage.equalsIgnoreCase("stock-management-edit")) ? "active" : ""%>" href="stock-management.jsp">Stock Management</a>
                         </li>
+                        <%
+                            }
+                        %>
                     </ul>
                     <form class="js-currencies-form js-currency-preference-form">
                         <select name="preferenceCurrency" class="form-control d-none">
