@@ -4,6 +4,7 @@
     Author     : Adam Watson
 --%>
 
+<%@page import="io.grimlock257.sccc.sharebrokering.client.model.UserSessionModel"%>
 <%@page import="io.grimlock257.sccc.sharebrokering.client.Users"%>
 <%@page import="io.grimlock257.sccc.sharebrokering.client.Stocks"%>
 
@@ -42,20 +43,24 @@
     <h1 class="js-company-name"></h1>
     <h2>Information</h2>
     <%
+        // Check cookies for guid and role
+        UserSessionModel userSessionModel = Users.getInstance().getUserSessionDetails(request);
+        boolean isLoggedIn = userSessionModel != null;
+
         // Display page contents based on query parameters
         if (request.getParameter("buy") != null) {
             String symbol = request.getParameter("symbol");
             String quantity = request.getParameter("quantity");
 
-            out.println(Stocks.getInstance().handlePurchase(symbol, quantity));
+            out.println(Stocks.getInstance().handlePurchase(request, symbol, quantity));
         } else if (request.getParameter("sell") != null) {
             String symbol = request.getParameter("symbol");
             String quantity = request.getParameter("quantity");
 
-            out.println(Stocks.getInstance().handleSale(symbol, quantity));
+            out.println(Stocks.getInstance().handleSale(request, symbol, quantity));
         }
 
-        out.println(Stocks.getInstance().getStockTable(request.getParameter("stockSymbol")));
+        out.println(Stocks.getInstance().getStockTable(request.getParameter("stockSymbol"), isLoggedIn));
     %>
     <h2>Popular articles</h2>
     <div class="row js-news-item-container c-news-item-container"></div>

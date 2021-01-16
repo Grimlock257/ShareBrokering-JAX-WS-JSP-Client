@@ -1,10 +1,12 @@
 package io.grimlock257.sccc.sharebrokering.client;
 
+import io.grimlock257.sccc.sharebrokering.client.model.UserSessionModel;
 import io.grimlock257.sccc.ws.ShareBrokering;
 import io.grimlock257.sccc.ws.ShareBrokering_Service;
 import io.grimlock257.sccc.ws.Stock;
 import java.util.ArrayList;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Stocks
@@ -46,19 +48,21 @@ public class Stocks {
     /**
      * Retrieve stocks from the Web Service and return a HTML table representation, or info dialog if there are no Stocks to display (non management mode)
      *
+     * @param isLoggedIn Whether a user is logged in
      * @return The stocks table or a info dialog as an HTML string
      */
-    public String getStocksTable() {
-        return getStocksTable(false);
+    public String getStocksTable(boolean isLoggedIn) {
+        return getStocksTable(false, isLoggedIn);
     }
 
     /**
      * Retrieve stocks from the Web Service and return a HTML table representation, or info dialog if there are no Stocks to display
      *
      * @param managementMode Whether the table should be for the management mode
+     * @param isLoggedIn Whether a user is logged in
      * @return The stocks table or a info dialog as an HTML string
      */
-    public String getStocksTable(boolean managementMode) {
+    public String getStocksTable(boolean managementMode, boolean isLoggedIn) {
         // Get list of Stock objects from the server
         List<Stock> stocks = port.getAllStocks();
 
@@ -66,7 +70,7 @@ public class Stocks {
         if (!(stocks.size() > 0)) {
             return "<div class='bg-info p-2 mb-3'>Sorry, there are no stocks listed at the moment - check back later</div>";
         } else {
-            return CommonUtils.getInstance().getStockTableAsHTML(stocks, true, managementMode);
+            return CommonUtils.getInstance().getStockTableAsHTML(stocks, true, managementMode, isLoggedIn);
         }
     }
 
@@ -74,9 +78,10 @@ public class Stocks {
      * Retrieve stock from the Web Service and return a HTML table representation, or error dialog if no stock was found
      *
      * @param companySymbol The symbol to use for the lookup
+     * @param isLoggedIn Whether a user is logged in
      * @return The stock table or a error dialog as an HTML string
      */
-    public String getStockTable(String companySymbol) {
+    public String getStockTable(String companySymbol, boolean isLoggedIn) {
         // Get Stock object from the server
         Stock stock = port.getStockBySymbol(companySymbol);
 
@@ -87,7 +92,7 @@ public class Stocks {
             List<Stock> theStock = new ArrayList<>();
             theStock.add(stock);
 
-            return CommonUtils.getInstance().getStockTableAsHTML(theStock, false, false);
+            return CommonUtils.getInstance().getStockTableAsHTML(theStock, false, false, isLoggedIn);
         }
     }
 
@@ -103,8 +108,8 @@ public class Stocks {
      * @param order Whether to order the sortBy column ascending or descending
      * @return The stocks table or a info dialog as an HTML string
      */
-    public String handleSearch(String stockName, String stockSymbol, String stockCurrency, String sharePriceFilter, String sharePriceStr, String sortBy, String order) {
-        return handleSearch(stockName, stockSymbol, stockCurrency, sharePriceFilter, sharePriceStr, sortBy, order, false);
+    public String handleSearch(String stockName, String stockSymbol, String stockCurrency, String sharePriceFilter, String sharePriceStr, String sortBy, String order, boolean isLoggedIn) {
+        return handleSearch(stockName, stockSymbol, stockCurrency, sharePriceFilter, sharePriceStr, sortBy, order, false, isLoggedIn);
     }
 
     /**
@@ -118,9 +123,10 @@ public class Stocks {
      * @param sortBy The column in which the results should be ordered by
      * @param order Whether to order the sortBy column ascending or descending
      * @param managementMode Whether to render the table in management mode
+     * @param isLoggedIn Whether a user is logged in
      * @return The stocks table or a info dialog as an HTML string
      */
-    public String handleSearch(String stockName, String stockSymbol, String stockCurrency, String sharePriceFilter, String sharePriceStr, String sortBy, String order, boolean managementMode) {
+    public String handleSearch(String stockName, String stockSymbol, String stockCurrency, String sharePriceFilter, String sharePriceStr, String sortBy, String order, boolean managementMode, boolean isLoggedIn) {
         Double sharePrice = -1D;
 
         try {
@@ -137,7 +143,7 @@ public class Stocks {
         if (!(filteredStocks.size() > 0)) {
             return "<div class='bg-danger p-2 mb-3'>Sorry, no stocks met your criteria - please try search again.</div>";
         } else {
-            return CommonUtils.getInstance().getStockTableAsHTML(filteredStocks, true, managementMode);
+            return CommonUtils.getInstance().getStockTableAsHTML(filteredStocks, true, managementMode, isLoggedIn);
         }
     }
 

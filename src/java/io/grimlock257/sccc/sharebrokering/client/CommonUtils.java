@@ -43,9 +43,10 @@ public class CommonUtils {
      * @param stocks The stocks used to populate the table with
      * @param clickableRows Whether to have clickable rows
      * @param managementMode Whether the table is to be generated for the management page
+     * @param isLoggedIn Whether the user is logged in or not
      * @return The String representing the HTML table
      */
-    public String getStockTableAsHTML(List<Stock> stocks, boolean clickableRows, boolean managementMode) {
+    public String getStockTableAsHTML(List<Stock> stocks, boolean clickableRows, boolean managementMode, boolean isLoggedIn) {
         StringBuilder builder = new StringBuilder();
 
         // Create table and set up header row
@@ -84,13 +85,16 @@ public class CommonUtils {
             builder.append("<td class='align-middle text-center'>" + CommonUtils.formatDateTime(stock.getPrice().getUpdated()) + "</td>");
             builder.append("<td class='align-middle text-center'>");
 
-            if (managementMode) {
-                builder.append("<a href='stock-management-edit.jsp?stockSymbol=" + stock.getStockSymbol() + "&stockName=" + stock.getStockName() + "&availableShares=" + stock.getAvailableShares() + "' class='btn btn-warning mr-2 js-edit-btn'>Edit</a>");
-                builder.append("<button type='button' class='btn btn-danger js-remove-btn' data-toggle='modal' data-target='#remove-modal' data-action='Remove' data-available-shares='" + stock.getAvailableShares() + "'>Remove</button>");
-
+            if (isLoggedIn) {
+                if (managementMode) {
+                    builder.append("<a href='stock-management-edit.jsp?stockSymbol=" + stock.getStockSymbol() + "&stockName=" + stock.getStockName() + "&availableShares=" + stock.getAvailableShares() + "' class='btn btn-warning mr-2 js-edit-btn'>Edit</a>");
+                    builder.append("<button type='button' class='btn btn-danger js-remove-btn' data-toggle='modal' data-target='#remove-modal' data-action='Remove' data-available-shares='" + stock.getAvailableShares() + "'>Remove</button>");
+                } else {
+                    builder.append("<button type='button' class='btn btn-warning mr-2 js-sell-btn' data-toggle='modal' data-target='#sales-modal' data-action='Sell'>Sell</button>");
+                    builder.append("<button type='button' class='btn btn-success js-buy-btn'" + (stock.getAvailableShares() <= 0F ? " disabled" : "") + " data-toggle='modal' data-target='#sales-modal' data-action='Buy' data-available-shares='" + stock.getAvailableShares() + "'>Buy</button>");
+                }
             } else {
-                builder.append("<button type='button' class='btn btn-warning mr-2 js-sell-btn' data-toggle='modal' data-target='#sales-modal' data-action='Sell'>Sell</button>");
-                builder.append("<button type='button' class='btn btn-success js-buy-btn'" + (stock.getAvailableShares() <= 0F ? " disabled" : "") + " data-toggle='modal' data-target='#sales-modal' data-action='Buy' data-available-shares='" + stock.getAvailableShares() + "'>Buy</button>");
+                builder.append("<a class='btn btn-primary' href='login.jsp'>Login to trade</a>");
             }
             builder.append("</td>");
             builder.append("</tr>");
