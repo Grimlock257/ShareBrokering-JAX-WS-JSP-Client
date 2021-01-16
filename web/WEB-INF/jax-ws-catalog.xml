@@ -3,4 +3,5 @@
     <system systemId="http://localhost:8080/ShareBrokering/ShareBrokering?wsdl" uri="wsdl/localhost_8080/ShareBrokering/ShareBrokering.wsdl"/>
     <system systemId="http://localhost:8080/ShareBrokering/ShareBrokering?xsd=1" uri="wsdl/localhost_8080/ShareBrokering/ShareBrokering.xsd_1.xsd"/>
     <system systemId="http://localhost:8080/ShareBrokering/ShareBrokering?xsd=2" uri="wsdl/localhost_8080/ShareBrokering/ShareBrokering.xsd_2.xsd"/>
+    <system systemId="http://localhost:8080/ShareBrokering/ShareBrokering?xsd=3" uri="wsdl/localhost_8080/ShareBrokering/ShareBrokering.xsd_3.xsd"/>
 </catalog>
