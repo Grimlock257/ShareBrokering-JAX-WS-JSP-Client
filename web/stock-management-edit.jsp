@@ -4,6 +4,7 @@
     Author     : Adam Watson
 --%>
 
+<%@page import="io.grimlock257.sccc.sharebrokering.client.model.UserSessionModel"%>
 <%@page import="io.grimlock257.sccc.sharebrokering.client.Users"%>
 <%@page import="io.grimlock257.sccc.ws.Role"%>
 <%@page import="io.grimlock257.sccc.sharebrokering.client.Stocks"%>
@@ -30,22 +31,9 @@
 
 <%
     // Check cookies for guid and role
-    String guid = null;
-    String role = null;
+    UserSessionModel userSessionModel = Users.getInstance().getUserSessionDetails(request);
 
-    for (Cookie cookie : request.getCookies()) {
-        if (cookie.getName().equalsIgnoreCase("guid")) {
-            guid = cookie.getValue();
-
-            continue;
-        }
-
-        if (cookie.getName().equalsIgnoreCase("role")) {
-            role = cookie.getValue().toUpperCase();
-        }
-    }
-
-    if (guid != null && role != null && (Role.valueOf(role) == Role.ADMIN)) {
+    if (userSessionModel != null && (Role.valueOf(userSessionModel.getRole()) == Role.ADMIN)) {
 %>
 <div class="container bg-secondary text-white pt-4 pb-1 mb-4">
     <h1>Edit Stock</h1>

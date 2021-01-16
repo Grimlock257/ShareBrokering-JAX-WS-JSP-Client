@@ -1,10 +1,12 @@
 package io.grimlock257.sccc.sharebrokering.client;
 
 import io.grimlock257.sccc.sharebrokering.client.model.ClientResponseModel;
+import io.grimlock257.sccc.sharebrokering.client.model.UserSessionModel;
 import io.grimlock257.sccc.ws.LoginResponse;
 import io.grimlock257.sccc.ws.ShareBrokering;
 import io.grimlock257.sccc.ws.ShareBrokering_Service;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -113,5 +115,32 @@ public class Users {
 
         response.addCookie(guidCookie);
         response.addCookie(roleCookie);
+    }
+
+    /**
+     * Retrieve the session information from cookies
+     *
+     * @param request The request object from the call site page
+     * @return The UserSessionModel if logged in, or null otherwise
+     */
+    public UserSessionModel getUserSessionDetails(HttpServletRequest request) {
+        String guid = null;
+        String role = null;
+
+        for (Cookie cookie : request.getCookies()) {
+            if (cookie.getName().equalsIgnoreCase("guid")) {
+                guid = cookie.getValue();
+            }
+
+            if (cookie.getName().equalsIgnoreCase("role")) {
+                role = cookie.getValue().toUpperCase();
+            }
+        }
+
+        if (guid != null && role != null) {
+            return new UserSessionModel(guid, role);
+        } else {
+            return null;
+        }
     }
 }

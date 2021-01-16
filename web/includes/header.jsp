@@ -4,6 +4,8 @@
     Author     : Adam Watson
 --%>
 
+<%@page import="io.grimlock257.sccc.sharebrokering.client.model.UserSessionModel"%>
+<%@page import="io.grimlock257.sccc.sharebrokering.client.Users"%>
 <%@page import="io.grimlock257.sccc.ws.Role"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
@@ -74,20 +76,9 @@
                         </li>
                         <%
                             // Check cookies for guid and role
-                            String guid = null;
-                            String role = null;
+                            UserSessionModel userSessionModel = Users.getInstance().getUserSessionDetails(request);
 
-                            for (Cookie cookie : request.getCookies()) {
-                                if (cookie.getName().equalsIgnoreCase("guid")) {
-                                    guid = cookie.getValue();
-                                }
-
-                                if (cookie.getName().equalsIgnoreCase("role")) {
-                                    role = cookie.getValue().toUpperCase();
-                                }
-                            }
-
-                            if (guid != null && role != null && (Role.valueOf(role) == Role.ADMIN)) {
+                            if (userSessionModel != null && (Role.valueOf(userSessionModel.getRole()) == Role.ADMIN)) {
                         %>
                         <li class="nav-item">
                             <a class="nav-link <%= currentPage != null && (currentPage.equalsIgnoreCase("stock-management") || currentPage.equalsIgnoreCase("stock-management-edit")) ? "active" : ""%>" href="stock-management.jsp">Stock Management</a>
@@ -99,7 +90,7 @@
                     <span class="navbar-text">
                         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                             <%
-                                if (guid != null && role != null) {
+                                if (userSessionModel != null) {
                             %>
                             <li class="nav-item">
                                 <a class="nav-link" href="<%= (request.getQueryString() != null) ? "?" + request.getQueryString() + "&" : "?"%>logout">Logout</a>
