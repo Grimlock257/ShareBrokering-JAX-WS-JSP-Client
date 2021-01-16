@@ -144,20 +144,29 @@ public class Stocks {
     /**
      * Handle when a purchase order is actioned, attempt to execute the purchase on the Web Service.
      *
+     * @param request The request object from the call site page
      * @param symbol The stock symbol which the user is purchasing
      * @param quantityStr The quantity that the user is purchasing as a String
      * @return A string representing an HTML dialog box with the appropriate message within (success or failure)
      */
-    public String handlePurchase(String symbol, String quantityStr) {
+    public String handlePurchase(HttpServletRequest request, String symbol, String quantityStr) {
+        UserSessionModel userSessionModel = Users.getInstance().getUserSessionDetails(request);
+
+        if (userSessionModel == null) {
+            return "<div class='bg-danger p-2 mb-3'>You need to be logged in to purchase shares. Please login.</div>";
+        }
+
         try {
+            if (symbol == null || quantityStr == null) {
+                return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>";
+            }
+
             Double quantity = Double.parseDouble(quantityStr);
 
-            if (symbol == null) {
-                return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. It appears symbol is missing - please try again.</div>";
-            } else if (quantity <= 0) {
+            if (quantity <= 0) {
                 return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. You cannot purchase 0 or less shares - please try again.</div>";
             } else {
-                Boolean purchaseSuccess = port.purchaseShare(symbol, quantity);
+                Boolean purchaseSuccess = port.purchaseShare(userSessionModel.getGuid(), symbol, quantity);
 
                 if (purchaseSuccess) {
                     return "<div class='bg-success p-2 mb-3'>You have successfully purchased " + quantity + " shares.</div>";
@@ -173,20 +182,29 @@ public class Stocks {
     /**
      * Handle when sell order is actioned, attempt to execute the sale on the Web Service.
      *
+     * @param request The request object from the call site page
      * @param symbol The stock symbol which the user is selling
      * @param quantityStr The quantity that the user is selling as a String
      * @return A string representing an HTML dialog box with the appropriate message within (success or failure)
      */
-    public String handleSale(String symbol, String quantityStr) {
+    public String handleSale(HttpServletRequest request, String symbol, String quantityStr) {
+        UserSessionModel userSessionModel = Users.getInstance().getUserSessionDetails(request);
+
+        if (userSessionModel == null) {
+            return "<div class='bg-danger p-2 mb-3'>You need to be logged in to sell shares. Please login.</div>";
+        }
+
         try {
+            if (symbol == null || quantityStr == null) {
+                return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>";
+            }
+
             Double quantity = Double.parseDouble(quantityStr);
 
-            if (symbol == null) {
-                return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. It appears symbol is missing - please try again.</div>";
-            } else if (quantity <= 0) {
+            if (quantity <= 0) {
                 return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. You cannot sell 0 or less shares - please try again.</div>";
             } else {
-                Boolean saleSuccess = port.sellShare(symbol, quantity);
+                Boolean saleSuccess = port.sellShare(userSessionModel.getGuid(), symbol, quantity);
 
                 if (saleSuccess) {
                     return "<div class='bg-success p-2 mb-3'>You have successfully sold " + quantity + " shares.</div>";
