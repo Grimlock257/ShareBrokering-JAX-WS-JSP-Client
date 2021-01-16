@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is Metro/2.3.2-b608 (trunk-7979; 2015-01-21T12:50:19+0000) JAXWS-RI/2.2.11-b150120.1832 JAXWS-API/2.2.12 JAXB-RI/2.2.12-b141219.1637 JAXB-API/2.2.13-b141020.1521 svn-revision#unknown. --><xs:schema xmlns:tns="http://grimlock257.github.io/Stocks" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" version="1.0" targetNamespace="http://grimlock257.github.io/Stocks">
+
+<xs:complexType name="Stock">
+<xs:sequence>
+<xs:element name="StockName" type="xs:string"/>
+<xs:element name="StockSymbol" type="xs:string"/>
+<xs:element name="AvailableShares" type="xs:double"/>
+<xs:element name="Price" type="tns:SharePrice"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="SharePrice">
+<xs:sequence>
+<xs:element name="Currency" type="xs:string"/>
+<xs:element name="Price" type="xs:double"/>
+<xs:element name="Updated" type="xs:dateTime"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>

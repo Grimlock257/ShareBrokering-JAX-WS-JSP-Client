@@ -1,6 +1,8 @@
-<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is Metro/2.3.2-b608 (trunk-7979; 2015-01-21T12:50:19+0000) JAXWS-RI/2.2.11-b150120.1832 JAXWS-API/2.2.12 JAXB-RI/2.2.12-b141219.1637 JAXB-API/2.2.13-b141020.1521 svn-revision#unknown. --><xs:schema xmlns:tns="http://sharebrokering.sccc.grimlock257.io/" xmlns:ns1="http://grimlock257.github.io/Stocks" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://sharebrokering.sccc.grimlock257.io/">
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is Metro/2.3.2-b608 (trunk-7979; 2015-01-21T12:50:19+0000) JAXWS-RI/2.2.11-b150120.1832 JAXWS-API/2.2.12 JAXB-RI/2.2.12-b141219.1637 JAXB-API/2.2.13-b141020.1521 svn-revision#unknown. --><xs:schema xmlns:tns="http://sharebrokering.sccc.grimlock257.io/" xmlns:ns2="http://grimlock257.github.io/Stocks/Users" xmlns:ns1="http://grimlock257.github.io/Stocks" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://sharebrokering.sccc.grimlock257.io/">
 
-<xs:import namespace="http://grimlock257.github.io/Stocks" schemaLocation="http://localhost:8080/ShareBrokering/ShareBrokering?xsd=2"/>
+<xs:import namespace="http://grimlock257.github.io/Stocks" schemaLocation="http://localhost:8080/ShareBrokering/ShareBrokering?xsd=3"/>
+
+<xs:import namespace="http://grimlock257.github.io/Stocks/Users" schemaLocation="http://localhost:8080/ShareBrokering/ShareBrokering?xsd=2"/>
 
 <xs:element name="addShare" type="tns:addShare"/>
 
@@ -10,6 +12,10 @@
 
 <xs:element name="deleteShareResponse" type="tns:deleteShareResponse"/>
 
+<xs:element name="depositFunds" type="tns:depositFunds"/>
+
+<xs:element name="depositFundsResponse" type="tns:depositFundsResponse"/>
+
 <xs:element name="getAllStocks" type="tns:getAllStocks"/>
 
 <xs:element name="getAllStocksResponse" type="tns:getAllStocksResponse"/>
@@ -17,6 +23,10 @@
 <xs:element name="getStockBySymbol" type="tns:getStockBySymbol"/>
 
 <xs:element name="getStockBySymbolResponse" type="tns:getStockBySymbolResponse"/>
+
+<xs:element name="loginUser" type="tns:loginUser"/>
+
+<xs:element name="loginUserResponse" type="tns:loginUserResponse"/>
 
 <xs:element name="modifyShare" type="tns:modifyShare"/>
 
@@ -26,6 +36,10 @@
 
 <xs:element name="purchaseShareResponse" type="tns:purchaseShareResponse"/>
 
+<xs:element name="registerUser" type="tns:registerUser"/>
+
+<xs:element name="registerUserResponse" type="tns:registerUserResponse"/>
+
 <xs:element name="searchShares" type="tns:searchShares"/>
 
 <xs:element name="searchSharesResponse" type="tns:searchSharesResponse"/>
@@ -33,6 +47,20 @@
 <xs:element name="sellShare" type="tns:sellShare"/>
 
 <xs:element name="sellShareResponse" type="tns:sellShareResponse"/>
+
+<xs:element name="withdrawFunds" type="tns:withdrawFunds"/>
+
+<xs:element name="withdrawFundsResponse" type="tns:withdrawFundsResponse"/>
+
+<xs:complexType name="getAllStocks">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="getAllStocksResponse">
+<xs:sequence>
+<xs:element name="return" type="ns1:Stock" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
 
 <xs:complexType name="getStockBySymbol">
 <xs:sequence>
@@ -43,16 +71,6 @@
 <xs:complexType name="getStockBySymbolResponse">
 <xs:sequence>
 <xs:element name="return" type="ns1:Stock" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="getAllStocks">
-<xs:sequence/>
-</xs:complexType>
-
-<xs:complexType name="getAllStocksResponse">
-<xs:sequence>
-<xs:element name="return" type="ns1:Stock" minOccurs="0" maxOccurs="unbounded"/>
 </xs:sequence>
 </xs:complexType>
 
@@ -69,6 +87,48 @@
 </xs:sequence>
 </xs:complexType>
 
+<xs:complexType name="withdrawFunds">
+<xs:sequence>
+<xs:element name="guid" type="xs:string" minOccurs="0"/>
+<xs:element name="amount" type="xs:double"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="withdrawFundsResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="registerUser">
+<xs:sequence>
+<xs:element name="firstName" type="xs:string" minOccurs="0"/>
+<xs:element name="lastName" type="xs:string" minOccurs="0"/>
+<xs:element name="username" type="xs:string" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+<xs:element name="currency" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="registerUserResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="depositFunds">
+<xs:sequence>
+<xs:element name="guid" type="xs:string" minOccurs="0"/>
+<xs:element name="amount" type="xs:double"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="depositFundsResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+
 <xs:complexType name="addShare">
 <xs:sequence>
 <xs:element name="stockName" type="xs:string" minOccurs="0"/>
@@ -78,6 +138,18 @@
 </xs:complexType>
 
 <xs:complexType name="addShareResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="deleteShare">
+<xs:sequence>
+<xs:element name="stockSymbol" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="deleteShareResponse">
 <xs:sequence>
 <xs:element name="return" type="xs:boolean"/>
 </xs:sequence>
@@ -114,18 +186,6 @@
 </xs:sequence>
 </xs:complexType>
 
-<xs:complexType name="deleteShare">
-<xs:sequence>
-<xs:element name="stockSymbol" type="xs:string" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="deleteShareResponse">
-<xs:sequence>
-<xs:element name="return" type="xs:boolean"/>
-</xs:sequence>
-</xs:complexType>
-
 <xs:complexType name="modifyShare">
 <xs:sequence>
 <xs:element name="stockName" type="xs:string" minOccurs="0"/>
@@ -138,6 +198,27 @@
 <xs:complexType name="modifyShareResponse">
 <xs:sequence>
 <xs:element name="return" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="loginUser">
+<xs:sequence>
+<xs:element name="username" type="xs:string" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="loginUserResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:loginResponse" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="loginResponse">
+<xs:sequence>
+<xs:element name="successful" type="xs:boolean"/>
+<xs:element name="guid" type="xs:string" minOccurs="0"/>
+<xs:element name="role" type="ns2:Role" minOccurs="0"/>
 </xs:sequence>
 </xs:complexType>
 </xs:schema>
