@@ -81,6 +81,9 @@
                                 <input type="password" name="password" class="form-control" placeholder="supersecret" required />
                             </div>
                         </div>
+                        <div class="row form-group">
+                            <a href="register.jsp" class="offset-md-2 col-sm-10 col-form-label text-white">Not registered? Register!</a>
+                        </div>
                         <div class="row">
                             <div class="col-sm-10 offset-md-2">
                                 <div class="row">
