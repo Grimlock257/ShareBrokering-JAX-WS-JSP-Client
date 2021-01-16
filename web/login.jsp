@@ -4,27 +4,15 @@
     Author     : AdamW
 --%>
 
+<%@page import="io.grimlock257.sccc.sharebrokering.client.model.UserSessionModel"%>
 <%@page import="io.grimlock257.sccc.sharebrokering.client.model.ClientResponseModel"%>
 <%@page import="io.grimlock257.sccc.sharebrokering.client.Users"%>
 
 <%
     // Check cookies for guid and role
-    String guid = null;
-    String role = null;
+    UserSessionModel userSessionModel = Users.getInstance().getUserSessionDetails(request);
 
-    for (Cookie cookie : request.getCookies()) {
-        if (cookie.getName().equalsIgnoreCase("guid")) {
-            guid = cookie.getValue();
-
-            continue;
-        }
-
-        if (cookie.getName().equalsIgnoreCase("role")) {
-            role = cookie.getValue().toUpperCase();
-        }
-    }
-
-    if (guid != null && role != null) {
+    if (userSessionModel != null) {
         response.sendRedirect("index.jsp");
     }
 %>
