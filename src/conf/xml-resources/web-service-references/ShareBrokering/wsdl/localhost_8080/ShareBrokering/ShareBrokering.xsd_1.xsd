@@ -76,6 +76,7 @@
 
 <xs:complexType name="sellShare">
 <xs:sequence>
+<xs:element name="guid" type="xs:string" minOccurs="0"/>
 <xs:element name="companySymbol" type="xs:string" minOccurs="0"/>
 <xs:element name="quantity" type="xs:double"/>
 </xs:sequence>
@@ -143,18 +144,6 @@
 </xs:sequence>
 </xs:complexType>
 
-<xs:complexType name="deleteShare">
-<xs:sequence>
-<xs:element name="stockSymbol" type="xs:string" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="deleteShareResponse">
-<xs:sequence>
-<xs:element name="return" type="xs:boolean"/>
-</xs:sequence>
-</xs:complexType>
-
 <xs:complexType name="searchShares">
 <xs:sequence>
 <xs:element name="stockName" type="xs:string" minOccurs="0"/>
@@ -175,6 +164,7 @@
 
 <xs:complexType name="purchaseShare">
 <xs:sequence>
+<xs:element name="guid" type="xs:string" minOccurs="0"/>
 <xs:element name="companySymbol" type="xs:string" minOccurs="0"/>
 <xs:element name="quantity" type="xs:double"/>
 </xs:sequence>
@@ -183,6 +173,18 @@
 <xs:complexType name="purchaseShareResponse">
 <xs:sequence>
 <xs:element name="return" type="xs:boolean" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="deleteShare">
+<xs:sequence>
+<xs:element name="stockSymbol" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="deleteShareResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"/>
 </xs:sequence>
 </xs:complexType>
 
