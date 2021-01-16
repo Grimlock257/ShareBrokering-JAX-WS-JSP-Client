@@ -4,6 +4,7 @@
     Author     : Adam Watson
 --%>
 
+<%@page import="io.grimlock257.sccc.ws.Role"%>
 <%@page import="io.grimlock257.sccc.sharebrokering.client.Stocks"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
@@ -64,7 +65,30 @@
                 </div>
             </div>
         </nav>
+        <%
+            // Check cookies for guid and role
+            String guid = null;
+            String role = null;
 
+            for (Cookie cookie : request.getCookies()) {
+                if (cookie.getName().equalsIgnoreCase("guid")) {
+                    guid = cookie.getValue();
+                }
+
+                if (cookie.getName().equalsIgnoreCase("role")) {
+                    role = cookie.getValue().toUpperCase();
+                }
+            }
+
+            if (guid != null && role != null && (Role.valueOf(role) != Role.ADMIN)) {
+        %>
+        <div class="container bg-secondary text-white pt-4 pb-1 mb-4">
+            <h1>Access Denied</h1>
+            <div class='bg-danger p-2 mb-3'>You do not have the appropriate permissions to view this page.</div>
+        </div>
+        <%
+        } else {
+        %>
         <div class="container bg-secondary text-white pt-4 pb-1 mb-4">
             <h1>Edit Stock</h1>
             <div class="card card-body bg-dark mb-3">
@@ -122,5 +146,8 @@
                 }
             %>
         </div>
+        <%
+            }
+        %>
     </body>
 </html>
