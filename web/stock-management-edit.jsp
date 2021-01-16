@@ -80,14 +80,7 @@
                 }
             }
 
-            if (guid != null && role != null && (Role.valueOf(role) != Role.ADMIN)) {
-        %>
-        <div class="container bg-secondary text-white pt-4 pb-1 mb-4">
-            <h1>Access Denied</h1>
-            <div class='bg-danger p-2 mb-3'>You do not have the appropriate permissions to view this page.</div>
-        </div>
-        <%
-        } else {
+            if (guid != null && role != null && (Role.valueOf(role) == Role.ADMIN)) {
         %>
         <div class="container bg-secondary text-white pt-4 pb-1 mb-4">
             <h1>Edit Stock</h1>
@@ -145,6 +138,13 @@
                     out.println(Stocks.getInstance().handleEdit(stockName, currentStockSymbol, newStockSymbol, availableShares));
                 }
             %>
+        </div>
+        <%
+        } else {
+        %>
+        <div class="container bg-secondary text-white pt-4 pb-1 mb-4">
+            <h1>Access Denied</h1>
+            <div class='bg-danger p-2 mb-3'>You do not have the appropriate permissions to view this page.</div>
         </div>
         <%
             }
