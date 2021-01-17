@@ -118,6 +118,12 @@ public class Users {
         response.addCookie(roleCookie);
     }
 
+    /**
+     * Attempt to retrieve the users available funds
+     *
+     * @param guid The account of which to retrieve available funds for
+     * @return A string representing an HTML dialog box with the appropriate message within (success or failure)
+     */
     public String getAvailableFunds(String guid) {
         if (guid == null) {
             return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. Please try again.</div>";
