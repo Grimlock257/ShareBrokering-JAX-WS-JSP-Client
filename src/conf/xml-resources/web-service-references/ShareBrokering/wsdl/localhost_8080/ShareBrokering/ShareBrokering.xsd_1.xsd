@@ -24,6 +24,10 @@
 
 <xs:element name="getStockBySymbolResponse" type="tns:getStockBySymbolResponse"/>
 
+<xs:element name="getUserFunds" type="tns:getUserFunds"/>
+
+<xs:element name="getUserFundsResponse" type="tns:getUserFundsResponse"/>
+
 <xs:element name="getUserStocks" type="tns:getUserStocks"/>
 
 <xs:element name="getUserStocksResponse" type="tns:getUserStocksResponse"/>
@@ -234,6 +238,25 @@
 <xs:complexType name="deleteShareResponse">
 <xs:sequence>
 <xs:element name="return" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getUserFunds">
+<xs:sequence>
+<xs:element name="guid" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getUserFundsResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:fundsResponse" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="fundsResponse">
+<xs:sequence>
+<xs:element name="availableFunds" type="xs:double"/>
+<xs:element name="currency" type="xs:string" minOccurs="0"/>
 </xs:sequence>
 </xs:complexType>
 
