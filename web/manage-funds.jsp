@@ -115,6 +115,4 @@
     }
 %>
 
-<jsp:include page="includes/sales-modal.jsp" />
-
 <jsp:include page="includes/footer.jsp" />
