@@ -10,7 +10,7 @@
     Boolean wasSearch = request.getParameter("search") != null;
 %>
 <div class="d-flex">
-    <div class="p-2 w-100 ">Below is a table of stocks currently listed on Adams Share Broker. Select the search button to the right to search through the stocks</div>
+    <div class="py-2 w-100 d-flex align-middle"><p class="my-auto">Below is a table of stocks currently listed on Adams Share Broker. Select the search button to the right to search through the stocks</p></div>
     <div class="p-2">
         <button class="btn btn-info" id="stocks-search-btn" data-toggle="collapse" data-target="#search">
             Search<span id="stocks-search-btn-spacer"></span><span id="stocks-search-btn-arrow" class="<% out.println(wasSearch ? "active" : ""); %>">&#11206;</span>
