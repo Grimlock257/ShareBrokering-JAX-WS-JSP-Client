@@ -88,6 +88,12 @@
 <message name="getUserStocksResponse">
 <part name="parameters" element="tns:getUserStocksResponse"/>
 </message>
+<message name="getUserFunds">
+<part name="parameters" element="tns:getUserFunds"/>
+</message>
+<message name="getUserFundsResponse">
+<part name="parameters" element="tns:getUserFundsResponse"/>
+</message>
 <portType name="ShareBrokering">
 <operation name="withdrawFunds">
 <input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/withdrawFundsRequest" message="tns:withdrawFunds"/>
@@ -140,6 +146,10 @@
 <operation name="getUserStocks">
 <input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/getUserStocksRequest" message="tns:getUserStocks"/>
 <output wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/getUserStocksResponse" message="tns:getUserStocksResponse"/>
+</operation>
+<operation name="getUserFunds">
+<input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/getUserFundsRequest" message="tns:getUserFunds"/>
+<output wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/getUserFundsResponse" message="tns:getUserFundsResponse"/>
 </operation>
 </portType>
 <binding name="ShareBrokeringPortBinding" type="tns:ShareBrokering">
@@ -253,6 +263,15 @@
 </output>
 </operation>
 <operation name="getUserStocks">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="getUserFunds">
 <soap:operation soapAction=""/>
 <input>
 <soap:body use="literal"/>
