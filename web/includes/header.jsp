@@ -83,6 +83,9 @@
                         <li class="nav-item">
                             <a class="nav-link <%= currentPage != null && currentPage.equalsIgnoreCase("user-stocks") ? "active" : ""%>" href="user-stocks.jsp">Your Stocks</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link <%= currentPage != null && currentPage.equalsIgnoreCase("manage-funds") ? "active" : ""%>" href="manage-funds.jsp">Manage Funds</a>
+                        </li>
                         <%
 
                             if (Role.valueOf(userSessionModel.getRole()) == Role.ADMIN) {
