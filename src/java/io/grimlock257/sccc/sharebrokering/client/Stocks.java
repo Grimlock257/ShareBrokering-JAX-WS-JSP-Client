@@ -4,6 +4,7 @@ import io.grimlock257.sccc.sharebrokering.client.model.UserSessionModel;
 import io.grimlock257.sccc.ws.ShareBrokering;
 import io.grimlock257.sccc.ws.ShareBrokering_Service;
 import io.grimlock257.sccc.ws.Stock;
+import io.grimlock257.sccc.ws.UserStock;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -93,6 +94,24 @@ public class Stocks {
             theStock.add(stock);
 
             return CommonUtils.getInstance().getStockTableAsHTML(theStock, false, false, isLoggedIn);
+        }
+    }
+
+    /**
+     * Retrieve user stocks from the Web Service and return a HTML table representation, or info dialog if there are no UserStocks to display
+     *
+     * @param guid The GUID of the users whose stocks to display
+     * @return The user stocks table or a info dialog as an HTML string
+     */
+    public String getUserStocksTable(String guid) {
+        // Get list of UserStock objects from the server
+        List<UserStock> userStocks = port.getUserStocks(guid);
+
+        // Check there are stocks actually some stocks owned by the user
+        if (!(userStocks.size() > 0)) {
+            return "<div class='bg-info p-2 mb-3'>You do not own any stocks. Purchase some from the Stocks page first!</div>";
+        } else {
+            return CommonUtils.getInstance().getUserStockTableAsHTML(userStocks);
         }
     }
 
