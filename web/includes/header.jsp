@@ -78,12 +78,20 @@
                             // Check cookies for guid and role
                             UserSessionModel userSessionModel = Users.getInstance().getUserSessionDetails(request);
 
-                            if (userSessionModel != null && (Role.valueOf(userSessionModel.getRole()) == Role.ADMIN)) {
+                            if (userSessionModel != null) {
+                        %>
+                        <li class="nav-item">
+                            <a class="nav-link <%= currentPage != null && currentPage.equalsIgnoreCase("user-stocks") ? "active" : ""%>" href="user-stocks.jsp">Your Stocks</a>
+                        </li>
+                        <%
+
+                            if (Role.valueOf(userSessionModel.getRole()) == Role.ADMIN) {
                         %>
                         <li class="nav-item">
                             <a class="nav-link <%= currentPage != null && (currentPage.equalsIgnoreCase("stock-management") || currentPage.equalsIgnoreCase("stock-management-edit")) ? "active" : ""%>" href="stock-management.jsp">Stock Management</a>
                         </li>
                         <%
+                                }
                             }
                         %>
                     </ul>
