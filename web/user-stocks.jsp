@@ -9,15 +9,6 @@
 <%@page import="io.grimlock257.sccc.sharebrokering.client.Stocks"%>
 
 <%
-    // Check cookies for guid and role
-    UserSessionModel userSessionModel = Users.getInstance().getUserSessionDetails(request);
-
-    if (userSessionModel == null) {
-        response.sendRedirect("index.jsp");
-    }
-%>
-
-<%
     request.setAttribute("currentPage", "user-stocks");
 
     // Set the pageTitle attribute for the tab title
@@ -41,6 +32,12 @@
     }
 %>
 
+<%
+    // Check cookies for guid and role
+    UserSessionModel userSessionModel = Users.getInstance().getUserSessionDetails(request);
+
+    if (userSessionModel != null) {
+%>
 <div class="container bg-secondary text-white pt-4 pb-1 mb-4">
     <h1>Your Shares</h1>
 
@@ -63,6 +60,16 @@
         }
     %>
 </div>
+<%
+} else {
+%>
+<div class="container bg-secondary text-white pt-4 pb-1 mb-4">
+    <h1>Uh-oh!</h1>
+    <div class='bg-warning p-2 mb-3'>You must be logged in to view your shares. Please log in!</div>
+</div>
+<%
+    }
+%>
 
 <jsp:include page="includes/sales-modal.jsp" />
 
