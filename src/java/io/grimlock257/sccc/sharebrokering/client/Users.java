@@ -2,6 +2,7 @@ package io.grimlock257.sccc.sharebrokering.client;
 
 import io.grimlock257.sccc.sharebrokering.client.model.ClientResponseModel;
 import io.grimlock257.sccc.sharebrokering.client.model.UserSessionModel;
+import io.grimlock257.sccc.ws.FundsResponse;
 import io.grimlock257.sccc.ws.LoginResponse;
 import io.grimlock257.sccc.ws.ShareBrokering;
 import io.grimlock257.sccc.ws.ShareBrokering_Service;
@@ -115,6 +116,82 @@ public class Users {
 
         response.addCookie(guidCookie);
         response.addCookie(roleCookie);
+    }
+
+    public String getAvailableFunds(String guid) {
+        if (guid == null) {
+            return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. Please try again.</div>";
+        }
+
+        FundsResponse fundsResponse = port.getUserFunds(guid);
+
+        if (fundsResponse == null) {
+            return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. Please try again.</div>";
+        } else {
+            return "<div class='py-2'>You have " + fundsResponse.getAvailableFunds() + " " + fundsResponse.getCurrency() + " available.</div>";
+        }
+    }
+
+    /**
+     * Attempt to deposit funds to the users account
+     *
+     * @param guid The account to which to deposit the funds
+     * @param amountStr The amount to deposit
+     * @return A string representing an HTML dialog box with the appropriate message within (success or failure)
+     */
+    public String depositFunds(String guid, String amountStr) {
+        try {
+            if (guid == null || amountStr == null) {
+                return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>";
+            }
+
+            Double amount = Double.parseDouble(amountStr);
+
+            if (amount < 0) {
+                return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. You cannot deposit an amount less than 0 - please try again.</div>";
+            } else {
+                Boolean depositSuccess = port.depositFunds(guid, amount);
+
+                if (depositSuccess) {
+                    return "<div class='bg-success p-2 mb-3'>You have successfully deposited " + amount + " to your account.</div>";
+                } else {
+                    return "<div class='bg-danger p-2 mb-3'>Your deposit has failed. Please try again. </div>";
+                }
+            }
+        } catch (NumberFormatException e) {
+            return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. It appears a non-numeric value was entered - please try again.</div>";
+        }
+    }
+
+    /**
+     * Attempt to withdraw funds from the users account
+     *
+     * @param guid The account to which to withdraw the funds from
+     * @param amountStr The amount to withdraw
+     * @return A string representing an HTML dialog box with the appropriate message within (success or failure)
+     */
+    public String withdrawFunds(String guid, String amountStr) {
+        try {
+            if (guid == null || amountStr == null) {
+                return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>";
+            }
+
+            Double amount = Double.parseDouble(amountStr);
+
+            if (amount < 0) {
+                return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. You cannot withdraw an amount less than 0 - please try again.</div>";
+            } else {
+                Boolean depositSuccess = port.withdrawFunds(guid, amount);
+
+                if (depositSuccess) {
+                    return "<div class='bg-success p-2 mb-3'>You have successfully withdrawn " + amount + " from your account.</div>";
+                } else {
+                    return "<div class='bg-danger p-2 mb-3'>Your withdrawal has failed. Please try again. </div>";
+                }
+            }
+        } catch (NumberFormatException e) {
+            return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. It appears a non-numeric value was entered - please try again.</div>";
+        }
     }
 
     /**
