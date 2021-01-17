@@ -37,7 +37,7 @@
     if (request.getParameter("logout") != null) {
         Users.getInstance().logout(response);
 
-        response.sendRedirect("user-stocks.jsp?loggedout");
+        response.sendRedirect("index.jsp?loggedout");
     }
 %>
 
@@ -45,24 +45,21 @@
     <h1>Your Shares</h1>
 
     <%
-        if (userSessionModel != null) {
+        // Handle different page states
+        if (request.getParameter("buy") != null) {
+            String symbol = request.getParameter("symbol");
+            String quantity = request.getParameter("quantity");
 
-            // Handle different page states
-            if (request.getParameter("buy") != null) {
-                String symbol = request.getParameter("symbol");
-                String quantity = request.getParameter("quantity");
+            out.println(Stocks.getInstance().handlePurchase(request, symbol, quantity));
+            out.println(Stocks.getInstance().getUserStocksTable(userSessionModel.getGuid()));
+        } else if (request.getParameter("sell") != null) {
+            String symbol = request.getParameter("symbol");
+            String quantity = request.getParameter("quantity");
 
-                out.println(Stocks.getInstance().handlePurchase(request, symbol, quantity));
-                out.println(Stocks.getInstance().getUserStocksTable(userSessionModel.getGuid()));
-            } else if (request.getParameter("sell") != null) {
-                String symbol = request.getParameter("symbol");
-                String quantity = request.getParameter("quantity");
-
-                out.println(Stocks.getInstance().handleSale(request, symbol, quantity));
-                out.println(Stocks.getInstance().getUserStocksTable(userSessionModel.getGuid()));
-            } else {
-                out.println(Stocks.getInstance().getUserStocksTable(userSessionModel.getGuid()));
-            }
+            out.println(Stocks.getInstance().handleSale(request, symbol, quantity));
+            out.println(Stocks.getInstance().getUserStocksTable(userSessionModel.getGuid()));
+        } else {
+            out.println(Stocks.getInstance().getUserStocksTable(userSessionModel.getGuid()));
         }
     %>
 </div>
