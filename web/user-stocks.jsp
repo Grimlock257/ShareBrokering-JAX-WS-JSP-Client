@@ -48,16 +48,14 @@
             String quantity = request.getParameter("quantity");
 
             out.println(Stocks.getInstance().handlePurchase(request, symbol, quantity));
-            out.println(Stocks.getInstance().getUserStocksTable(userSessionModel.getGuid()));
         } else if (request.getParameter("sell") != null) {
             String symbol = request.getParameter("symbol");
             String quantity = request.getParameter("quantity");
 
             out.println(Stocks.getInstance().handleSale(request, symbol, quantity));
-            out.println(Stocks.getInstance().getUserStocksTable(userSessionModel.getGuid()));
-        } else {
-            out.println(Stocks.getInstance().getUserStocksTable(userSessionModel.getGuid()));
         }
+
+        out.println(Stocks.getInstance().getUserStocksTable(userSessionModel.getGuid()));
     %>
 </div>
 <%
