@@ -10,11 +10,23 @@
 <xsd:import namespace="http://grimlock257.github.io/Stocks" schemaLocation="http://localhost:8080/ShareBrokering/ShareBrokering?xsd=3"/>
 </xsd:schema>
 </types>
-<message name="searchShares">
-<part name="parameters" element="tns:searchShares"/>
+<message name="withdrawFunds">
+<part name="parameters" element="tns:withdrawFunds"/>
 </message>
-<message name="searchSharesResponse">
-<part name="parameters" element="tns:searchSharesResponse"/>
+<message name="withdrawFundsResponse">
+<part name="parameters" element="tns:withdrawFundsResponse"/>
+</message>
+<message name="sellShare">
+<part name="parameters" element="tns:sellShare"/>
+</message>
+<message name="sellShareResponse">
+<part name="parameters" element="tns:sellShareResponse"/>
+</message>
+<message name="depositFunds">
+<part name="parameters" element="tns:depositFunds"/>
+</message>
+<message name="depositFundsResponse">
+<part name="parameters" element="tns:depositFundsResponse"/>
 </message>
 <message name="purchaseShare">
 <part name="parameters" element="tns:purchaseShare"/>
@@ -28,17 +40,17 @@
 <message name="addShareResponse">
 <part name="parameters" element="tns:addShareResponse"/>
 </message>
+<message name="searchShares">
+<part name="parameters" element="tns:searchShares"/>
+</message>
+<message name="searchSharesResponse">
+<part name="parameters" element="tns:searchSharesResponse"/>
+</message>
 <message name="deleteShare">
 <part name="parameters" element="tns:deleteShare"/>
 </message>
 <message name="deleteShareResponse">
 <part name="parameters" element="tns:deleteShareResponse"/>
-</message>
-<message name="modifyShare">
-<part name="parameters" element="tns:modifyShare"/>
-</message>
-<message name="modifyShareResponse">
-<part name="parameters" element="tns:modifyShareResponse"/>
 </message>
 <message name="registerUser">
 <part name="parameters" element="tns:registerUser"/>
@@ -46,11 +58,11 @@
 <message name="registerUserResponse">
 <part name="parameters" element="tns:registerUserResponse"/>
 </message>
-<message name="sellShare">
-<part name="parameters" element="tns:sellShare"/>
+<message name="loginUser">
+<part name="parameters" element="tns:loginUser"/>
 </message>
-<message name="sellShareResponse">
-<part name="parameters" element="tns:sellShareResponse"/>
+<message name="loginUserResponse">
+<part name="parameters" element="tns:loginUserResponse"/>
 </message>
 <message name="getAllStocks">
 <part name="parameters" element="tns:getAllStocks"/>
@@ -64,28 +76,30 @@
 <message name="getStockBySymbolResponse">
 <part name="parameters" element="tns:getStockBySymbolResponse"/>
 </message>
-<message name="loginUser">
-<part name="parameters" element="tns:loginUser"/>
+<message name="modifyShare">
+<part name="parameters" element="tns:modifyShare"/>
 </message>
-<message name="loginUserResponse">
-<part name="parameters" element="tns:loginUserResponse"/>
+<message name="modifyShareResponse">
+<part name="parameters" element="tns:modifyShareResponse"/>
 </message>
-<message name="withdrawFunds">
-<part name="parameters" element="tns:withdrawFunds"/>
+<message name="getUserStocks">
+<part name="parameters" element="tns:getUserStocks"/>
 </message>
-<message name="withdrawFundsResponse">
-<part name="parameters" element="tns:withdrawFundsResponse"/>
-</message>
-<message name="depositFunds">
-<part name="parameters" element="tns:depositFunds"/>
-</message>
-<message name="depositFundsResponse">
-<part name="parameters" element="tns:depositFundsResponse"/>
+<message name="getUserStocksResponse">
+<part name="parameters" element="tns:getUserStocksResponse"/>
 </message>
 <portType name="ShareBrokering">
-<operation name="searchShares">
-<input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/searchSharesRequest" message="tns:searchShares"/>
-<output wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/searchSharesResponse" message="tns:searchSharesResponse"/>
+<operation name="withdrawFunds">
+<input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/withdrawFundsRequest" message="tns:withdrawFunds"/>
+<output wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/withdrawFundsResponse" message="tns:withdrawFundsResponse"/>
+</operation>
+<operation name="sellShare">
+<input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/sellShareRequest" message="tns:sellShare"/>
+<output wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/sellShareResponse" message="tns:sellShareResponse"/>
+</operation>
+<operation name="depositFunds">
+<input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/depositFundsRequest" message="tns:depositFunds"/>
+<output wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/depositFundsResponse" message="tns:depositFundsResponse"/>
 </operation>
 <operation name="purchaseShare">
 <input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/purchaseShareRequest" message="tns:purchaseShare"/>
@@ -95,21 +109,21 @@
 <input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/addShareRequest" message="tns:addShare"/>
 <output wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/addShareResponse" message="tns:addShareResponse"/>
 </operation>
+<operation name="searchShares">
+<input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/searchSharesRequest" message="tns:searchShares"/>
+<output wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/searchSharesResponse" message="tns:searchSharesResponse"/>
+</operation>
 <operation name="deleteShare">
 <input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/deleteShareRequest" message="tns:deleteShare"/>
 <output wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/deleteShareResponse" message="tns:deleteShareResponse"/>
-</operation>
-<operation name="modifyShare">
-<input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/modifyShareRequest" message="tns:modifyShare"/>
-<output wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/modifyShareResponse" message="tns:modifyShareResponse"/>
 </operation>
 <operation name="registerUser">
 <input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/registerUserRequest" message="tns:registerUser"/>
 <output wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/registerUserResponse" message="tns:registerUserResponse"/>
 </operation>
-<operation name="sellShare">
-<input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/sellShareRequest" message="tns:sellShare"/>
-<output wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/sellShareResponse" message="tns:sellShareResponse"/>
+<operation name="loginUser">
+<input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/loginUserRequest" message="tns:loginUser"/>
+<output wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/loginUserResponse" message="tns:loginUserResponse"/>
 </operation>
 <operation name="getAllStocks">
 <input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/getAllStocksRequest" message="tns:getAllStocks"/>
@@ -119,22 +133,36 @@
 <input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/getStockBySymbolRequest" message="tns:getStockBySymbol"/>
 <output wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/getStockBySymbolResponse" message="tns:getStockBySymbolResponse"/>
 </operation>
-<operation name="loginUser">
-<input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/loginUserRequest" message="tns:loginUser"/>
-<output wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/loginUserResponse" message="tns:loginUserResponse"/>
+<operation name="modifyShare">
+<input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/modifyShareRequest" message="tns:modifyShare"/>
+<output wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/modifyShareResponse" message="tns:modifyShareResponse"/>
 </operation>
-<operation name="withdrawFunds">
-<input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/withdrawFundsRequest" message="tns:withdrawFunds"/>
-<output wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/withdrawFundsResponse" message="tns:withdrawFundsResponse"/>
-</operation>
-<operation name="depositFunds">
-<input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/depositFundsRequest" message="tns:depositFunds"/>
-<output wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/depositFundsResponse" message="tns:depositFundsResponse"/>
+<operation name="getUserStocks">
+<input wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/getUserStocksRequest" message="tns:getUserStocks"/>
+<output wsam:Action="http://sharebrokering.sccc.grimlock257.io/ShareBrokering/getUserStocksResponse" message="tns:getUserStocksResponse"/>
 </operation>
 </portType>
 <binding name="ShareBrokeringPortBinding" type="tns:ShareBrokering">
 <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
-<operation name="searchShares">
+<operation name="withdrawFunds">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="sellShare">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="depositFunds">
 <soap:operation soapAction=""/>
 <input>
 <soap:body use="literal"/>
@@ -161,7 +189,7 @@
 <soap:body use="literal"/>
 </output>
 </operation>
-<operation name="deleteShare">
+<operation name="searchShares">
 <soap:operation soapAction=""/>
 <input>
 <soap:body use="literal"/>
@@ -170,7 +198,7 @@
 <soap:body use="literal"/>
 </output>
 </operation>
-<operation name="modifyShare">
+<operation name="deleteShare">
 <soap:operation soapAction=""/>
 <input>
 <soap:body use="literal"/>
@@ -188,7 +216,7 @@
 <soap:body use="literal"/>
 </output>
 </operation>
-<operation name="sellShare">
+<operation name="loginUser">
 <soap:operation soapAction=""/>
 <input>
 <soap:body use="literal"/>
@@ -215,7 +243,7 @@
 <soap:body use="literal"/>
 </output>
 </operation>
-<operation name="loginUser">
+<operation name="modifyShare">
 <soap:operation soapAction=""/>
 <input>
 <soap:body use="literal"/>
@@ -224,16 +252,7 @@
 <soap:body use="literal"/>
 </output>
 </operation>
-<operation name="withdrawFunds">
-<soap:operation soapAction=""/>
-<input>
-<soap:body use="literal"/>
-</input>
-<output>
-<soap:body use="literal"/>
-</output>
-</operation>
-<operation name="depositFunds">
+<operation name="getUserStocks">
 <soap:operation soapAction=""/>
 <input>
 <soap:body use="literal"/>

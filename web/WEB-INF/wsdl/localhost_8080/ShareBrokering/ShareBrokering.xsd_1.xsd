@@ -24,6 +24,10 @@
 
 <xs:element name="getStockBySymbolResponse" type="tns:getStockBySymbolResponse"/>
 
+<xs:element name="getUserStocks" type="tns:getUserStocks"/>
+
+<xs:element name="getUserStocksResponse" type="tns:getUserStocksResponse"/>
+
 <xs:element name="loginUser" type="tns:loginUser"/>
 
 <xs:element name="loginUserResponse" type="tns:loginUserResponse"/>
@@ -62,32 +66,6 @@
 </xs:sequence>
 </xs:complexType>
 
-<xs:complexType name="getStockBySymbol">
-<xs:sequence>
-<xs:element name="companySymbol" type="xs:string" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="getStockBySymbolResponse">
-<xs:sequence>
-<xs:element name="return" type="ns1:Stock" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="sellShare">
-<xs:sequence>
-<xs:element name="guid" type="xs:string" minOccurs="0"/>
-<xs:element name="companySymbol" type="xs:string" minOccurs="0"/>
-<xs:element name="quantity" type="xs:double"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="sellShareResponse">
-<xs:sequence>
-<xs:element name="return" type="xs:boolean" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
 <xs:complexType name="withdrawFunds">
 <xs:sequence>
 <xs:element name="guid" type="xs:string" minOccurs="0"/>
@@ -114,6 +92,30 @@
 <xs:complexType name="registerUserResponse">
 <xs:sequence>
 <xs:element name="return" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getUserStocks">
+<xs:sequence>
+<xs:element name="guid" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getUserStocksResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:userStock" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="userStock">
+<xs:sequence>
+<xs:element name="stockName" type="xs:string" minOccurs="0"/>
+<xs:element name="stockSymbol" type="xs:string" minOccurs="0"/>
+<xs:element name="availableShares" type="xs:double"/>
+<xs:element name="price" type="ns1:SharePrice" minOccurs="0"/>
+<xs:element name="userPurchaseCurrency" type="xs:string" minOccurs="0"/>
+<xs:element name="userQuantity" type="xs:double"/>
+<xs:element name="userPurchaseValue" type="xs:double"/>
 </xs:sequence>
 </xs:complexType>
 
@@ -144,6 +146,67 @@
 </xs:sequence>
 </xs:complexType>
 
+<xs:complexType name="purchaseShare">
+<xs:sequence>
+<xs:element name="guid" type="xs:string" minOccurs="0"/>
+<xs:element name="companySymbol" type="xs:string" minOccurs="0"/>
+<xs:element name="quantity" type="xs:double"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="purchaseShareResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="loginUser">
+<xs:sequence>
+<xs:element name="username" type="xs:string" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="loginUserResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:loginResponse" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="loginResponse">
+<xs:sequence>
+<xs:element name="successful" type="xs:boolean"/>
+<xs:element name="guid" type="xs:string" minOccurs="0"/>
+<xs:element name="role" type="ns2:Role" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getStockBySymbol">
+<xs:sequence>
+<xs:element name="companySymbol" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getStockBySymbolResponse">
+<xs:sequence>
+<xs:element name="return" type="ns1:Stock" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="sellShare">
+<xs:sequence>
+<xs:element name="guid" type="xs:string" minOccurs="0"/>
+<xs:element name="companySymbol" type="xs:string" minOccurs="0"/>
+<xs:element name="quantity" type="xs:double"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="sellShareResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
 <xs:complexType name="searchShares">
 <xs:sequence>
 <xs:element name="stockName" type="xs:string" minOccurs="0"/>
@@ -159,20 +222,6 @@
 <xs:complexType name="searchSharesResponse">
 <xs:sequence>
 <xs:element name="return" type="ns1:Stock" minOccurs="0" maxOccurs="unbounded"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="purchaseShare">
-<xs:sequence>
-<xs:element name="guid" type="xs:string" minOccurs="0"/>
-<xs:element name="companySymbol" type="xs:string" minOccurs="0"/>
-<xs:element name="quantity" type="xs:double"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="purchaseShareResponse">
-<xs:sequence>
-<xs:element name="return" type="xs:boolean" minOccurs="0"/>
 </xs:sequence>
 </xs:complexType>
 
@@ -200,27 +249,6 @@
 <xs:complexType name="modifyShareResponse">
 <xs:sequence>
 <xs:element name="return" type="xs:boolean"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="loginUser">
-<xs:sequence>
-<xs:element name="username" type="xs:string" minOccurs="0"/>
-<xs:element name="password" type="xs:string" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="loginUserResponse">
-<xs:sequence>
-<xs:element name="return" type="tns:loginResponse" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="loginResponse">
-<xs:sequence>
-<xs:element name="successful" type="xs:boolean"/>
-<xs:element name="guid" type="xs:string" minOccurs="0"/>
-<xs:element name="role" type="ns2:Role" minOccurs="0"/>
 </xs:sequence>
 </xs:complexType>
 </xs:schema>
