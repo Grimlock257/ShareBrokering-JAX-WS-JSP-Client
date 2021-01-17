@@ -152,8 +152,8 @@ public class CommonUtils {
             builder.append("<td class='align-middle c-shrink-cell'>" + userStock.getStockSymbol() + "</td>");
             builder.append("<td class='align-middle c-shrink-cell text-right'>" + String.format("%.2f", userStock.getAvailableShares()) + "</td>");
             builder.append("<td class='align-middle c-shrink-cell text-right'>" + String.format("%.2f", userStock.getUserQuantity()) + "</td>");
-            builder.append("<td class='align-middle c-shrink-cell text-right js-currency-listed-price-cell'>" + String.format("%.2f", userStock.getUserPurchaseValue()) + "</td>");
-            builder.append("<td class='align-middle c-shrink-cell text-left js-currency-listed-currency-cell'>" + userStock.getUserPurchaseCurrency() + "</td>");
+            builder.append("<td class='align-middle c-shrink-cell text-right'>" + String.format("%.2f", userStock.getUserPurchaseValue()) + "</td>");
+            builder.append("<td class='align-middle c-shrink-cell text-left'>" + userStock.getUserPurchaseCurrency() + "</td>");
             builder.append("<td class='align-middle c-shrink-cell text-right js-currency-listed-price-cell'>" + String.format("%.2f", userStock.getPrice().getPrice()) + "</td>");
             builder.append("<td class='align-middle c-shrink-cell text-left js-currency-listed-currency-cell'>" + userStock.getPrice().getCurrency() + "</td>");
             builder.append("<td class='align-middle c-shrink-cell text-right js-currency-preference-price-cell'></td>");
