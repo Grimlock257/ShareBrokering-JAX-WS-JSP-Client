@@ -30,7 +30,7 @@ $(document).ready(function () {
             salesModal.find('#js-quantitiy-field').prop("max", availableShares);
         }
 
-        if (action.toLowerCase() === "sell") {
+        if ((availableShares === null || availableShares === undefined) && action.toLowerCase() === "sell") {
             salesModal.find('#js-quantitiy-field').removeAttr("max");
         }
     });
