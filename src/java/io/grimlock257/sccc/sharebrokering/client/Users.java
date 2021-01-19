@@ -134,7 +134,7 @@ public class Users {
         if (fundsResponse == null) {
             return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. Please try again.</div>";
         } else {
-            return "<div class='py-2'>You have " + fundsResponse.getAvailableFunds() + " " + fundsResponse.getCurrency() + " available.</div>";
+            return "<div class='py-2'>You have " + String.format("%.2f", fundsResponse.getAvailableFunds()) + " " + fundsResponse.getCurrency() + " available.</div>";
         }
     }
 
