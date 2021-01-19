@@ -160,7 +160,7 @@ public class CommonUtils {
             builder.append("<td class='align-middle c-shrink-cell text-left js-currency-preference-currency-cell'></td>");
             builder.append("<td class='align-middle text-center'>" + CommonUtils.formatDateTime(userStock.getPrice().getUpdated()) + "</td>");
             builder.append("<td class='align-middle text-center'>");
-            builder.append("<button type='button' class='btn btn-warning mb-2 js-sell-btn' data-toggle='modal' data-target='#sales-modal' data-action='Sell'>Sell</button>");
+            builder.append("<button type='button' class='btn btn-warning mb-2 js-sell-btn' data-toggle='modal' data-target='#sales-modal' data-action='Sell' data-available-shares='" + userStock.getUserQuantity() + "'>Sell</button>");
             builder.append("<button type='button' class='btn btn-success js-buy-btn'" + (userStock.getAvailableShares() <= 0F ? " disabled" : "") + " data-toggle='modal' data-target='#sales-modal' data-action='Buy' data-available-shares='" + userStock.getAvailableShares() + "'>Buy</button>");
             builder.append("</td>");
             builder.append("</tr>");
