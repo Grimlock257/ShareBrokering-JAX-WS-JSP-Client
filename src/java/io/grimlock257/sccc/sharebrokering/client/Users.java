@@ -22,20 +22,10 @@ public class Users {
 
     private static Users instance = null;
 
-    ShareBrokering_Service service;
-    ShareBrokering port;
-
     /**
      * Private constructor to prevent instantiation
      */
     private Users() {
-        try {
-            // Create reference to the web service
-            service = new ShareBrokering_Service();
-            port = service.getShareBrokeringPort();
-        } catch (WebServiceException e) {
-            System.err.println("[JSP Client] WebServiceException connecting to SharesBrokering SOAP service, resulting in failure to initialise Users.java members. " + e.getMessage());
-        }
     }
 
     /**
@@ -70,14 +60,8 @@ public class Users {
         Boolean registerSuccess;
 
         try {
-            registerSuccess = port.registerUser(firstName, lastName, username, password, currency);
-        } catch (WebServiceException e) {
-            System.err.println("[JSP Client] WebServiceException connecting to SharesBrokering SOAP service, resulting in failure to register. " + e.getMessage());
-
-            return new ClientResponseModel(false, "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>");
+            registerSuccess = getPort().registerUser(firstName, lastName, username, password, currency);
         } catch (NullPointerException e) {
-            System.err.println("[JSP Client] NPE connecting to SharesBrokering SOAP service, resulting in failure to register. " + e.getMessage());
-
             return new ClientResponseModel(false, "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>");
         }
 
@@ -104,14 +88,8 @@ public class Users {
         LoginResponse loginResponse;
 
         try {
-            loginResponse = port.loginUser(username, password);
-        } catch (WebServiceException e) {
-            System.err.println("[JSP Client] WebServiceException connecting to SharesBrokering SOAP service, resulting in failure to login. " + e.getMessage());
-
-            return new ClientResponseModel(false, "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>");
+            loginResponse = getPort().loginUser(username, password);
         } catch (NullPointerException e) {
-            System.err.println("[JSP Client] NPE connecting to SharesBrokering SOAP service, resulting in failure to login. " + e.getMessage());
-
             return new ClientResponseModel(false, "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>");
         }
 
@@ -161,14 +139,8 @@ public class Users {
         FundsResponse fundsResponse;
 
         try {
-            fundsResponse = port.getUserFunds(guid);
-        } catch (WebServiceException e) {
-            System.err.println("[JSP Client] WebServiceException connecting to SharesBrokering SOAP service, resulting in failure to get available funds. " + e.getMessage());
-
-            return "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>";
+            fundsResponse = getPort().getUserFunds(guid);
         } catch (NullPointerException e) {
-            System.err.println("[JSP Client] NPE connecting to SharesBrokering SOAP service, resulting in failure to get available funds. " + e.getMessage());
-
             return "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>";
         }
 
@@ -200,14 +172,8 @@ public class Users {
                 Boolean depositSuccess;
 
                 try {
-                    depositSuccess = port.depositFunds(guid, amount);
-                } catch (WebServiceException e) {
-                    System.err.println("[JSP Client] WebServiceException connecting to SharesBrokering SOAP service, resulting in failure to deposit funds. " + e.getMessage());
-
-                    return "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>";
+                    depositSuccess = getPort().depositFunds(guid, amount);
                 } catch (NullPointerException e) {
-                    System.err.println("[JSP Client] NPE connecting to SharesBrokering SOAP service, resulting in failure to deposit funds. " + e.getMessage());
-
                     return "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>";
                 }
 
@@ -243,14 +209,8 @@ public class Users {
                 Boolean withdrawSuccess;
 
                 try {
-                    withdrawSuccess = port.withdrawFunds(guid, amount);
-                } catch (WebServiceException e) {
-                    System.err.println("[JSP Client] WebServiceException connecting to SharesBrokering SOAP service, resulting in failure to withdraw funds. " + e.getMessage());
-
-                    return "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>";
+                    withdrawSuccess = getPort().withdrawFunds(guid, amount);
                 } catch (NullPointerException e) {
-                    System.err.println("[JSP Client] NPE connecting to SharesBrokering SOAP service, resulting in failure to withdraw funds. " + e.getMessage());
-
                     return "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>";
                 }
 
@@ -294,5 +254,24 @@ public class Users {
         } else {
             return null;
         }
+    }
+
+    /**
+     * Attempt to form a connection to the Share Brokering SOAP service
+     *
+     * @return A port connection to the web service, or null if failure
+     */
+    private ShareBrokering getPort() {
+        try {
+            // Create reference to the web service
+            ShareBrokering_Service service = new ShareBrokering_Service();
+            ShareBrokering port = service.getShareBrokeringPort();
+
+            return port;
+        } catch (WebServiceException e) {
+            System.err.println("[JSP Client] WebServiceException connecting to SharesBrokering SOAP service. ShareBrokering port will throw NPE. " + e.getMessage());
+        }
+
+        return null;
     }
 }
