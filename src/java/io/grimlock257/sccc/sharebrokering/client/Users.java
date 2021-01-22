@@ -9,6 +9,7 @@ import io.grimlock257.sccc.ws.ShareBrokering_Service;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.ws.WebServiceException;
 
 /**
  * Users
@@ -28,9 +29,13 @@ public class Users {
      * Private constructor to prevent instantiation
      */
     private Users() {
-        // Create reference to the web service
-        service = new ShareBrokering_Service();
-        port = service.getShareBrokeringPort();
+        try {
+            // Create reference to the web service
+            service = new ShareBrokering_Service();
+            port = service.getShareBrokeringPort();
+        } catch (WebServiceException e) {
+            System.err.println("[JSP Client] WebServiceException connecting to SharesBrokering SOAP service, resulting in failure to initialise Users.java members. " + e.getMessage());
+        }
     }
 
     /**
@@ -62,7 +67,19 @@ public class Users {
             return new ClientResponseModel(false, "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>");
         }
 
-        Boolean registerSuccess = port.registerUser(firstName, lastName, username, password, currency);
+        Boolean registerSuccess;
+
+        try {
+            registerSuccess = port.registerUser(firstName, lastName, username, password, currency);
+        } catch (WebServiceException e) {
+            System.err.println("[JSP Client] WebServiceException connecting to SharesBrokering SOAP service, resulting in failure to register. " + e.getMessage());
+
+            return new ClientResponseModel(false, "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>");
+        } catch (NullPointerException e) {
+            System.err.println("[JSP Client] NPE connecting to SharesBrokering SOAP service, resulting in failure to register. " + e.getMessage());
+
+            return new ClientResponseModel(false, "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>");
+        }
 
         if (registerSuccess) {
             return new ClientResponseModel(true, "<div class='bg-success p-2 mb-3'>You've successfully registered!</div>");
@@ -84,9 +101,21 @@ public class Users {
             return new ClientResponseModel(false, "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>");
         }
 
-        LoginResponse loginResponse = port.loginUser(username, password);
+        LoginResponse loginResponse;
 
-        if (loginResponse.isSuccessful()) {
+        try {
+            loginResponse = port.loginUser(username, password);
+        } catch (WebServiceException e) {
+            System.err.println("[JSP Client] WebServiceException connecting to SharesBrokering SOAP service, resulting in failure to login. " + e.getMessage());
+
+            return new ClientResponseModel(false, "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>");
+        } catch (NullPointerException e) {
+            System.err.println("[JSP Client] NPE connecting to SharesBrokering SOAP service, resulting in failure to login. " + e.getMessage());
+
+            return new ClientResponseModel(false, "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>");
+        }
+
+        if (loginResponse != null && loginResponse.isSuccessful()) {
             Cookie guidCookie = new Cookie("guid", loginResponse.getGuid());
             guidCookie.setMaxAge(60 * 60 * 24);
 
@@ -129,7 +158,19 @@ public class Users {
             return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. Please try again.</div>";
         }
 
-        FundsResponse fundsResponse = port.getUserFunds(guid);
+        FundsResponse fundsResponse;
+
+        try {
+            fundsResponse = port.getUserFunds(guid);
+        } catch (WebServiceException e) {
+            System.err.println("[JSP Client] WebServiceException connecting to SharesBrokering SOAP service, resulting in failure to get available funds. " + e.getMessage());
+
+            return "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>";
+        } catch (NullPointerException e) {
+            System.err.println("[JSP Client] NPE connecting to SharesBrokering SOAP service, resulting in failure to get available funds. " + e.getMessage());
+
+            return "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>";
+        }
 
         if (fundsResponse == null) {
             return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. Please try again.</div>";
@@ -156,7 +197,19 @@ public class Users {
             if (amount < 0) {
                 return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. You cannot deposit an amount less than 0 - please try again.</div>";
             } else {
-                Boolean depositSuccess = port.depositFunds(guid, amount);
+                Boolean depositSuccess;
+
+                try {
+                    depositSuccess = port.depositFunds(guid, amount);
+                } catch (WebServiceException e) {
+                    System.err.println("[JSP Client] WebServiceException connecting to SharesBrokering SOAP service, resulting in failure to deposit funds. " + e.getMessage());
+
+                    return "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>";
+                } catch (NullPointerException e) {
+                    System.err.println("[JSP Client] NPE connecting to SharesBrokering SOAP service, resulting in failure to deposit funds. " + e.getMessage());
+
+                    return "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>";
+                }
 
                 if (depositSuccess) {
                     return "<div class='bg-success p-2 mb-3'>You have successfully deposited " + amount + " to your account.</div>";
@@ -187,9 +240,21 @@ public class Users {
             if (amount < 0) {
                 return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. You cannot withdraw an amount less than 0 - please try again.</div>";
             } else {
-                Boolean depositSuccess = port.withdrawFunds(guid, amount);
+                Boolean withdrawSuccess;
 
-                if (depositSuccess) {
+                try {
+                    withdrawSuccess = port.withdrawFunds(guid, amount);
+                } catch (WebServiceException e) {
+                    System.err.println("[JSP Client] WebServiceException connecting to SharesBrokering SOAP service, resulting in failure to withdraw funds. " + e.getMessage());
+
+                    return "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>";
+                } catch (NullPointerException e) {
+                    System.err.println("[JSP Client] NPE connecting to SharesBrokering SOAP service, resulting in failure to withdraw funds. " + e.getMessage());
+
+                    return "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>";
+                }
+
+                if (withdrawSuccess) {
                     return "<div class='bg-success p-2 mb-3'>You have successfully withdrawn " + amount + " from your account.</div>";
                 } else {
                     return "<div class='bg-danger p-2 mb-3'>Your withdrawal has failed. Please try again. </div>";
@@ -210,13 +275,17 @@ public class Users {
         String guid = null;
         String role = null;
 
-        for (Cookie cookie : request.getCookies()) {
-            if (cookie.getName().equalsIgnoreCase("guid")) {
-                guid = cookie.getValue();
-            }
+        Cookie[] cookies = request.getCookies();
 
-            if (cookie.getName().equalsIgnoreCase("role")) {
-                role = cookie.getValue().toUpperCase();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equalsIgnoreCase("guid")) {
+                    guid = cookie.getValue();
+                }
+
+                if (cookie.getName().equalsIgnoreCase("role")) {
+                    role = cookie.getValue().toUpperCase();
+                }
             }
         }
 

@@ -8,6 +8,7 @@ import io.grimlock257.sccc.ws.UserStock;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.ws.WebServiceException;
 
 /**
  * Stocks
@@ -27,9 +28,13 @@ public class Stocks {
      * Private constructor to prevent instantiation
      */
     private Stocks() {
-        // Create reference to the web service
-        service = new ShareBrokering_Service();
-        port = service.getShareBrokeringPort();
+        try {
+            // Create reference to the web service
+            service = new ShareBrokering_Service();
+            port = service.getShareBrokeringPort();
+        } catch (WebServiceException e) {
+            System.err.println("[JSP Client] WebServiceException connecting to SharesBrokering SOAP service, resulting in failure to initialise Stocks.java members. " + e.getMessage());
+        }
     }
 
     /**
@@ -65,7 +70,19 @@ public class Stocks {
      */
     public String getStocksTable(boolean managementMode, boolean isLoggedIn) {
         // Get list of Stock objects from the server
-        List<Stock> stocks = port.getAllStocks();
+        List<Stock> stocks;
+
+        try {
+            stocks = port.getAllStocks();
+        } catch (WebServiceException e) {
+            System.err.println("[JSP Client] WebServiceException connecting to SharesBrokering SOAP service, resulting in failure to retrieve stocks table. " + e.getMessage());
+
+            return "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>";
+        } catch (NullPointerException e) {
+            System.err.println("[JSP Client] NPE connecting to SharesBrokering SOAP service, resulting in failure to retrieve stocks table. " + e.getMessage());
+
+            return "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>";
+        }
 
         // Check there are stocks actually some stocks
         if (!(stocks.size() > 0)) {
@@ -84,7 +101,19 @@ public class Stocks {
      */
     public String getStockTable(String companySymbol, boolean isLoggedIn) {
         // Get Stock object from the server
-        Stock stock = port.getStockBySymbol(companySymbol);
+        Stock stock;
+
+        try {
+            stock = port.getStockBySymbol(companySymbol);
+        } catch (WebServiceException e) {
+            System.err.println("[JSP Client] WebServiceException connecting to SharesBrokering SOAP service, resulting in failure to retrieve stock table. " + e.getMessage());
+
+            return "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>";
+        } catch (NullPointerException e) {
+            System.err.println("[JSP Client] NPE connecting to SharesBrokering SOAP service, resulting in failure to retrieve stock table. " + e.getMessage());
+
+            return "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>";
+        }
 
         // Check stock is not null
         if (stock == null) {
@@ -105,7 +134,19 @@ public class Stocks {
      */
     public String getUserStocksTable(String guid) {
         // Get list of UserStock objects from the server
-        List<UserStock> userStocks = port.getUserStocks(guid);
+        List<UserStock> userStocks;
+
+        try {
+            userStocks = port.getUserStocks(guid);
+        } catch (WebServiceException e) {
+            System.err.println("[JSP Client] WebServiceException connecting to SharesBrokering SOAP service, resulting in to retrieve user stocks table. " + e.getMessage());
+
+            return "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>";
+        } catch (NullPointerException e) {
+            System.err.println("[JSP Client] NPE connecting to SharesBrokering SOAP service, resulting in to retrieve user stocks table. " + e.getMessage());
+
+            return "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>";
+        }
 
         // Check there are stocks actually some stocks owned by the user
         if (!(userStocks.size() > 0)) {
@@ -157,7 +198,19 @@ public class Stocks {
             }
         }
 
-        List<Stock> filteredStocks = port.searchShares(stockName, stockSymbol, stockCurrency, sharePriceFilter, sharePrice, sortBy, order);
+        List<Stock> filteredStocks;
+
+        try {
+            filteredStocks = port.searchShares(stockName, stockSymbol, stockCurrency, sharePriceFilter, sharePrice, sortBy, order);
+        } catch (WebServiceException e) {
+            System.err.println("[JSP Client] WebServiceException connecting to SharesBrokering SOAP service, resulting in failure to retrieve search results. " + e.getMessage());
+
+            return "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>";
+        } catch (NullPointerException e) {
+            System.err.println("[JSP Client] NPE connecting to SharesBrokering SOAP service, resulting in failure to retrieve search results. " + e.getMessage());
+
+            return "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>";
+        }
 
         // Check there are stocks actually some stocks
         if (!(filteredStocks.size() > 0)) {
@@ -192,7 +245,19 @@ public class Stocks {
             if (quantity <= 0) {
                 return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. You cannot purchase 0 or less shares - please try again.</div>";
             } else {
-                Boolean purchaseSuccess = port.purchaseShare(userSessionModel.getGuid(), symbol, quantity);
+                Boolean purchaseSuccess;
+
+                try {
+                    purchaseSuccess = port.purchaseShare(userSessionModel.getGuid(), symbol, quantity);
+                } catch (WebServiceException e) {
+                    System.err.println("[JSP Client] WebServiceException connecting to SharesBrokering SOAP service, resulting in failure to purchase share. " + e.getMessage());
+
+                    return "<div class='bgdanger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>";
+                } catch (NullPointerException e) {
+                    System.err.println("[JSP Client] NPE connecting to SharesBrokering SOAP service, resulting in failure to purchase share. " + e.getMessage());
+
+                    return "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>";
+                }
 
                 if (purchaseSuccess) {
                     return "<div class='bg-success p-2 mb-3'>You have successfully purchased " + quantity + " shares.</div>";
@@ -230,7 +295,19 @@ public class Stocks {
             if (quantity <= 0) {
                 return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. You cannot sell 0 or less shares - please try again.</div>";
             } else {
-                Boolean saleSuccess = port.sellShare(userSessionModel.getGuid(), symbol, quantity);
+                Boolean saleSuccess;
+
+                try {
+                    saleSuccess = port.sellShare(userSessionModel.getGuid(), symbol, quantity);
+                } catch (WebServiceException e) {
+                    System.err.println("[JSP Client] WebServiceException connecting to SharesBrokering SOAP service, resulting in failure to sell share. " + e.getMessage());
+
+                    return "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>";
+                } catch (NullPointerException e) {
+                    System.err.println("[JSP Client] NPE connecting to SharesBrokering SOAP service, resulting in failure to sell share. " + e.getMessage());
+
+                    return "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>";
+                }
 
                 if (saleSuccess) {
                     return "<div class='bg-success p-2 mb-3'>You have successfully sold " + quantity + " shares.</div>";
@@ -262,7 +339,19 @@ public class Stocks {
             if (availableShares < 0) {
                 return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. You cannot have less than 0 shares - please try again.</div>";
             } else {
-                Boolean addSuccess = port.addShare(stockName, stockSymbol, availableShares);
+                Boolean addSuccess;
+
+                try {
+                    addSuccess = port.addShare(stockName, stockSymbol, availableShares);
+                } catch (WebServiceException e) {
+                    System.err.println("[JSP Client] WebServiceException connecting to SharesBrokering SOAP service, resulting in failure to add new share. " + e.getMessage());
+
+                    return "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>";
+                } catch (NullPointerException e) {
+                    System.err.println("[JSP Client] NPE connecting to SharesBrokering SOAP service, resulting in failure to add new share. " + e.getMessage());
+
+                    return "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>";
+                }
 
                 if (addSuccess) {
                     return "<div class='bg-success p-2 mb-3'>You have successfully added " + stockSymbol + " as a share.</div>";
@@ -286,7 +375,19 @@ public class Stocks {
             return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>";
         }
 
-        Boolean removeSuccess = port.deleteShare(stockSymbol);
+        Boolean removeSuccess;
+
+        try {
+            removeSuccess = port.deleteShare(stockSymbol);
+        } catch (WebServiceException e) {
+            System.err.println("[JSP Client] WebServiceException connecting to SharesBrokering SOAP service, resulting in failure to remove share. " + e.getMessage());
+
+            return "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>";
+        } catch (NullPointerException e) {
+            System.err.println("[JSP Client] NPE connecting to SharesBrokering SOAP service, resulting in failure to remove share. " + e.getMessage());
+
+            return "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>";
+        }
 
         if (removeSuccess) {
             return "<div class='bg-success p-2 mb-3'>You have successfully removed the stock with the symbol '" + stockSymbol + "'.</div>";
@@ -315,7 +416,19 @@ public class Stocks {
             if (availableShares < 0) {
                 return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. You cannot have less than 0 shares - please try again.</div>";
             } else {
-                Boolean editSuccess = port.modifyShare(stockName, currentStockSymbol, newStockSymbol, availableShares);
+                Boolean editSuccess;
+
+                try {
+                    editSuccess = port.modifyShare(stockName, currentStockSymbol, newStockSymbol, availableShares);
+                } catch (WebServiceException e) {
+                    System.err.println("[JSP Client] WebServiceException connecting to SharesBrokering SOAP service, resulting in failure to modify share. " + e.getMessage());
+
+                    return "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>";
+                } catch (NullPointerException e) {
+                    System.err.println("[JSP Client] NPE connecting to SharesBrokering SOAP service, resulting in failure to modify share. " + e.getMessage());
+
+                    return "<div class='bg-danger p-2 mb-3'>Oops, something went wrong connecting to the web service. Please try again.</div>";
+                }
 
                 if (editSuccess) {
                     return "<div class='bg-success p-2 mb-3'>You have successfully modified " + currentStockSymbol + ".</div>";
