@@ -2,6 +2,7 @@ package io.grimlock257.sccc.sharebrokering.client;
 
 import io.grimlock257.sccc.sharebrokering.client.model.ClientResponseModel;
 import io.grimlock257.sccc.sharebrokering.client.model.UserSessionModel;
+import static io.grimlock257.sccc.sharebrokering.client.util.StringUtil.isNullOrEmpty;
 import io.grimlock257.sccc.ws.FundsResponse;
 import io.grimlock257.sccc.ws.LoginResponse;
 import io.grimlock257.sccc.ws.ShareBrokering;
@@ -53,7 +54,7 @@ public class Users {
      * @return A ClientResponseModel containing boolean of success, and a message representing an HTML dialog box with the appropriate message within (success or failure)
      */
     public ClientResponseModel register(String firstName, String lastName, String username, String password, String currency) {
-        if (firstName == null || lastName == null || username == null || password == null || currency == null) {
+        if (isNullOrEmpty(firstName) || isNullOrEmpty(lastName) || isNullOrEmpty(username) || isNullOrEmpty(password) || isNullOrEmpty(currency)) {
             return new ClientResponseModel(false, "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>");
         }
 
@@ -81,7 +82,7 @@ public class Users {
      * @return A ClientResponseModel containing boolean of success, and a message representing an HTML dialog box with the appropriate message within (success or failure)
      */
     public ClientResponseModel login(HttpServletResponse response, String username, String password) {
-        if (username == null || password == null) {
+        if (response == null || isNullOrEmpty(username) || isNullOrEmpty(password)) {
             return new ClientResponseModel(false, "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>");
         }
 
@@ -115,6 +116,10 @@ public class Users {
      * @param response The response object from the call site page
      */
     public void logout(HttpServletResponse response) {
+        if (response == null) {
+            return;
+        }
+
         Cookie guidCookie = new Cookie("guid", null);
         guidCookie.setMaxAge(0);
 
@@ -132,7 +137,7 @@ public class Users {
      * @return A string representing an HTML dialog box with the appropriate message within (success or failure)
      */
     public String getAvailableFunds(String guid) {
-        if (guid == null) {
+        if (isNullOrEmpty(guid)) {
             return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. Please try again.</div>";
         }
 
@@ -160,7 +165,7 @@ public class Users {
      */
     public String depositFunds(String guid, String amountStr) {
         try {
-            if (guid == null || amountStr == null) {
+            if (isNullOrEmpty(guid) || isNullOrEmpty(amountStr)) {
                 return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>";
             }
 
@@ -197,7 +202,7 @@ public class Users {
      */
     public String withdrawFunds(String guid, String amountStr) {
         try {
-            if (guid == null || amountStr == null) {
+            if (isNullOrEmpty(guid) || isNullOrEmpty(amountStr)) {
                 return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>";
             }
 
@@ -235,16 +240,18 @@ public class Users {
         String guid = null;
         String role = null;
 
-        Cookie[] cookies = request.getCookies();
+        if (request != null) {
+            Cookie[] cookies = request.getCookies();
 
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equalsIgnoreCase("guid")) {
-                    guid = cookie.getValue();
-                }
+            if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                    if (cookie.getName().equalsIgnoreCase("guid")) {
+                        guid = cookie.getValue();
+                    }
 
-                if (cookie.getName().equalsIgnoreCase("role")) {
-                    role = cookie.getValue().toUpperCase();
+                    if (cookie.getName().equalsIgnoreCase("role")) {
+                        role = cookie.getValue().toUpperCase();
+                    }
                 }
             }
         }

@@ -1,6 +1,7 @@
 package io.grimlock257.sccc.sharebrokering.client;
 
 import io.grimlock257.sccc.sharebrokering.client.model.UserSessionModel;
+import static io.grimlock257.sccc.sharebrokering.client.util.StringUtil.isNullOrEmpty;
 import io.grimlock257.sccc.ws.ShareBrokering;
 import io.grimlock257.sccc.ws.ShareBrokering_Service;
 import io.grimlock257.sccc.ws.Stock;
@@ -84,6 +85,10 @@ public class Stocks {
      * @return The stock table or a error dialog as an HTML string
      */
     public String getStockTable(String companySymbol, boolean isLoggedIn) {
+        if (isNullOrEmpty(companySymbol)) {
+            return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. The company symbol is missing. Please try again.</div>";
+        }
+
         // Get Stock object from the server
         Stock stock;
 
@@ -111,6 +116,10 @@ public class Stocks {
      * @return The user stocks table or a info dialog as an HTML string
      */
     public String getUserStocksTable(String guid) {
+        if (isNullOrEmpty(guid)) {
+            return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. Please try again.</div>";
+        }
+
         // Get list of UserStock objects from the server
         List<UserStock> userStocks;
 
@@ -162,11 +171,13 @@ public class Stocks {
     public String handleSearch(String stockName, String stockSymbol, String stockCurrency, String sharePriceFilter, String sharePriceStr, String sortBy, String order, boolean managementMode, boolean isLoggedIn) {
         Double sharePrice = -1D;
 
-        try {
-            sharePrice = Double.parseDouble(sharePriceStr);
-        } catch (NumberFormatException e) {
-            if (sharePriceStr.length() > 0) {
-                return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. It appears a non-numeric value was entered - please try again.</div>";
+        if (!isNullOrEmpty(sharePriceStr)) {
+            try {
+                sharePrice = Double.parseDouble(sharePriceStr);
+            } catch (NumberFormatException e) {
+                if (sharePriceStr.length() > 0) {
+                    return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. It appears a non-numeric value was entered - please try again.</div>";
+                }
             }
         }
 
@@ -195,6 +206,10 @@ public class Stocks {
      * @return A string representing an HTML dialog box with the appropriate message within (success or failure)
      */
     public String handlePurchase(HttpServletRequest request, String symbol, String quantityStr) {
+        if (request == null) {
+            return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. Please try again.</div>";
+        }
+
         UserSessionModel userSessionModel = Users.getInstance().getUserSessionDetails(request);
 
         if (userSessionModel == null) {
@@ -202,7 +217,7 @@ public class Stocks {
         }
 
         try {
-            if (symbol == null || quantityStr == null) {
+            if (isNullOrEmpty(symbol) || isNullOrEmpty(quantityStr)) {
                 return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>";
             }
 
@@ -239,6 +254,10 @@ public class Stocks {
      * @return A string representing an HTML dialog box with the appropriate message within (success or failure)
      */
     public String handleSale(HttpServletRequest request, String symbol, String quantityStr) {
+        if (request == null) {
+            return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. Please try again.</div>";
+        }
+
         UserSessionModel userSessionModel = Users.getInstance().getUserSessionDetails(request);
 
         if (userSessionModel == null) {
@@ -246,7 +265,7 @@ public class Stocks {
         }
 
         try {
-            if (symbol == null || quantityStr == null) {
+            if (isNullOrEmpty(symbol) || isNullOrEmpty(quantityStr)) {
                 return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>";
             }
 
@@ -284,7 +303,7 @@ public class Stocks {
      */
     public String handleAdd(String stockName, String stockSymbol, String availableSharesStr) {
         try {
-            if (stockName == null || stockSymbol == null || availableSharesStr == null) {
+            if (isNullOrEmpty(stockName) || isNullOrEmpty(stockSymbol) || isNullOrEmpty(availableSharesStr)) {
                 return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>";
             }
 
@@ -319,7 +338,7 @@ public class Stocks {
      * @return A string representing an HTML dialog box with the appropriate message within (success or failure)
      */
     public String handleRemove(String stockSymbol) {
-        if (stockSymbol == null) {
+        if (isNullOrEmpty(stockSymbol)) {
             return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>";
         }
 
@@ -349,7 +368,7 @@ public class Stocks {
      */
     public String handleEdit(String stockName, String currentStockSymbol, String newStockSymbol, String availableSharesStr) {
         try {
-            if (stockName == null || currentStockSymbol == null || newStockSymbol == null || availableSharesStr == null) {
+            if (isNullOrEmpty(stockName) || isNullOrEmpty(currentStockSymbol) || isNullOrEmpty(newStockSymbol) || isNullOrEmpty(availableSharesStr)) {
                 return "<div class='bg-danger p-2 mb-3'>Sorry, something went wrong. It appears some form information is missing - please try again.</div>";
             }
 
