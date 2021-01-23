@@ -58,7 +58,7 @@
                     <label>Sort by</label>
                     <div class="input-group">
                         <select name="sortBy" class="form-control js-stocks-search-selectable">
-                            <option value="stockSymbol" selected>Default (stock symbol)</option>
+                            <option value="stockName" selected>Default (stock name)</option>
                             <option value="stockName" <% out.println(wasSearch && request.getParameter("sortBy") != null && request.getParameter("sortBy").equals("stockName") ? "selected" : ""); %>>Stock name</option>
                             <option value="stockSymbol" <% out.println(wasSearch && request.getParameter("sortBy") != null && request.getParameter("sortBy").equals("stockSymbol") ? "selected" : ""); %>>Stock symbol</option>
                             <option value="shareCurrency" <% out.println(wasSearch && request.getParameter("sortBy") != null && request.getParameter("sortBy").equals("shareCurrency") ? "selected" : ""); %>>Currency</option>
@@ -70,7 +70,7 @@
                     <label>Order by</label>
                     <div class="input-group">
                         <select name="order" class="form-control js-stocks-search-selectable">
-                            <option value="desc" selected>Default (descending)</option>
+                            <option value="asc" selected>Default (ascending)</option>
                             <option value="asc" <% out.println(wasSearch && request.getParameter("order") != null && request.getParameter("order").equals("asc") ? "selected" : ""); %>>Ascending</option>
                             <option value="desc" <% out.println(wasSearch && request.getParameter("order") != null && request.getParameter("order").equals("desc") ? "selected" : "");%>>Descending</option>
                         </select>
