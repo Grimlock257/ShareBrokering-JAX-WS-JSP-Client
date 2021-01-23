@@ -41,7 +41,7 @@
             <div class="row form-group">
                 <label  class="col-sm-2 col-form-label">Funds amount</label>
                 <div class="col-sm-10">
-                    <input type="number" name="fundsAmount" class="form-control" placeholder="100" min="0" />
+                    <input type="number" name="fundsAmount" class="form-control" placeholder="100" step="any" min="0" />
                 </div>
             </div>
             <div class="row">
@@ -73,7 +73,7 @@
             <div class="row form-group">
                 <label  class="col-sm-2 col-form-label">Funds amount</label>
                 <div class="col-sm-10">
-                    <input type="number" name="fundsAmount" class="form-control" placeholder="100" min="0" />
+                    <input type="number" name="fundsAmount" class="form-control" placeholder="100" step="any" min="0" />
                 </div>
             </div>
             <div class="row">

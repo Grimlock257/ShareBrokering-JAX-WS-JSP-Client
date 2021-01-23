@@ -25,7 +25,7 @@ $(document).ready(function () {
                     // Determine whether the form is for currency prefernce
                     if (currencyForm.hasClass("js-currency-preference-form")) {
                         Object.keys(response).forEach(function (key) {
-                            currenciesFormSelect.append("<option value='" + key.toLowerCase() + "' " + ((userCurrency === key.toLowerCase()) ? "selected" : "") + ">" + key + " - " + response[key] + "</option>");
+                            currenciesFormSelect.append("<option value='" + key + "' " + ((userCurrency === key.toLowerCase()) ? "selected" : "") + ">" + key + " - " + response[key] + "</option>");
                         });
                     } else {
                         // Get query parameters
@@ -34,7 +34,7 @@ $(document).ready(function () {
                         const stockCurrency = urlParams.get('stockCurrency');
 
                         Object.keys(response).forEach(function (key) {
-                            currenciesFormSelect.append("<option value='" + key.toLowerCase() + "' " + ((wasSearch && stockCurrency === key.toLowerCase()) ? "selected" : "") + ">" + key + " - " + response[key] + "</option>");
+                            currenciesFormSelect.append("<option value='" + key + "' " + ((wasSearch && stockCurrency === key.toLowerCase()) ? "selected" : "") + ">" + key + " - " + response[key] + "</option>");
                         });
                     }
                 });

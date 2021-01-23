@@ -56,10 +56,10 @@
                     </div>
                 </div>
                 <div class="row form-group">
-                    <label class="col-sm-2 col-form-label">Currency</label>
+                    <label class="col-sm-2 col-form-label">Funds currency</label>
                     <div class="col-sm-10 js-currencies-form">
                         <select name="currency" class="form-control js-stocks-search-selectable" required>
-                            <option value="" selected readonly disabled>Select funds currency</option>
+                            <option value="GBP" readonly>GBP - British Pound (default)</option>
                         </select>
                     </div>
                 </div>
@@ -87,7 +87,7 @@
             String lastName = request.getParameter("lastName");
             String username = request.getParameter("username");
             String password = request.getParameter("password");
-            String currency = request.getParameter("currency").toUpperCase();
+            String currency = request.getParameter("currency");
 
             ClientResponseModel clientResponseModel = Users.getInstance().register(firstName, lastName, username, password, currency);
 

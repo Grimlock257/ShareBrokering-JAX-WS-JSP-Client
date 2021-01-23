@@ -13,7 +13,7 @@
                     <label class="col-sm-3 col-form-label text-right">Preferred display currency</label>
                     <div class="col-sm-9 js-currencies-form">
                         <select name="preferenceCurrency" class="form-control js-stocks-search-selectable" required>
-                            <option value="gbp" readonly>GBP - British Pound (default)</option>
+                            <option value="GBP" readonly>GBP - British Pound (default)</option>
                         </select>
                     </div>
                 </div>

@@ -23,11 +23,11 @@
             <div class="form-row">
                 <div class="col-md-5 mb-3">
                     <label>Stock name</label>
-                    <input type="text" name="stockName" <% out.println(wasSearch ? "value='" + request.getParameter("stockName") + "'" : ""); %> class="form-control js-stocks-search-text-clearable" placeholder="e.g. coca-cola" />
+                    <input type="text" name="stockName" <% out.println(wasSearch && request.getParameter("stockName") != null ? "value='" + request.getParameter("stockName").trim() + "'" : ""); %> class="form-control js-stocks-search-text-clearable" placeholder="e.g. coca-cola" />
                 </div>
                 <div class="col-md-2 mb-3">
                     <label>Stock symbol</label>
-                    <input type="text" name="stockSymbol" <% out.println(wasSearch ? "value='" + request.getParameter("stockSymbol") + "'" : ""); %> class="form-control js-stocks-search-text-clearable" placeholder="e.g. KO" />
+                    <input type="text" name="stockSymbol" <% out.println(wasSearch && request.getParameter("stockSymbol") != null ? "value='" + request.getParameter("stockSymbol").trim() + "'" : ""); %> class="form-control js-stocks-search-text-clearable" placeholder="e.g. KO" />
                 </div>
                 <div class="col-md-5 mb-3">
                     <label>Currency</label>
@@ -44,25 +44,25 @@
                     <div class="input-group">
                         <select name="sharePriceFilter"class="form-control js-stocks-search-selectable">
                             <option value="equal" selected>Default (equal to)</option>
-                            <option value="lessOrEqual" <% out.println(wasSearch && request.getParameter("sharePriceFilter").equals("lessOrEqual") ? "selected" : ""); %>>Is less than or equal to</option>
-                            <option value="equal" <% out.println(wasSearch && request.getParameter("sharePriceFilter").equals("equal") ? "selected" : ""); %>>Is equal to</option>
-                            <option value="greaterOrEqual" <% out.println(wasSearch && request.getParameter("sharePriceFilter").equals("greaterOrEqual") ? "selected" : ""); %>>Is greater than or equal to</option>
+                            <option value="lessOrEqual" <% out.println(wasSearch && request.getParameter("sharePriceFilter") != null && request.getParameter("sharePriceFilter").equals("lessOrEqual") ? "selected" : ""); %>>Is less than or equal to</option>
+                            <option value="equal" <% out.println(wasSearch && request.getParameter("sharePriceFilter") != null && request.getParameter("sharePriceFilter").equals("equal") ? "selected" : ""); %>>Is equal to</option>
+                            <option value="greaterOrEqual" <% out.println(wasSearch && request.getParameter("sharePriceFilter") != null && request.getParameter("sharePriceFilter").equals("greaterOrEqual") ? "selected" : ""); %>>Is greater than or equal to</option>
                         </select>
                     </div>
                 </div>
                 <div class="col-md-2 mb-3">
                     <label>Share price</label>
-                    <input type="number" name="sharePrice" <% out.println(wasSearch ? "value='" + request.getParameter("sharePrice") + "'" : ""); %> class="form-control js-stocks-search-text-clearable" placeholder="e.g. 10" step="any" min="0" />
+                    <input type="number" name="sharePrice" <% out.println(wasSearch && request.getParameter("sharePrice") != null ? "value='" + request.getParameter("sharePrice").trim() + "'" : ""); %> class="form-control js-stocks-search-text-clearable" placeholder="e.g. 10" step="any" min="0" />
                 </div>
                 <div class="col-md-3 mb-3">
                     <label>Sort by</label>
                     <div class="input-group">
                         <select name="sortBy" class="form-control js-stocks-search-selectable">
                             <option value="stockSymbol" selected>Default (stock symbol)</option>
-                            <option value="stockName" <% out.println(wasSearch && request.getParameter("sortBy").equals("stockName") ? "selected" : ""); %>>Stock name</option>
-                            <option value="stockSymbol" <% out.println(wasSearch && request.getParameter("sortBy").equals("stockSymbol") ? "selected" : ""); %>>Stock symbol</option>
-                            <option value="shareCurrency" <% out.println(wasSearch && request.getParameter("sortBy").equals("shareCurrency") ? "selected" : ""); %>>Currency</option>
-                            <option value="sharePrice" <% out.println(wasSearch && request.getParameter("sortBy").equals("sharePrice") ? "selected" : ""); %>>Share price</option>
+                            <option value="stockName" <% out.println(wasSearch && request.getParameter("sortBy") != null && request.getParameter("sortBy").equals("stockName") ? "selected" : ""); %>>Stock name</option>
+                            <option value="stockSymbol" <% out.println(wasSearch && request.getParameter("sortBy") != null && request.getParameter("sortBy").equals("stockSymbol") ? "selected" : ""); %>>Stock symbol</option>
+                            <option value="shareCurrency" <% out.println(wasSearch && request.getParameter("sortBy") != null && request.getParameter("sortBy").equals("shareCurrency") ? "selected" : ""); %>>Currency</option>
+                            <option value="sharePrice" <% out.println(wasSearch && request.getParameter("sortBy") != null && request.getParameter("sortBy").equals("sharePrice") ? "selected" : ""); %>>Share price</option>
                         </select>
                     </div>
                 </div>
@@ -71,8 +71,8 @@
                     <div class="input-group">
                         <select name="order" class="form-control js-stocks-search-selectable">
                             <option value="desc" selected>Default (descending)</option>
-                            <option value="asc" <% out.println(wasSearch && request.getParameter("order").equals("asc") ? "selected" : ""); %>>Ascending</option>
-                            <option value="desc" <% out.println(wasSearch && request.getParameter("order").equals("desc") ? "selected" : "");%>>Descending</option>
+                            <option value="asc" <% out.println(wasSearch && request.getParameter("order") != null && request.getParameter("order").equals("asc") ? "selected" : ""); %>>Ascending</option>
+                            <option value="desc" <% out.println(wasSearch && request.getParameter("order") != null && request.getParameter("order").equals("desc") ? "selected" : "");%>>Descending</option>
                         </select>
                     </div>
                 </div>
