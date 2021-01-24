@@ -12,7 +12,7 @@ $(document).ready(function () {
         type: "GET",
         url: "http://localhost:8080/CurrencyAPI/webresources/currencies",
         success: function (response) {
-            if (response !== null && response !== undefined) {
+            if (response !== null && response !== undefined && response.success === true) {
                 var userCurrency = Cookies.get('userCurrency');
 
                 // Iterate over each currency dropdown on the page
@@ -24,8 +24,8 @@ $(document).ready(function () {
 
                     // Determine whether the form is for currency prefernce
                     if (currencyForm.hasClass("js-currency-preference-form")) {
-                        Object.keys(response).forEach(function (key) {
-                            currenciesFormSelect.append("<option value='" + key + "' " + ((userCurrency === key) ? "selected" : "") + ">" + key + " - " + response[key] + "</option>");
+                        Object.keys(response.currencies).forEach(function (key) {
+                            currenciesFormSelect.append("<option value='" + key + "' " + ((userCurrency === key) ? "selected" : "") + ">" + key + " - " + response.currencies[key] + "</option>");
                         });
                     } else {
                         // Get query parameters
@@ -33,13 +33,13 @@ $(document).ready(function () {
                         const wasSearch = urlParams.has('search');
                         const stockCurrency = urlParams.get('stockCurrency');
 
-                        Object.keys(response).forEach(function (key) {
-                            currenciesFormSelect.append("<option value='" + key + "' " + ((wasSearch && stockCurrency === key) ? "selected" : "") + ">" + key + " - " + response[key] + "</option>");
+                        Object.keys(response.currencies).forEach(function (key) {
+                            currenciesFormSelect.append("<option value='" + key + "' " + ((wasSearch && stockCurrency === key) ? "selected" : "") + ">" + key + " - " + response.currencies[key] + "</option>");
                         });
                     }
                 });
             } else {
-                $("body > .container").prepend("<div class='bg-danger p-2'>Failed to retrieve currencies. Please try again.</div>");
+                $("<div class='container bg-danger text-white pt-4 pb-1 mb-4'>Failed to retrieve currencies. Please try again.</div>").insertAfter("nav");
             }
         }
     });
@@ -73,7 +73,7 @@ $(document).ready(function () {
                 success: function (response) {
                     var preferredCurrencyPriceCell = theRow.find(".js-currency-preference-price-cell");
 
-                    if (response !== null && response !== undefined && response.status === "success") {
+                    if (response !== null && response !== undefined && response.success === true) {
                         preferredCurrencyPriceCell.html(response.value.toFixed(2));
                     } else {
                         preferredCurrencyPriceCell.html("<span class='text-warning font-weight-bold'>Error</span>");
