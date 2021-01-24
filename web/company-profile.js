@@ -18,8 +18,8 @@ $(document).ready(function () {
         url: "http://localhost:8080/NewsAPI/webresources/news",
         data: "name=" + stockName,
         success: function (response) {
-            if (response.status === "ok") {
-                if (response.totalResults > 0) {
+            if (response.success === true) {
+                if (response.articles.length > 0) {
                     response.articles.forEach(function (article) {
                         const articleDate = new Date(article.publishedAt).toLocaleString();
                         const newCard = `
