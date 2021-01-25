@@ -61,9 +61,9 @@
                             <option value="stockName" selected>Default (stock name)</option>
                             <option value="stockName" <% out.println(wasSearch && request.getParameter("sortBy") != null && request.getParameter("sortBy").equals("stockName") ? "selected" : ""); %>>Stock name</option>
                             <option value="stockSymbol" <% out.println(wasSearch && request.getParameter("sortBy") != null && request.getParameter("sortBy").equals("stockSymbol") ? "selected" : ""); %>>Stock symbol</option>
-                            <option value="shareCurrency" <% out.println(wasSearch && request.getParameter("sortBy") != null && request.getParameter("sortBy").equals("shareCurrency") ? "selected" : ""); %>>Currency</option>
-                            <option value="sharePrice" <% out.println(wasSearch && request.getParameter("sortBy") != null && request.getParameter("sortBy").equals("sharePrice") ? "selected" : ""); %>>Share price</option>
                             <option value="availableShares" <% out.println(wasSearch && request.getParameter("sortBy") != null && request.getParameter("sortBy").equals("availableShares") ? "selected" : ""); %>>Available shares</option>
+                            <option value="sharePrice" <% out.println(wasSearch && request.getParameter("sortBy") != null && request.getParameter("sortBy").equals("sharePrice") ? "selected" : ""); %>>Share price</option>
+                            <option value="shareCurrency" <% out.println(wasSearch && request.getParameter("sortBy") != null && request.getParameter("sortBy").equals("shareCurrency") ? "selected" : ""); %>>Currency</option>
                         </select>
                     </div>
                 </div>
