@@ -83,7 +83,7 @@ public class CommonUtils {
             builder.append("<td class='align-middle c-shrink-cell text-left js-currency-listed-currency-cell'>" + stock.getPrice().getCurrency() + "</td>");
             builder.append("<td class='align-middle c-shrink-cell text-right js-currency-preference-price-cell'></td>");
             builder.append("<td class='align-middle c-shrink-cell text-left js-currency-preference-currency-cell'></td>");
-            builder.append("<td class='align-middle text-center'>" + CommonUtils.formatDateTime(stock.getPrice().getUpdated()) + "</td>");
+            builder.append("<td class='align-middle c-shrink-cell text-center'>" + CommonUtils.formatDateTime(stock.getPrice().getUpdated()) + "</td>");
             builder.append("<td class='align-middle text-center'>");
 
             if (isLoggedIn) {
@@ -158,7 +158,7 @@ public class CommonUtils {
             builder.append("<td class='align-middle c-shrink-cell text-left js-currency-listed-currency-cell'>" + userStock.getPrice().getCurrency() + "</td>");
             builder.append("<td class='align-middle c-shrink-cell text-right js-currency-preference-price-cell'></td>");
             builder.append("<td class='align-middle c-shrink-cell text-left js-currency-preference-currency-cell'></td>");
-            builder.append("<td class='align-middle text-center'>" + CommonUtils.formatDateTime(userStock.getPrice().getUpdated()) + "</td>");
+            builder.append("<td class='align-middle c-shrink-cell text-center'>" + CommonUtils.formatDateTime(userStock.getPrice().getUpdated()) + "</td>");
             builder.append("<td class='align-middle text-center'>");
             builder.append("<button type='button' class='btn btn-warning mb-2 js-sell-btn' data-toggle='modal' data-target='#sales-modal' data-action='Sell' data-available-shares='" + userStock.getUserQuantity() + "'>Sell</button>");
             builder.append("<button type='button' class='btn btn-success js-buy-btn'" + (userStock.getAvailableShares() <= 0F ? " disabled" : "") + " data-toggle='modal' data-target='#sales-modal' data-action='Buy' data-available-shares='" + userStock.getAvailableShares() + "'>Buy</button>");
@@ -181,7 +181,7 @@ public class CommonUtils {
      * @return The formatted date time as a String
      */
     public static String formatDateTime(XMLGregorianCalendar dateTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss z");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm z");
         ZonedDateTime zonedTime = dateTime.toGregorianCalendar().toZonedDateTime();
 
         return formatter.format(zonedTime);
